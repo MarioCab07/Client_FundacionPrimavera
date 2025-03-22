@@ -24,9 +24,18 @@ export const AuthProvider = ({children}) =>{
     },[]);
 
     const login = async(data)=>{
-        await Login(data);
-        const response = await WhoAmI();
-        setUser(response.data);
+        
+        let response = await Login(data);
+        
+        if (response.status === 200) {
+            setUser(response.data);
+            
+        }
+        return response;
+        
+        
+        
+        
     }
 
     const logout = async()=>{
