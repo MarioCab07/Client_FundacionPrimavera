@@ -18,10 +18,12 @@ export const AuthProvider = ({children}) =>{
                 setLoading(false);
             }
         };
+        if(!user){
+            fetchUser();
+        }
+        
     
-        fetchUser();
-    
-    },[]);
+    },[user]);
 
     const login = async(data)=>{
         

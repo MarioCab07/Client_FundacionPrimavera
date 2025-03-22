@@ -1,4 +1,3 @@
-import bg from "../assets/images/bg.jpg";
 import logo from "../assets/icons/FundacionLogo.png";
 import pin from "../assets/icons/pin.png"
 import LoginImage from "../assets/images/LoginImage.png"
@@ -6,12 +5,17 @@ import LoginImage from "../assets/images/LoginImage.png"
 import { AiOutlineUser } from 'react-icons/ai'
 import { MdLock,MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import { BsBoxArrowInRight } from 'react-icons/bs'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useAuth} from "../context/AuthContext";
 import { sleep } from "../tools/tools";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { useNavigate,useLocation } from "react-router-dom";
+
 
 const LoginPage = ()=>{
+
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const {login, loading} = useAuth();
     const [data,setData] = useState({
@@ -44,8 +48,12 @@ const LoginPage = ()=>{
                     isLoading: false,
                     autoClose: 3000, // Close after 3 seconds
                 });
-            }
+                await sleep(800);
+            if(response.data.role!="COLABORADOR" || response.data.role!="VOLUNTARIO"){
+                navigate("/Dashboard");
             
+            }
+        }
             
         } catch (err) {
             setError(err.response.data.error);
@@ -58,11 +66,40 @@ const LoginPage = ()=>{
           }
     }
 
+    
+
+    useEffect(()=>{ 
+        
+        const showGoodbyeToast = localStorage.getItem("showGoodbyeToast");
+        
+        
+        
+        if (showGoodbyeToast == "true" ) {
+            console.log("Showing toast");
+            toast.info("👋 Hasta luego, esperamos verte pronto!", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                draggable: true,
+                progress: undefined,
+                onClose:()=>{
+                    localStorage.removeItem("showGoodbyeToast");
+                },
+                icon: null
+            });
+            
+            
+        }
+        
+        
+    },[])
+
     return( 
         <>
         <section 
         className="min-h-screen bg-cover bg-center flex flex-col items-center "
-        style={{backgroundImage:`url(${bg})`}} >
+         >
                 
         <article 
         className=" px-5 py-6  flex justify-between w-screen " style={{backgroundColor:"#E2E2E2",boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"}} >
@@ -82,7 +119,7 @@ const LoginPage = ()=>{
         className="flex w-screen grow ">
 
         <div
-        style={{background: "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(190,182,4,1) 0%, rgba(237,238,13,1) 87%)", boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px"}}
+        style={{background: "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(190,182,4,1) 0%, rgba(237,238,13,1) 87%)", boxShadow:" rgba(0, 0, 0, 0.1) 0px 4px 12px"}}
         className="relative w-1/2 h flex flex-col items-center justify-center">
         <img className="fixed z-0 w-3xl  p-10 rounded-2xl " style={{backgroundColor:"#E2E2E2",boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px"}} src={LoginImage} alt="" />
         
@@ -146,12 +183,12 @@ const LoginPage = ()=>{
         }}
         type="submit"
     >
-        {/* Default Text */}
+        
         <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 transform group-hover:-translate-x-full">
             Login
         </span>
 
-        {/* Icon on Hover */}
+        
         <span className="absolute inset-0 flex items-center justify-center transition-transform duration-500 transform translate-x-full group-hover:translate-x-0">
             <BsBoxArrowInRight size="1.5rem" />
         </span>
@@ -175,7 +212,7 @@ const LoginPage = ()=>{
             pauseOnFocusLoss
             draggable
             theme="light"
-            transition={Bounce} // Use the Bounce transition
+            transition={Bounce} 
         />
         </>
     )

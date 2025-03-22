@@ -7,7 +7,7 @@ const ProtectedRoutes = ({allowedRoles}) => {
     const {user,loading} = useAuth();
 
     if(loading) return <Loading/>;
-    if(!user) return <Navigate to="/login"/>
+    if(!user) return <Navigate to="/"/>
     if(!allowedRoles.includes(user.role)) return <Navigate to="/"/>
     return <Outlet/>
 
