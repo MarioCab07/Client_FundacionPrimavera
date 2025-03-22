@@ -6,7 +6,7 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                righteous: ['"Righteous"', 'sans-serif'], // Add the Righteous font
+                 // Add the Righteous font
             },
         },
     },
