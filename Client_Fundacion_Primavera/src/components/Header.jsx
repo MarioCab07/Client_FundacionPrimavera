@@ -5,7 +5,12 @@ import {parserHeaderRole} from "../tools/tools"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { BiLogOut } from 'react-icons/bi'
-const Header =()=>{
+
+import Menu from "./Menu"
+
+import { useState } from "react"
+
+export const DashBoardHeader =()=>{
     const navigate = useNavigate();
     const {user,logout} = useAuth();
     const buttons = parserHeaderRole(user?.role);
@@ -54,6 +59,15 @@ const Header =()=>{
     )
 }
 
+export const Header = ()=>{
+
+    const [open,setOpen] = useState(false);
+    return(
+        <>
+        <Menu setOpen={setOpen}/>
+        </>
+
+    )
+}
 
 
-export default Header;
