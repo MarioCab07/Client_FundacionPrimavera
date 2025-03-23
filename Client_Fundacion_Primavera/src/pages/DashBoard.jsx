@@ -1,4 +1,4 @@
-import Header from "../components/Header"
+import {DashBoardHeader} from "../components/Header"
 import {useAuth} from "../context/AuthContext"
 import {useEffect} from "react"
 import { ToastContainer, toast, Bounce } from 'react-toastify';
@@ -72,7 +72,7 @@ const DashBoard = ()=>{
     return(
         <>
         <section className="flex flex-col h-full">
-        <Header/>
+        <DashBoardHeader/>
         <article className=" w-full h-3/4 flex items-center justify-center gap-10">
             
             {options.map((option)=>{
