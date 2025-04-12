@@ -71,9 +71,9 @@ const DashBoard = ()=>{
     }, []);
     return(
         <>
-        <section className="flex flex-col h-full">
+        <section className="flex flex-col h-screen">
         <DashBoardHeader/>
-        <article className=" w-full h-3/4 flex items-center justify-center gap-10">
+        <article className=" w-full flex-1 h-full  flex items-center justify-center gap-10">
             
             {options.map((option)=>{
                 return(

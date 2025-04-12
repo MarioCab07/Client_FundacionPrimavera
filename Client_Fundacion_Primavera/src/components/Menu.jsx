@@ -1,12 +1,13 @@
-import { AiOutlineHome } from 'react-icons/ai'
-import { BsPeople,AiOutlineUserAdd } from 'react-icons/bs'
+import { AiOutlineHome, AiOutlineUserAdd } from 'react-icons/ai'
+import { BsPeople } from 'react-icons/bs'
 import { GrUserSettings } from 'react-icons/gr'
 import { BiBox } from 'react-icons/bi'
 import { ImStatsDots } from 'react-icons/im'
 import { BiLogOut } from 'react-icons/bi'
+import { AiOutlineClose } from 'react-icons/ai'
 
 import { useAuth } from '../context/AuthContext'
-import { navigate } from 'react-router-dom'
+import { useNavigate,Link } from 'react-router-dom'
 
 const getOptions=(role)=>{
     
@@ -32,37 +33,37 @@ const getOptions=(role)=>{
     {
         title:"Home",
         url:"/DashBoard",
-        icon:<AiOutlineHome size={60}/>,
+        icon:<AiOutlineHome size={40}/>,
         level:3
     },
     {
         title:"Beneficiarios",
         url:"/GestionarBeneficiarios",
-        icon:<BsPeople size={60}/>,
+        icon:<BsPeople size={40}/>,
         level:3
     },
     {
         title:"Voluntarios",
         url:"/Voluntarios",
-        icon:<AiOutlineUserAdd size={60}/>,
+        icon:<AiOutlineUserAdd size={40}/>,
         level:3
     },
     {
         title:"Usuarios",
         url:"/Usuarios",
-        icon:<GrUserSettings size={60}/>,
+        icon:<GrUserSettings size={40}/>,
         level:5
     },
     {
         title:"Inventario",
         url:"/Inventario",
-        icon:<BiBox size={60}/>,
+        icon:<BiBox size={40}/>,
         level:3
     },
     {
         title:"Estadísticas",
         url:"/Estadisticas",
-        icon:<ImStatsDots size={60}/>,
+        icon:<ImStatsDots size={30}/>,
         level:3
     }
 
@@ -76,44 +77,53 @@ const getOptions=(role)=>{
 
 
 
-const Menu=({setOpen})=>{
-    const {user,logout} = useAuth();
-
-    const handleLogout = async()=>{
-        await logout();
-        localStorage.setItem("showGoodbyeToast", true);
-        navigate("/");
-    }
-
-    const handleOpen=()=>{
-        setOpen(false);
-    }
-
-
-    const options = getOptions(user?.role);
-    return(
-        <>
-        <section>
-            <article><button onClick={handleOpen}>X</button></article>
-            <article>
-                {options.map((option)=>{
-                    return(
-                        <div key={option.title} className="flex flex-col items-center justify-center gap-5">
-                            {option.icon}
-                            <h1>{option.title}</h1>
-                        </div>
-                    )
-                })}
-            </article>
-            <article>
-            <button onClick={handleLogout}>
-                <BiLogOut size={30}/>
-            </button>
-            </article>
-        </section>
-        </>
-    )
-}
-
-
-export default Menu;
+    const Menu = ({ open, setOpen }) => {
+        const { user, logout } = useAuth();
+        const navigate = useNavigate();
+    
+        const handleLogout = async () => {
+            await logout();
+            localStorage.setItem("showGoodbyeToast", true);
+            navigate("/");
+        };
+    
+        const handleClose = () => {
+            setOpen(false);
+        };
+    
+        const options = getOptions(user?.role);
+    
+        return (
+            <div
+                className={`fixed top-0 left-0 h-3/4 w-1/6 bg-gray-800 text-white transform transition-transform duration-500 py-5 rounded-br-2xl flex flex-col gap-20 ${
+                    open ? "translate-x-0" : "-translate-x-full"
+                }`}
+                style={{
+                    background: "linear-gradient(90deg, rgba(129,129,129,1) 0%, rgba(113,113,113,1) 38%, rgba(87,87,87,1) 100%)",
+                }}
+            >
+                <article className="font-bold w-full flex justify-end px-5">
+                    <button className="cursor-pointer" onClick={handleClose}>
+                        <AiOutlineClose size={30} />
+                    </button>
+                </article>
+                <article className="flex flex-col w-full">
+                    {options.map((option) => (
+                        <Link to={option.url} key={option.title}>
+                            <div className="flex px-10 h-15 items-center justify-start gap-5 hover:bg-white hover:text-black">
+                                {option.icon}
+                                <h4>{option.title}</h4>
+                            </div>
+                        </Link>
+                    ))}
+                </article>
+                <article className="px-6  h-full w-full flex justify-start items-end">
+                    <button className='hover:cursor-pointer hover:text-black' onClick={handleLogout}>
+                        <BiLogOut size={30} />
+                    </button>
+                </article>
+            </div>
+        );
+    };
+    
+    export default Menu;

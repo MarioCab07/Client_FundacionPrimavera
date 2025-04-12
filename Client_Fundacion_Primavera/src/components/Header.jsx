@@ -5,6 +5,7 @@ import {parserHeaderRole} from "../tools/tools"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { BiLogOut } from 'react-icons/bi'
+import { GiHamburgerMenu } from 'react-icons/gi'
 
 import Menu from "./Menu"
 
@@ -59,12 +60,27 @@ export const DashBoardHeader =()=>{
     )
 }
 
+
 export const Header = ()=>{
 
+    
+
     const [open,setOpen] = useState(false);
+
+    const handleOpen=()=>{
+        setOpen(true);
+    }
     return(
         <>
-        <Menu setOpen={setOpen}/>
+        <section className="py-4 px-10 gap-10 flex flex-row-reverse justify-between items-center " style={{background:"#E2E2E2",boxShadow:" rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+        <div className=""> <img src={Logo} alt="logo" className="w-30 h-20"/></div>
+
+            <button className="hover:cursor-pointer" onClick={handleOpen}>
+            <GiHamburgerMenu size={30}/>
+            </button>
+        
+        </section>
+        <Menu open={open} setOpen={setOpen}/>
         </>
 
     )
