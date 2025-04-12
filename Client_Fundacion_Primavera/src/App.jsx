@@ -3,6 +3,8 @@ import {AuthProvider} from "./context/AuthContext"
 import LoginPage from "./pages/LoginPage";
 import DashBoard from "./pages/DashBoard";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import BenAdd from "./pages/BenAdd";
+
 import bg from "./assets/images/bg.jpg"
 import "./App.css"
 //import link to navigate to the page
@@ -15,16 +17,17 @@ function App() {
     <>
     <section className="" style={{
     backgroundImage: `url(${bg})`,
-    backgroundSize: "700px 500px", 
+    backgroundSize: "700px 700px", 
     backgroundRepeat: "repeat", 
-    height: "100vh",
+    minHeight: "100vh",
   }}>
       <AuthProvider>
       
       <Routes>
       <Route path="/" element={<LoginPage/>}/>
       <Route element={<ProtectedRoutes allowedRoles={["SUPER_ADMIN", "ADMIN","GERENTE"]} />}>
-          <Route path="/dashboard" element={<DashBoard />} />
+          <Route path="/Dashboard" element={<DashBoard />} />
+          <Route path="/RegistrarBeneficiario" element={<BenAdd />} />
       </Route>
       </Routes>
       
