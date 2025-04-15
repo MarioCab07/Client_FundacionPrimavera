@@ -3,7 +3,7 @@ import {AuthProvider} from "./context/AuthContext"
 import LoginPage from "./pages/LoginPage";
 import DashBoard from "./pages/DashBoard";
 import ProtectedRoutes from "./components/ProtectedRoutes";
-import BenAdd from "./pages/BenAdd";
+import BenAdd from "./pages/BenAddPage";
 
 import bg from "./assets/images/bg.jpg"
 import "./App.css"
