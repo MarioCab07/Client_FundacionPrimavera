@@ -4,15 +4,12 @@ const apiURL = import.meta.env.VITE_BASE_URL;
 
 const api = axios.create({
     baseURL: apiURL,
-    headers: {
-        "Content-Type": "application/json",
-    },
     withCredentials: true,
 })
 //Auth Functions
 export const Login = async(data)=>{
     try {
-        return api.post("auth/login",data);
+        return await api.post("auth/login",data);
     } catch (error) {
         throw error;
     }
@@ -20,7 +17,7 @@ export const Login = async(data)=>{
 
 export const WhoAmI = async()=>{
     try {
-        return api.get("auth/whoami");
+        return await api.get("auth/whoami");
     } catch (error) {
         throw error;
     }
@@ -28,7 +25,7 @@ export const WhoAmI = async()=>{
 
 export const Logout = async()=>{
     try {
-        return api.post("auth/logout");
+        return await api.post("auth/logout");
     } catch (error) {
         
     }
@@ -38,7 +35,7 @@ export const Logout = async()=>{
 //User Functions
 export const getUsers = async()=>{
     try {
-        return api.get("auth/get/users");
+        return await api.get("auth/get/users");
     } catch (error) {
         throw error;
     }
@@ -46,7 +43,7 @@ export const getUsers = async()=>{
 
 export const registerUser = async(data)=>{
     try {
-        return api.post("auth/register",data);
+        return await api.post("auth/register",data);
     } catch (error) {
         throw error;
         
@@ -55,7 +52,7 @@ export const registerUser = async(data)=>{
 
 export const updateUser = async(userId,data)=>{
     try {
-        return api.put(`auth/update/user/${userId}`,data);
+        return await api.put(`auth/update/user/${userId}`,data);
     } catch (error) {
         throw error;
     }
@@ -64,7 +61,7 @@ export const updateUser = async(userId,data)=>{
 export const deleteUser = async(userId)=>{
     try {
         
-        return api.delete(`auth/delete/user/${userId}`);
+        return await api.delete(`auth/delete/user/${userId}`);
     } catch (error) {
         throw error;
     }
@@ -77,18 +74,18 @@ export const getBeneficiaries = async(page=1, pageSize =10)=>{
         const skip = (page - 1) * pageSize;
         const limit = pageSize;
 
-        return api.get("beneficiary/getAll",{params:{skip,limit}});
+        return await api.get("beneficiary/getAll",{params:{skip,limit}});
 
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const findBeneficiary = async(benId)=>{
     try {
-        return api.get(`beneficiary/find/${benId}`);
+        return await api.get(`beneficiary/find/${benId}`);
     } catch (error) {
-        
+        throw error;
     }
 }
 
@@ -97,70 +94,70 @@ export const getInactiveBeneficiaries = async(page=1, pageSize =10)=>{
         const skip = (page - 1) * pageSize;
         const limit = pageSize;
 
-        return api.get("beneficiary/inactive",{params:{skip,limit}});
+        return await api.get("beneficiary/inactive",{params:{skip,limit}});
 
     } catch (error) {
-        
+        throw error;
     }
 }
 
 
 export const getBenDocuments = async(benId)=>{
     try {
-        return api.get(`beneficiary/read/document/${benId}`)
+        return await api.get(`beneficiary/read/document/${benId}`)
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const getBenPhoto = async(benId)=>{
     try {
-        return api.get(`beneficiary/photo/${benId}`)
+        return await api.get(`beneficiary/photo/${benId}`)
     } catch (error) {
-        
+        throw error;
     }
 }
 
 
 export const addBeneficiary = async(data)=>{
     try {
-        return api.post("beneficiary/create",data);
+        return await api.post("beneficiary/create",data);
     } catch (error) {
-        
+        throw error;
     }
 }
 
 
 export const uploadDocuments = async(benId,data)=>{
     try {
-        return api.post(`beneficiary/upload/document/${benId}`,data);
+        return await api.post(`beneficiary/upload/document/${benId}`,data);
     } catch (error) {
-        
+        throw error;
     }
 }
 
 
 export const toggleActive = async(benId,data)=>{
     try {
-        return api.patch(`beneficiary/toggle/${benId}`,data)
+        return await api.patch(`beneficiary/toggle/${benId}`,data)
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const updateBeneficiary = async(benId,data)=>{
     try {
-        return api.put(`beneficiary/update/${benId}`,data)
+        return await api.put(`beneficiary/update/${benId}`,data)
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const deleteBenDocument = async(benId,data)=>{
     try {
-        return api.delete(`beneficiary/delete/document/${benId}`,{data});    
+        return await api.delete(`beneficiary/delete/document/${benId}`,{data});    
     } catch (error) {
-        
+        throw error;
     }
 }
 
@@ -168,17 +165,17 @@ export const deleteBenDocument = async(benId,data)=>{
 //Inventory Functions
 export const getImage = async(inventId)=>{
     try {
-        return api.get(`inventory/image/${inventId}`);
+        return await api.get(`inventory/image/${inventId}`);
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const findItem = async(inventId)=>{
     try {
-        return api.get(`inventory/find/${inventId}`);
+        return await api.get(`inventory/find/${inventId}`);
     } catch (error) {
-        
+        throw error;
     }
 }
 
@@ -187,16 +184,16 @@ export const getInventory = async(page=1, pageSize =10)=>{
         const skip = (page - 1) * pageSize;
         const limit = pageSize;
 
-        return api.get("inventory/getAll",{params:{skip,limit}});
+        return await api.get("inventory/getAll",{params:{skip,limit}});
 
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const addItem = async(data)=>{
     try{
-        return api.post("inventory/create",data);
+        return await api.post("inventory/create",data);
     }catch(error){
         throw error;
     }
@@ -205,7 +202,7 @@ export const addItem = async(data)=>{
 
 export const updateItem = async(inventId,data)=>{
     try {
-        return api.put(`inventory/update/${inventId}`,data);
+        return await api.put(`inventory/update/${inventId}`,data);
     } catch (error) {
         throw error;
     }
@@ -213,7 +210,7 @@ export const updateItem = async(inventId,data)=>{
 
 export const deleteItem = async(inventId)=>{
     try {
-        return api.delete(`inventory/delete/${inventId}`);
+        return await api.delete(`inventory/delete/${inventId}`);
     } catch (error) {
         throw error;
     }
@@ -226,58 +223,58 @@ export const getVolunteers = async(page=1, pageSize =10)=>{
         const skip = (page - 1) * pageSize;
         const limit = pageSize;
 
-        return api.get("volunteer/getAll",{params:{skip,limit}});
+        return await api.get("volunteer/getAll",{params:{skip,limit}});
 
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const findVolunteer = async(volunId)=>{
     try {
-        return api.get(`volunteer/find/${volunId}`);
+        return await api.get(`volunteer/find/${volunId}`);
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const addVolunteer = async(data)=>{
     try {
-        return api.post("volunteer/create",data);
+        return await api.post("volunteer/create",data);
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const createVolunUser = async(volunId)=>{
     try {
-        return api.post(`volunteer/create/user/${volunId}`);
+        return await api.post(`volunteer/create/user/${volunId}`);
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const updateVolunteer = async(volunId,data)=>{
     try {
-        return api.put(`volunteer/update/${volunId}`,data);
+        return await api.put(`volunteer/update/${volunId}`,data);
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const deleteVolunteer = async(volunId)=>{
     try {
-        return api.delete(`volunteer/delete/${volunId}`);
+        return await api.delete(`volunteer/delete/${volunId}`);
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const toggleVolunActive = async(volunId)=>{
     try {
-        return api.patch(`volunteer/toggle/active/${volunId}`);
+        return await api.patch(`volunteer/toggle/active/${volunId}`);
     } catch (error) {
-        
+        throw error;
     }
 }
 
@@ -288,34 +285,34 @@ export const getPetitions = async(status="pending",page=1, pageSize =10)=>{
         const skip = (page - 1) * pageSize;
         const limit = pageSize;
 
-        return api.get("petition/getAll",{params:{skip,limit}});
+        return await api.get("petition/getAll",{params:{skip,limit}});
 
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const reopenPetition = async(petId)=>{
     try {
-        return api.patch(`petition/reopen/${petId}`);
+        return await api.patch(`petition/reopen/${petId}`);
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const resolvePetition = async(petId)=>{
     try {
-        return api.patch(`petition/resolve/${petId}`);
+        return await api.patch(`petition/resolve/${petId}`);
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const deletePetition = async(petId)=>{
     try {
-        return api.delete(`petition/delete/${petId}`);
+        return await api.delete(`petition/delete/${petId}`);
     } catch (error) {
-        
+        throw error;
     }
 }
 
@@ -324,41 +321,41 @@ export const deletePetition = async(petId)=>{
 
 export const getGeneralStats = async()=>{
     try {
-        return api.get("stats/general");
+        return await api.get("stats/general");
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const getIncomeStats = async()=>{
     try {
-        return api.get("stats/income");
+        return await api.get("stats/income");
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const getHouseStats = async()=>{
     try {
-        return api.get("stats/house");
+        return await api.get("stats/house");
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const getPhoneStats = async()=>{
     try {
-        return api.get("stats/phone");
+        return await api.get("stats/phone");
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export const getAgeStats = async(data)=>{
     try {
-        return api.get("stats/income",{params:data});
+        return await api.get("stats/income",{params:data});
     } catch (error) {
-        
+        throw error;
     }
 }
 

@@ -66,3 +66,8 @@ export const validateInput = (field, value) => {
     }
     return true; // If no pattern is defined, assume valid
 };
+
+export const sanitizeInput = (input) => {
+    // Remove potentially harmful characters or patterns
+    return input.replace(/['";<>${}`[\]]/g, ""); // Removes single quotes, double quotes, semicolons, and angle brackets
+};
