@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
 @import "tailwindcss";
+@import "./style/animations.css";
 @layer utilities {
     .hide-password-toggle::-ms-reveal, 
     .hide-password-toggle::-ms-clear,

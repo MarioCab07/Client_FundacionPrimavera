@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import DashBoard from "./pages/DashBoard";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import BenAdd from "./pages/BenAddPage";
+import BenList from "./pages/BenListPage";
 
 import bg from "./assets/images/bg.jpg"
 import "./App.css"
@@ -28,6 +29,7 @@ function App() {
       <Route element={<ProtectedRoutes allowedRoles={["SUPER_ADMIN", "ADMIN","GERENTE"]} />}>
           <Route path="/Dashboard" element={<DashBoard />} />
           <Route path="/RegistrarBeneficiario" element={<BenAdd />} />
+          <Route path="/GestionarBeneficiarios" element={<BenList />} />
       </Route>
       </Routes>
       
