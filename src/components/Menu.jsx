@@ -8,6 +8,7 @@ import { AiOutlineClose } from 'react-icons/ai'
 
 import { useAuth } from '../context/AuthContext'
 import { useNavigate,Link } from 'react-router-dom'
+import { useEffect, useRef } from "react";
 
 const getOptions=(role)=>{
     
@@ -80,6 +81,7 @@ const getOptions=(role)=>{
     const Menu = ({ open, setOpen }) => {
         const { user, logout } = useAuth();
         const navigate = useNavigate();
+        const menuRef = useRef(null);
     
         const handleLogout = async () => {
             await logout();
@@ -92,14 +94,28 @@ const getOptions=(role)=>{
         };
     
         const options = getOptions(user?.role);
+
+        useEffect(() => {
+            const handleClickOutside = (event) => {
+                if (menuRef.current && !menuRef.current.contains(event.target)) {
+                    setOpen(false); // Cierra el menú si el clic ocurre fuera de él
+                }
+            };
+    
+            document.addEventListener("mousedown", handleClickOutside); // Escucha clics en el documento
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside); // Limpia el evento al desmontar
+            };
+        }, [setOpen]);
     
         return (
             <div
                 className={`fixed top-0 left-0 h-3/4 w-1/6 bg-gray-800 text-white transform transition-transform duration-500 py-5 rounded-br-2xl flex flex-col gap-20 ${
-                    open ? "translate-x-0" : "-translate-x-full"
+                    open ? "translate-x-0 z-50" : "-translate-x-full z-50"
                 }`}
                 style={{
                     background: "linear-gradient(90deg, rgba(129,129,129,1) 0%, rgba(113,113,113,1) 38%, rgba(87,87,87,1) 100%)",
+                    boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"
                 }}
             >
                 <article className="font-bold w-full flex justify-end px-5">

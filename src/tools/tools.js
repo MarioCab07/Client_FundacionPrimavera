@@ -71,3 +71,8 @@ export const sanitizeInput = (input) => {
     // Remove potentially harmful characters or patterns
     return input.replace(/['";<>${}`[\]]/g, ""); // Removes single quotes, double quotes, semicolons, and angle brackets
 };
+
+import dayjs from "dayjs";
+export const sanitizeDate = (isoDate) => {
+    return dayjs(isoDate).format("DD/MM/YYYY");
+};

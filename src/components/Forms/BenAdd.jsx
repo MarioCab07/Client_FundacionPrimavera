@@ -22,6 +22,7 @@ dayjs.extend(utc);
 import { addBeneficiary } from "../../services/api.services";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import { sleep } from "../../tools/tools";
+import { responsivePropType } from "@mui/system";
 
 const BenForm = () => {
   // Styles
@@ -96,10 +97,11 @@ const BenForm = () => {
   const handleAddDependent = () => {
     if (dependent) {
       const updatedDependents = [...form.dependents, dependent]; // Add the new dependent to the array
+      console.log(updatedDependents);
+      
       setForm({ ...form, dependents: updatedDependents }); // Update the form state
       setDependent(""); // Reset the dependent state
-    } else {
-    }
+    } 
   };
 
   // Function to handle the change in the DUI input field
@@ -157,7 +159,8 @@ const BenForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-
+    
+    
     const toastId = toast.loading("Agregando Beneficiario...");
     const starting_date = startingDate.format("MM-DD-YYYY");
         const birth_date = birthDate.format("MM-DD-YYYY");
@@ -228,6 +231,14 @@ const BenForm = () => {
         setBirthDate(dayjs().utc()); // Reset the birth date to the current date
         setStartingDate(dayjs().utc()); // Reset the starting date to the current date
 
+      }else {
+
+        toast.update(toastId, {
+          render: "Ya existe Beneficiario con ese DUI!",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000, // Close after 3 seconds
+        });
       }
 
 
@@ -662,7 +673,7 @@ const BenForm = () => {
               >
                 {/* Text that transitions out */}
                 <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 transform group-hover:-translate-x-full font-bold ">
-                  Agregar hola
+                  Agregar
                 </span>
 
                 {/* Checkmark that transitions in */}

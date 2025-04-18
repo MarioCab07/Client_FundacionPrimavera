@@ -20,7 +20,7 @@ const BasicSelect = ({options , value,setValue,label})=> {
           labelId="select-label"
           id="select"
           value={value}
-          label="Age"
+          label={label}
           onChange={handleChange}
         >
             {options.map((opt)=>{

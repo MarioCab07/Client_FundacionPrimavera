@@ -1,6 +1,8 @@
 import axios from "axios";
+import profileIcon from "../assets/icons/ProfileIcon.jpg";
 
-const apiURL = import.meta.env.VITE_BASE_URL;
+
+const apiURL = import.meta.env.VITE_BASE_URL+"api/v1/";
 
 const api = axios.create({
     baseURL: apiURL,
@@ -112,9 +114,10 @@ export const getBenDocuments = async(benId)=>{
 
 export const getBenPhoto = async(benId)=>{
     try {
-        return await api.get(`beneficiary/photo/${benId}`)
+        const response =  await api.get(`beneficiary/photo/${benId}`);
+        return response.data.photo;
     } catch (error) {
-        throw error;
+        return profileIcon;
     }
 }
 
@@ -123,7 +126,7 @@ export const addBeneficiary = async(data)=>{
     try {
         return await api.post("beneficiary/create",data);
     } catch (error) {
-        throw error;
+        return ""
     }
 }
 
@@ -170,6 +173,8 @@ export const getImage = async(inventId)=>{
         throw error;
     }
 }
+
+
 
 export const findItem = async(inventId)=>{
     try {
