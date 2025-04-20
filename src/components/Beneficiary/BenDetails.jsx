@@ -10,7 +10,9 @@ import "../../style/animations.css";
 
 
 
+
 import { Documents } from "./Documents";
+
 
 const Details = ({
   ben,
@@ -21,6 +23,9 @@ const Details = ({
   setShowModify,
   handleClose,
 }) => {
+  
+const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
+
   return (
     <>
       <h2 className="text-2xl font-bold text-center">
@@ -228,7 +233,10 @@ const Details = ({
         )}
       </div>
       <div className="flex gap-4 justify-center items-center">
-        <button
+
+        {isAdmin ? (
+          <>
+          <button
           onClick={()=>{
             setShowModify(true);
           }}
@@ -236,16 +244,6 @@ const Details = ({
           className="bg-amber-300 rounded-2xl p-3 w-fit gap-4 flex items-center hover:bg-amber-50 cursor-pointer"
         >
           Modificar <BsPencilSquare size={20} />{" "}
-        </button>
-        <button
-          onClick={() => {
-            setShowDocuments(true);
-          }}
-          style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
-          className="bg-amber-300 rounded-2xl p-3 w-fit flex gap-4 items-center hover:bg-amber-50 cursor-pointer"
-        >
-          Ver Documentos
-          <AiOutlineFilePdf size={20} />
         </button>
         {ben.active.value ? (
           <button
@@ -260,6 +258,20 @@ const Details = ({
         ):
         null
         }
+          </>
+        ):(null)}
+        
+        <button
+          onClick={() => {
+            setShowDocuments(true);
+          }}
+          style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+          className="bg-amber-300 rounded-2xl p-3 w-fit flex gap-4 items-center hover:bg-amber-50 cursor-pointer"
+        >
+          Ver Documentos
+          <AiOutlineFilePdf size={20} />
+        </button>
+        
         
         <button
           style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}

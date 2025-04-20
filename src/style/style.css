@@ -1,0 +1,23 @@
+.ms-madi-regular {
+    font-family: "Ms Madi", cursive;
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px; /* Ancho del scroll */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Fondo del track */
+    border-radius: 10px; /* Bordes redondeados */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #fbbf24, #f59e0b); /* Degradado amarillo */
+    border-radius: 10px; /* Bordes redondeados */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, #f59e0b, #d97706); /* Color más oscuro al hover */
+  }

@@ -38,26 +38,28 @@ const Search=({setBenSelected})=>{
     return(
         <>
         <section className=" h-fit relative w-full flex flex-col gap-4 items-start justify-center mt-10">
-          <form
-            onSubmit={handleSearch}
-            className="flex items-center gap-2 w-1/3 relative z-10"
-          >
-            <input
-              value={search}
-              onChange={handleChange}
-              placeholder="Buscar por DUI o nombre exacto"
-              type="text"
-              className="bg-white  p-2 w-full relative z-10 focus:outline-none focus:ring-2 focus:bg-amber-300 focus:border-transparent"
-              style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
-            />
-            <button
-              style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
-              className="cursor-pointer w-1/4 p-2 rounded-2xl flex gap-5 justify-center items-center bg-amber-200 hover:bg-white transition-all duration-300 ease-in-out hover:text-amber-300 font-bold"
-            >
-               <BsSearch size={20}/>
-               Buscar
-            </button>
-          </form>
+        <form
+  onSubmit={handleSearch}
+  className="flex items-center gap-2 w-1/3 relative z-10"
+>
+  <input
+    value={search}
+    onChange={handleChange}
+    placeholder="Buscar por DUI o nombre exacto"
+    type="text"
+    className="bg-white p-3 w-full rounded-lg relative z-10 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-gray-100 transition-all duration-300"
+    style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+  />
+  <button
+    style={{
+      boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+    }}
+    className="cursor-pointer w-1/4 p-3 rounded-lg flex gap-3 justify-center items-center text-white font-bold bg-amber-300 hover:scale-105 transition-all duration-300 hover:bg-yellow-50 hover:text-amber-300  "
+  >
+    <BsSearch size={20} />
+    Buscar
+  </button>
+</form>
   
           {/* Dropdown */}
           {showDropdown && (

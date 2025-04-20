@@ -8,6 +8,7 @@ import { sanitizeDate } from "../../tools/tools";
 import { IoMdOpen } from "react-icons/io";
 import "../../style/animations.css"
 import { uploadDocuments } from "../../services/api.services";
+import { parseRol } from "../../tools/tools";
 
 
 const DeleteDoc = ({ ben, selectedDoc, setShowDelete, onDocumentDeleted }) => {
@@ -47,6 +48,7 @@ const DeleteDoc = ({ ben, selectedDoc, setShowDelete, onDocumentDeleted }) => {
         await sleep(800);
         onDocumentDeleted(fileName);
         handleClose();
+        window.location.reload();
       }
     } catch (error) {
       toast.update(toastId, {
@@ -168,6 +170,7 @@ const UploadDoc = ({ ben, setShowUpload, onUploadDocument }) => {
         onUploadDocument(response.data.newFiles);
         await sleep(800);
         handleClose();
+        window.location.reload();
       }
     } catch (error) {
       toast.update(toastId, {
@@ -269,6 +272,7 @@ return(
   const [showDelete, setShowDelete] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [showUpload, setShowUpload] = useState(false);
+  const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
@@ -307,7 +311,8 @@ return(
         
         {!showUpload ? (
           <>
-          <button onClick={()=>{setShowUpload(true)}} className="flex gap-2 cursor-pointer items-center bg-amber-300 rounded-2xl hover:bg-amber-50 hover:text-amber-300 transition ease-in-out 0.5s w-fit p-2  ">Subir Documentos <AiOutlineUpload size={20}/> </button>
+          {isAdmin && (<button onClick={()=>{setShowUpload(true)}} className="flex gap-2 cursor-pointer items-center bg-amber-300 rounded-2xl hover:bg-amber-50 hover:text-amber-300 transition ease-in-out 0.5s w-fit p-2  ">Subir Documentos <AiOutlineUpload size={20}/> </button>)}
+          
           <article className="flex flex-col gap-4">
           <div className="flex justify-evenly  w-full gap-10">
             <h5>Nombre</h5>
@@ -344,7 +349,7 @@ return(
                       </div>
 
                       <div className="flex gap-6">
-                        <button
+                        {isAdmin && ( <button
                           onClick={() => handleClick(doc.name)}
                           style={{
                             boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
@@ -353,7 +358,8 @@ return(
                         >
                           {" "}
                           <AiOutlineDelete size={20} />{" "}
-                        </button>
+                        </button>)}
+                       
                       </div>
                     </div>
                   </>

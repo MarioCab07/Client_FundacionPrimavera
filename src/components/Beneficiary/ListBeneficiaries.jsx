@@ -16,8 +16,75 @@ const ListBeneficiaries = ({data,setBenSelected})=>{
     }
    
    
-    return(
-        <>
+    return (
+        <div className="flex flex-col max-h-96 overflow-y-scroll gap-6 w-full custom-scrollbar">
+          {data.map((ben) => (
+            <div
+              key={ben._id}
+              className="flex flex-col bg-white shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out rounded-xl p-6 cursor-pointer"
+              onClick={() => handleClick(ben)}
+            >
+              <div className="flex justify-evenly items-center gap-6 w-full">
+                {/* Profile Image */}
+                <img
+                  className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
+                  src={encodeURI(ben.photo) || profileIcon}
+                  alt="Profile"
+                />
+    
+                {/* Beneficiary Info */}
+                <div className="flex flex-col flex-1 gap-2">
+                  <h4 className="text-xl font-bold text-gray-800">{ben.name}</h4>
+                  <p className="text-sm text-gray-500">{ben.age} años</p>
+                </div>
+    
+                {/* DUI */}
+                <div className="flex flex-col flex-1 items-center gap-1">
+                  <p className="text-sm font-semibold text-gray-600">DUI</p>
+                  <p className="text-base font-bold text-gray-800">{ben.dui}</p>
+                </div>
+    
+                {/* Affiliation */}
+                <div className="flex flex-col flex-1 items-center gap-1">
+                  <p className="text-sm font-semibold text-gray-600">Afiliación</p>
+                  <p className="text-base font-bold text-gray-800">{ben.affiliation}</p>
+                </div>
+    
+                {/* Active/Inactive Status */}
+                <div className="flex flex-col items-center gap-1">
+                  <p className="text-sm font-semibold text-gray-600">Estado</p>
+                  {ben.active.value ? (
+                    <div className="flex items-center gap-2 text-green-600 font-semibold">
+                      Activo
+                      <div
+                        className="w-4 h-4 rounded-full bg-green-500"
+                        style={{ boxShadow: "0 0 10px rgba(58, 238, 13, 0.5)" }}
+                      ></div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 text-red-600 font-semibold">
+                      Inactivo
+                      <div
+                        className="w-4 h-4 rounded-full bg-red-500"
+                        style={{ boxShadow: "0 0 10px rgba(255, 0, 0, 0.5)" }}
+                      ></div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+}
+
+
+export default ListBeneficiaries;
+
+
+/*
+
+<>
         {data.map((ben)=>{
             return(
                 <>
@@ -73,8 +140,6 @@ const ListBeneficiaries = ({data,setBenSelected})=>{
         })}
         
         </>
-    )
-}
 
+*/
 
-export default ListBeneficiaries;
