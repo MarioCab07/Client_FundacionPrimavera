@@ -110,35 +110,47 @@ const getOptions=(role)=>{
     
         return (
             <div
-                className={`fixed top-0 left-0 h-3/4 w-1/6 bg-gray-800 text-white transform transition-transform duration-500 py-5 rounded-br-2xl flex flex-col gap-20 ${
-                    open ? "translate-x-0 z-50" : "-translate-x-full z-50"
-                }`}
-                style={{
-                    background: "linear-gradient(90deg, rgba(129,129,129,1) 0%, rgba(113,113,113,1) 38%, rgba(87,87,87,1) 100%)",
-                    boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"
-                }}
-            >
-                <article className="font-bold w-full flex justify-end px-5">
-                    <button className="cursor-pointer" onClick={handleClose}>
-                        <AiOutlineClose size={30} />
-                    </button>
-                </article>
-                <article className="flex flex-col w-full">
-                    {options.map((option) => (
-                        <Link to={option.url} key={option.title}>
-                            <div className="flex px-10 h-15 items-center justify-start gap-5 hover:bg-white hover:text-black">
-                                {option.icon}
-                                <h4>{option.title}</h4>
-                            </div>
-                        </Link>
-                    ))}
-                </article>
-                <article className="px-6  h-full w-full flex justify-start items-end">
-                    <button className='hover:cursor-pointer hover:text-black' onClick={handleLogout}>
-                        <BiLogOut size={30} />
-                    </button>
-                </article>
-            </div>
+  className={`fixed top-0 left-0 h-3/4 w-1/5 bg-gray-800 text-white transform transition-transform duration-500 py-5 rounded-br-3xl flex flex-col gap-10 ${
+    open ? "translate-x-0 z-50" : "-translate-x-full z-50"
+  }`}
+  style={{
+    background: "linear-gradient(90deg, #4B5563, #374151)", // Gradiente gris oscuro
+    boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+  }}
+>
+  {/* Close Button */}
+  <article className="font-bold w-full flex justify-end px-5">
+    <button
+      className="cursor-pointer p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-all duration-300"
+      onClick={handleClose}
+    >
+      <AiOutlineClose size={25} className="text-white" />
+    </button>
+  </article>
+
+  {/* Menu Options */}
+  <article className="flex flex-col w-full">
+    {options.map((option) => (
+      <Link to={option.url} key={option.title}>
+        <div className="flex px-8 py-3 items-center justify-start gap-4 rounded-lg hover:bg-gray-600 hover:text-white transition-all duration-300">
+          {option.icon}
+          <h4 className="text-lg font-semibold">{option.title}</h4>
+        </div>
+      </Link>
+    ))}
+  </article>
+
+  {/* Logout Button */}
+  <article className="px-6 h-full w-full flex justify-start items-end">
+    <button
+      className="flex items-center cursor-pointer gap-2 text-gray-400 hover:text-red-500 transition-all duration-300"
+      onClick={handleLogout}
+    >
+      <BiLogOut size={25} />
+      <span className="text-sm font-semibold">Cerrar Sesión</span>
+    </button>
+  </article>
+</div>
         );
     };
     

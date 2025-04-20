@@ -26,36 +26,43 @@ export const DashBoardHeader =()=>{
 
     return(
         <>
-        <section className="p-4 gap-10 flex flex-row-reverse justify-center items-center " style={{background:"#E2E2E2",boxShadow:" rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+        <section
+  className="p-4 gap-10 flex flex-row-reverse justify-between items-center bg-gradient-to-r from-gray-200 via-white to-gray-300 shadow-lg rounded-b-2xl"
+  style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
+>
+  {/* Logo */}
+  <div className="flex items-center">
+    <img src={Logo} alt="logo" className="w-28 h-16 object-contain" />
+  </div>
 
-        <div className=""> <img src={Logo} alt="logo" className="w-30 h-20"/></div>
-       
+  {/* Navigation Buttons */}
+  <div className="w-3/4 flex gap-10 justify-center items-center">
+    {buttons.map((option) => (
+      <Link
+        className={`rounded-2xl px-5 py-3 font-bold transform transition-all duration-300 ease-in-out hover:scale-110 hover:bg-gray-700 hover:text-white ${
+          option === "Usuarios" ? "bg-amber-300 text-white" : "bg-white text-gray-700"
+        }`}
+        style={{
+          boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+        }}
+        to={`/${option}`}
+        key={option}
+      >
+        {option}
+      </Link>
+    ))}
+  </div>
 
-        <div className=" w-3/4  flex gap-40 justify-center items-center">
-        {buttons.map((option)=>{
-            return(
-                <Link
-                className={`rounded-2xl px-5 py-3 font-bold transform transition-all duration-700 ease-in-out hover:scale-125 hover:bg-[#7C7C7C] hover:text-white ${
-                    option === "Usuarios" ? "bg-[#FADF4A]" : "bg-white"
-                }`}
-                style={{
-                    boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-                }}
-                to={`/${option}`}
-                key={option}
-            >
-                {option}
-            </Link>
-            )
-        })}
-        </div>
-        <div className="h-fit   w-fit items-center justify-start">
-        <button onClick={handleLogout} className=" flex items-center text-black hover:text-red-700 hover:cursor-pointer"><BiLogOut size={30}/></button>
-        </div>
-        
-
-
-        </section>
+  {/* Logout Button */}
+  <div className="flex items-center">
+    <button
+      onClick={handleLogout}
+      className="flex items-center cursor-pointer text-gray-700 hover:text-red-600 transition-all duration-300"
+    >
+      <BiLogOut size={30} />
+    </button>
+  </div>
+</section>
         </>
     )
 }
@@ -72,15 +79,27 @@ export const Header = ()=>{
     }
     return(
         <>
-        <section className="py-4 px-10 gap-10 flex flex-row-reverse justify-between items-center " style={{background:"#E2E2E2",boxShadow:" rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
-        <div className=""> <img src={Logo} alt="logo" className="w-30 h-20"/></div>
+        <section
+  className=" py-4 px-10 flex items-center flex-row-reverse justify-between bg-gradient-to-r from-gray-200 via-white to-gray-300 shadow-lg rounded-b-2xl"
+  style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
+>
+  {/* Logo */}
+  <div className="flex items-center">
+    <img src={Logo} alt="logo" className="w-28 h-16 object-contain" />
+    <h1 className="ml-4 text-2xl font-bold text-gray-700">Fundación Primavera</h1>
+  </div>
 
-            <button className="hover:cursor-pointer" onClick={handleOpen}>
-            <GiHamburgerMenu size={30}/>
-            </button>
-        
-        </section>
-        <Menu open={open} setOpen={setOpen}/>
+  {/* Hamburger Menu */}
+  <button
+    className="hover:cursor-pointer p-2 rounded-full bg-gray-100 hover:bg-gray-300 transition-all duration-300"
+    onClick={handleOpen}
+  >
+    <GiHamburgerMenu size={30} className="text-gray-700" />
+  </button>
+
+  {/* Menu */}
+  <Menu open={open} setOpen={setOpen} />
+</section>
         </>
 
     )

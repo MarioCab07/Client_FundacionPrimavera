@@ -108,10 +108,10 @@ const BenList = () => {
         theme="light"
         transition={Bounce}
       />
-      <section className="flex flex-col items-center rounded-lg w-full relative z-40">
-      <div className="flex flex-1 items-center justify-center gap-10  px-4 py-2 ">
+      <section className="flex flex-col items-center rounded-lg w-full relative z-40 p-2">
+      <div className="flex flex-1 items-center justify-center gap-10  px-4 py-8 ">
             <BsFillPeopleFill size={30}/>
-            <h3 className="font-bold text-4xl">Beneficiarios</h3>
+            <h3 className=" text-6xl ms-madi-regular ">Beneficiarios</h3>
           </div>
         <article className="flex justify-between items-center gap-20 p-4 w-full relative z-10">
           
@@ -120,31 +120,61 @@ const BenList = () => {
           
           
           <div className="flex gap-4 items-center justify-center">
-            <Link style={{boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"}} className=" cursor-pointer flex-1 p-2 rounded-2xl flex gap-5 justify-center items-center bg-amber-200 hover:bg-white transition-all duration-300 ease-in-out hover:text-amber-300 font-bold text-center" to={"/RegistrarBeneficiario"}>   Agregar Beneficiario  <HiPencilAlt size={30}/></Link>
+            <Link style={{boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"}} className="cursor-pointer w-fit p-3 rounded-lg flex gap-3 justify-center items-center text-white font-bold bg-amber-300 hover:scale-105 transition-all duration-300 hover:bg-yellow-50 hover:text-amber-300 text-center  " to={"/RegistrarBeneficiario"}>   Agregar Beneficiario  <HiPencilAlt size={40}/></Link>
             
           </div>
         </article>
 
-        <article className="w-1/2 flex flex-col bg-[#F1F1F1] rounded-2xl p-4 gap-4" style={{boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"}}>
-        <ToggleButtonGroup
+        <article
+  className="w-3/4 flex flex-col bg-gradient-to-br from-gray-200 via-white to-amber-100 rounded-2xl p-6 gap-6 shadow-lg"
+  style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 4px 12px" }}
+>
+  {/* Toggle Buttons */}
+  <div className="flex justify-center">
+    <ToggleButtonGroup
       color="primary"
       value={showActive}
       exclusive
       onChange={handleChange}
       aria-label="Platform"
+      className="bg-gray-100 rounded-lg p-1"
     >
-      <ToggleButton value={true}>Activos</ToggleButton>
-      <ToggleButton value={false}>Inactivos</ToggleButton>
-      
+      <ToggleButton
+        value={true}
+        className={`px-6 py-2 rounded-lg font-semibold ${
+          showActive
+            ? "bg-amber-300 text-white shadow-md"
+            : "bg-white text-gray-600 hover:bg-gray-200"
+        }`}
+      >
+        Activos
+      </ToggleButton>
+      <ToggleButton
+        value={false}
+        className={`px-6 py-2 rounded-lg font-semibold ${
+          !showActive
+            ? "bg-amber-300 text-white shadow-md"
+            : "bg-white text-gray-600 hover:bg-gray-200"
+        }`}
+      >
+        Inactivos
+      </ToggleButton>
     </ToggleButtonGroup>
-            {loading ? <Loading/> : 
-            (data.length > 0 ? (<ListBeneficiaries data={data} setBenSelected={setBenSelected}/>): <p>No hay Beneficiarios Registrados</p>)
-        
-            
-        }
+  </div>
 
-        
-        </article>
+  {/* Content */}
+  <div className="flex flex-col items-center justify-center">
+    {loading ? (
+      <Loading />
+    ) : data.length > 0 ? (
+      <ListBeneficiaries data={data} setBenSelected={setBenSelected} />
+    ) : (
+      <p className="text-gray-500 text-lg font-medium">
+        No hay Beneficiarios Registrados
+      </p>
+    )}
+  </div>
+</article>
       </section>
       {benSelected && (
             <BenDetails ben={benSelected} setBenSelected={setBenSelected}/>

@@ -10,9 +10,11 @@ import { FiSave } from "react-icons/fi";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { BsUpload } from "react-icons/bs";
 import { RiUserAddLine } from "react-icons/ri";
+import { BsFillPeopleFill } from "react-icons/bs";
 
 // Default Profile Icon
 import profileIcon from "../../assets/icons/ProfileIcon.jpg";
+import { Link } from "react-router-dom";
 
 // Day.js plugins
 import dayjs from "dayjs";
@@ -258,10 +260,13 @@ const BenForm = () => {
     <>
       <section className="flex-col flex items-center justify-center p-10 gap-10">
         <article className=" w-1/2  font-bold text-3xl  flex justify-center items-center gap-5">
-          <HiOutlinePencilAlt size={40} />
-          <h2 className="">Nuevo Beneficiario...</h2>
+          <HiOutlinePencilAlt size={50} />
+          <h2 className=" text-6xl ms-madi-regular ">Nuevo Beneficiario...</h2>
         </article>
-
+        <div className="flex gap-4 items-center justify-end w-full">
+            <Link style={{boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"}} className="cursor-pointer w-fit p-3 rounded-lg flex gap-3 justify-center items-center text-white font-bold bg-amber-300 hover:scale-105 transition-all duration-300 hover:bg-yellow-50 hover:text-amber-300 text-center  " to={"/GestionarBeneficiarios"}> Beneficiarios <BsFillPeopleFill size={30}/></Link>
+            
+          </div>
         <article
           style={{
             boxShadow:
@@ -269,7 +274,7 @@ const BenForm = () => {
           }}
           className="w-full bg-white  py-4 rounded-4xl  "
         >
-          <form className="flex flex-col" onSubmit={handleSubmit}>
+          <form className="flex flex-col max-h-1/2 " onSubmit={handleSubmit}>
             <div className=" flex  gap-10 justify-center">
               {/* Upload Picture*/}
               <div className="p-2 flex flex-col items-center justify-center gap-4  w-1/4 ">

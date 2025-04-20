@@ -1,6 +1,7 @@
 import {createContext,useContext,useEffect,useState} from "react";
 import {WhoAmI,Login,Logout} from "../services/api.services";
 
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({children}) =>{
@@ -25,12 +26,15 @@ export const AuthProvider = ({children}) =>{
     
     },[user]);
 
-    const login = async(data)=>{
+    const login = async(form)=>{
         
-        let response = await Login(data);
+        let response = await Login(form);
         
         if (response.status === 200) {
             setUser(response.data);
+            
+            
+            
             
         }
         return response;

@@ -6,7 +6,10 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 import BenAdd from "./pages/BenAddPage";
 import BenList from "./pages/BenListPage";
 
-import bg from "./assets/images/bg.jpg"
+
+import bg from "./assets/images/background.jpg"
+import "./style/animations.css"
+import "./style/style.css"
 import "./App.css"
 //import link to navigate to the page
 
@@ -18,8 +21,9 @@ function App() {
     <>
     <section className="" style={{
     backgroundImage: `url(${bg})`,
-    backgroundSize: "700px 700px", 
-    backgroundRepeat: "repeat", 
+    backgroundSize: "cover", 
+    backgroundRepeat: "repeat",
+    backgroundPosition: "center",
     minHeight: "100vh",
   }}>
       <AuthProvider>

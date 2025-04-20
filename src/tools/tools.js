@@ -76,3 +76,13 @@ import dayjs from "dayjs";
 export const sanitizeDate = (isoDate) => {
     return dayjs(isoDate).format("DD/MM/YYYY");
 };
+
+
+export const parseRol=(role)=>{
+    
+    if (role === "SUPER_ADMIN" || role === "ADMIN") {
+      return true;
+    }else{
+      return false;
+    }
+  }
