@@ -86,3 +86,19 @@ export const parseRol=(role)=>{
       return false;
     }
   }
+
+
+export const smoothScrollToBottom = () => {
+    const scrollHeight = document.body.scrollHeight;
+    const scrollStep = 50; // Ajusta este valor para controlar la velocidad (menor = más lento)
+    const delay = 15; // Tiempo entre cada paso (en ms)
+  
+    const scrollInterval = setInterval(() => {
+      const currentScroll = window.scrollY;
+      if (currentScroll + window.innerHeight >= scrollHeight) {
+        clearInterval(scrollInterval); // Detén el intervalo cuando llegues al final
+      } else {
+        window.scrollBy(0, scrollStep); // Desplázate hacia abajo
+      }
+    }, delay);
+  };

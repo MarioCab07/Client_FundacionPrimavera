@@ -1,7 +1,7 @@
 import { Header } from "../components/Header";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import { BiSearchAlt } from 'react-icons/bi'
+
 
 import { HiPencilAlt } from 'react-icons/hi'
 import { useState,useEffect } from "react";
@@ -17,10 +17,11 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import { ToastContainer, Bounce } from "react-toastify";
 import Search from "../components/Beneficiary/Search";
-
+import { smoothScrollToBottom } from "../tools/tools";
 
 
 import BenDetails from "../components/Beneficiary/BenDetails";
+import Pagination from "../components/Pagination";
 
 
 
@@ -37,61 +38,62 @@ const BenList = () => {
     const [totalPages,setTotalPages] = useState(1);
     const [searched,setSearched]= useState();
 
-    useEffect(()=>{
-        const fetchData = async () => {
-            try {
-                
-                    setLoading(true);
-                    sleep(1000);
-                    
-                    const activeBen = await getBeneficiaries(1,10);
-                    const inactiveBen = await getInactiveBeneficiaries(1,10);
 
-                    
-                    
-                    if(activeBen.status===200 && activeBen.data){
-                        setActive(activeBen.data.beneficiaries);
-                        setData(activeBen.data.beneficiaries);
-                        setPage(activeBen.data.page);
-                        setTotalPages(activeBen.data.pages);
-                    }
+    const fetchData = async () => {
+      try {
+          
+              setLoading(true);
+              await sleep(500);
+              let response;
+              if(showActive){
+                response = await getBeneficiaries(page,10)
+              }else{
+                response = await getInactiveBeneficiaries(page,10)
+              }
+              
+              if(response.status===200 && response.data){
+                  
+                  setData(response.data.beneficiaries) 
+                  setPage(response.data.page);
+                  if(response.data.pages < 1){
+                    setTotalPages(1);
+                  }else{
+                    setTotalPages(response.data.pages);
+                  }
+                  
+              }
+              
+              
 
-                    if(inactiveBen.status===200 && inactiveBen.data){
-                        setInactive(inactiveBen.data.beneficiaries);
-                        
-                    }
-                
-                
-                
-                
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+              
 
-        fetchData();
-    },[])
-
-    useEffect(()=>{
-
-      if(showActive){
-        setData(active);
-      }else{
-        setData(inactive);
+      } catch (error) {
+          console.error("Error fetching data:", error);
+      } finally {
+          setLoading(false);
       }
-      
-    },[showActive])
+  };
+    useEffect(()=>{
+        
+
+      fetchData();
+    },[page,showActive])
+
 
 
 
 
     const handleChange= (event, newAlignment) => {
       if (newAlignment !== null) {
-        setShowActive(newAlignment); // Actualiza el estado solo si newAlignment no es null
+        setShowActive(newAlignment); 
     }
     }
+
+    const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
+  
 
   return (
     <>
@@ -110,7 +112,7 @@ const BenList = () => {
       />
       <section className="flex flex-col items-center rounded-lg w-full relative z-40 p-2">
       <div className="flex flex-1 items-center justify-center gap-10  px-4 py-8 ">
-            <BsFillPeopleFill size={30}/>
+            <BsFillPeopleFill size={40}/>
             <h3 className=" text-6xl ms-madi-regular ">Beneficiarios</h3>
           </div>
         <article className="flex justify-between items-center gap-20 p-4 w-full relative z-10">
@@ -174,11 +176,20 @@ const BenList = () => {
       </p>
     )}
   </div>
+
+  <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+
 </article>
-      </section>
-      {benSelected && (
+
+{benSelected && (
             <BenDetails ben={benSelected} setBenSelected={setBenSelected}/>
         )}
+      </section>
+      
     </>
   );
 };

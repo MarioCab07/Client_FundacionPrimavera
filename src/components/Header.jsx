@@ -85,8 +85,10 @@ export const Header = ()=>{
 >
   {/* Logo */}
   <div className="flex items-center">
-    <img src={Logo} alt="logo" className="w-28 h-16 object-contain" />
-    <h1 className="ml-4 text-2xl font-bold text-gray-700">Fundación Primavera</h1>
+  <img src={Logo} alt="logo" className="w-28 h-16 object-contain" />
+  <h1 className="ml-4 text-2xl font-bold text-gray-700">Fundación Primavera</h1>
+    
+    
   </div>
 
   {/* Hamburger Menu */}

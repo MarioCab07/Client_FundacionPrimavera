@@ -17,7 +17,7 @@ const ListBeneficiaries = ({data,setBenSelected})=>{
    
    
     return (
-        <div className="flex flex-col max-h-96 overflow-y-scroll gap-6 w-full custom-scrollbar">
+        <div className="flex flex-col max-h-[600px] overflow-y-scroll gap-6 w-full custom-scrollbar">
           {data.map((ben) => (
             <div
               key={ben._id}

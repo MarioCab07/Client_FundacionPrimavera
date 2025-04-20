@@ -1,10 +1,8 @@
 import logo from "../assets/icons/FundacionLogo.png";
-import loginLogo from "../assets/images/LoginLogo.png";
 import LoginImage from "../assets/images/Login.jpg"
 
 import { AiOutlineUser } from 'react-icons/ai'
 import { MdLock,MdVisibility, MdVisibilityOff } from 'react-icons/md'
-import { BsBoxArrowInRight } from 'react-icons/bs'
 import {useEffect, useState} from "react";
 import {useAuth} from "../context/AuthContext";
 import { sleep } from "../tools/tools";
