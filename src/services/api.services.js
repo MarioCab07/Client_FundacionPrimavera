@@ -71,12 +71,10 @@ export const deleteUser = async(userId)=>{
 
 //Beneficiary Functions
 
-export const getBeneficiaries = async(page=1, pageSize =10)=>{
+export const getBeneficiaries = async(page=1, limit =10)=>{
     try {
-        const skip = (page - 1) * pageSize;
-        const limit = pageSize;
-
-        return await api.get("beneficiary/getAll",{params:{skip,limit}});
+       
+        return await api.get("beneficiary/getAll",{params:{page,limit}});
 
     } catch (error) {
         throw error;
