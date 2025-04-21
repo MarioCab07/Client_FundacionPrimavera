@@ -102,3 +102,45 @@ export const smoothScrollToBottom = () => {
       }
     }, delay);
   };
+
+
+export const inputStyle =()=>{
+
+  return `
+      border-b border-black 
+      bg-transparent 
+      focus:bg-gray-200
+      focus:border-0
+      focus:rounded-2xl
+      outline-none 
+      p-2
+  `
+}
+
+export const handleDuiChange = (e,setForm,form)=>{
+  const field = e.target.id;
+    let value = e.target.value.replace(/\D/g, ""); // Remove all non-numeric characters
+    if (value.length > 8) {
+      value = value.slice(0, 8) + "-" + value.slice(8, 9); // Add a '-' after the first 8 digits
+    }
+    setForm({ ...form, [field]: value });
+}
+
+export const handleNumbers = (e,setForm,form) => {
+  const field = e.target.id;
+  let value = e.target.value.replace(/\D/g, "");
+  if (!value) {
+    value = null;
+  } // Remove all non-numeric characters
+  value = parseInt(value);
+  setForm({ ...form, [field]: value });
+};
+
+export const handlePhoneChange = (e,setForm,form) => {
+  const field = e.target.id;
+  let value = e.target.value.replace(/\D/g, ""); // Remove all non-numeric characters
+  if (value.length > 4) {
+    value = value.slice(0, 4) + "-" + value.slice(4, 8); // Add a '-' after the first 8 digits
+  }
+  setForm({ ...form, [field]: value }); // Update the form state with the formatted value
+};

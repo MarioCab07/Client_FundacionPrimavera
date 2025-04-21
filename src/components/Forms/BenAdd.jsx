@@ -23,20 +23,12 @@ dayjs.extend(utc);
 
 import { addBeneficiary } from "../../services/api.services";
 import { ToastContainer, toast, Bounce } from "react-toastify";
-import { sleep } from "../../tools/tools";
-import { responsivePropType } from "@mui/system";
+import { sleep, inputStyle,handleDuiChange,handleNumbers,handlePhoneChange } from "../../tools/tools";
+
 
 const BenForm = () => {
   // Styles
-  const inputStyle = `
-    border-b border-black 
-    bg-transparent 
-    focus:bg-gray-200
-    focus:border-0
-    focus:rounded-2xl
-    outline-none 
-    p-2
-`;
+  const inpStyle = inputStyle();
   const spanStyle = `
     flex flex-col gap-1
     `;
@@ -106,21 +98,19 @@ const BenForm = () => {
     } 
   };
 
-  // Function to handle the change in the DUI input field
-  const handleDuiChange = (e) => {
-    const field = e.target.id;
-    let value = e.target.value.replace(/\D/g, ""); // Remove all non-numeric characters
-    if (value.length > 8) {
-      value = value.slice(0, 8) + "-" + value.slice(8, 9); // Add a '-' after the first 8 digits
-    }
-    setForm({ ...form, [field]: value }); // Update the form state with the formatted value
-  };
-
+ 
   // Function to handle the change in other input fields
   const handleChange = (e) => {
     const field = e.target.id;
-    const value = e.target.value;
-    setForm({ ...form, [field]: value });
+    let value;
+    if(field==="adress"){
+        value = e.target.value;
+    }else{
+        value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "");
+    }
+    
+    
+    setForm({ ...form, [field]: value }); 
   };
 
   // Function to handle the change in the file input field
@@ -136,26 +126,7 @@ const BenForm = () => {
     }
   };
 
-  // Function to handle the change in numeric input fields (weight and height)
-  const handleNumbers = (e) => {
-    const field = e.target.id;
-    let value = e.target.value.replace(/\D/g, "");
-    if (!value) {
-      value = 0;
-    } // Remove all non-numeric characters
-    value = parseInt(value);
-    setForm({ ...form, [field]: value });
-  };
-
-  // Function to handle the change in the phone number input field
-  const handlePhoneChange = (e) => {
-    const field = e.target.id;
-    let value = e.target.value.replace(/\D/g, ""); // Remove all non-numeric characters
-    if (value.length > 4) {
-      value = value.slice(0, 4) + "-" + value.slice(4, 8); // Add a '-' after the first 8 digits
-    }
-    setForm({ ...form, [field]: value }); // Update the form state with the formatted value
-  };
+  
 
   // Function to handle form submission
   const handleSubmit = async (e) => {
@@ -165,7 +136,7 @@ const BenForm = () => {
     
     const toastId = toast.loading("Agregando Beneficiario...");
     const starting_date = startingDate.format("MM-DD-YYYY");
-        const birth_date = birthDate.format("MM-DD-YYYY");
+    const birth_date = birthDate.format("MM-DD-YYYY");
         const updatedForm = {
             ...form,
             birth_date,
@@ -248,7 +219,7 @@ const BenForm = () => {
       
       
       toast.update(toastId, {
-        render: error.response?.data?.error,
+        render: error.response.data.error || "Error al agregar beneficiario",
         type: "error",
         isLoading: false,
         autoClose: 3000, // Close after 3 seconds
@@ -311,7 +282,7 @@ const BenForm = () => {
                     required
                     id="name"
                     type="text"
-                    className={inputStyle}
+                    className={inpStyle}
                     value={form.name}
                     onChange={handleChange}
                   />
@@ -324,7 +295,7 @@ const BenForm = () => {
                     required
                     id="adress"
                     type="text"
-                    className={inputStyle}
+                    className={inpStyle}
                     value={form.adress}
                     onChange={handleChange}
                   />
@@ -337,7 +308,7 @@ const BenForm = () => {
                     id="birth_place"
                     required
                     type="text"
-                    className={inputStyle}
+                    className={inpStyle}
                     value={form.birth_place}
                     onChange={handleChange}
                   />
@@ -356,10 +327,10 @@ const BenForm = () => {
                   <input
                     id="dui"
                     type="text"
-                    className={inputStyle}
+                    className={inpStyle}
                     placeholder="12345678-9"
                     value={form.dui} // Bind the value to the form state
-                    onChange={handleDuiChange} // Format the input dynamically
+                    onChange={(e)=>{handleDuiChange(e,setForm,form)}} // Format the input dynamically
                     maxLength={10}
                     required // Limit the input length to 10 characters (8 digits + 1 dash)
                   />
@@ -372,10 +343,10 @@ const BenForm = () => {
                     required
                     id="weight"
                     type="text"
-                    className={inputStyle}
+                    className={inpStyle}
                     placeholder="lb"
                     value={form.weight}
-                    onChange={handleNumbers}
+                    onChange={(e)=>{ handleNumbers(e,setForm,form)}}
                   />
                 </span>
                 <span className={spanStyle}>
@@ -386,10 +357,10 @@ const BenForm = () => {
                     required
                     id="height"
                     type="text"
-                    className={inputStyle}
+                    className={inpStyle}
                     placeholder="cm"
                     value={form.height}
-                    onChange={handleNumbers}
+                    onChange={(e)=>{ handleNumbers(e,setForm,form)}}
                   />
                 </span>
                 <CheckboxValue
@@ -406,10 +377,10 @@ const BenForm = () => {
                   </label>
                   <input
                     value={form.phone_number}
-                    onChange={handlePhoneChange}
+                    onChange={(e)=>{handlePhoneChange(e,setForm,form)}}
                     id="phone_number"
                     type="text"
-                    className={inputStyle}
+                    className={inpStyle}
                   />
                 </span>
                 <span className={`${spanStyle} gap-6`}>
@@ -447,7 +418,7 @@ const BenForm = () => {
                   <input
                     id="illness"
                     type="text"
-                    className={inputStyle}
+                    className={inpStyle}
                     placeholder=""
                     value={form.illness}
                     onChange={handleChange}
@@ -460,7 +431,7 @@ const BenForm = () => {
                   <input
                     id="medicines"
                     type="text"
-                    className={inputStyle}
+                    className={inpStyle}
                     placeholder=""
                     value={form.medicines}
                     onChange={handleChange}
@@ -483,7 +454,7 @@ const BenForm = () => {
                   <input
                     id="medical_service"
                     type="text"
-                    className={inputStyle}
+                    className={inpStyle}
                     placeholder=""
                     value={form.medical_service}
                     onChange={handleChange}
@@ -496,7 +467,7 @@ const BenForm = () => {
                   <input
                     id="discapacities"
                     type="text"
-                    className={inputStyle}
+                    className={inpStyle}
                     placeholder=""
                     value={form.discapacities}
                     onChange={handleChange}
@@ -547,7 +518,7 @@ const BenForm = () => {
                   <input
                     id="work_occup"
                     type="text"
-                    className={inputStyle}
+                    className={inpStyle}
                     placeholder=""
                     value={form.work_occup}
                     onChange={handleChange}
@@ -560,7 +531,7 @@ const BenForm = () => {
                   <input
                     id="affiliation"
                     type="text"
-                    className={inputStyle}
+                    className={inpStyle}
                     placeholder="Fundacion Primavera"
                     value={form.affiliation}
                     onChange={handleChange}
@@ -587,7 +558,7 @@ const BenForm = () => {
                     <input
                       id="personIC_name"
                       type="text"
-                      className={`${inputStyle} flex-1`}
+                      className={`${inpStyle} flex-1`}
                       placeholder=""
                       value={form.personIC_name}
                       onChange={handleChange}
@@ -599,7 +570,7 @@ const BenForm = () => {
                     <input
                       id="personIC_dui"
                       type="text"
-                      className={inputStyle}
+                      className={inpStyle}
                       placeholder=""
                       value={form.personIC_dui}
                       onChange={handleDuiChange}
@@ -614,7 +585,7 @@ const BenForm = () => {
                     <input
                       id="personIC_phone_number"
                       type="text"
-                      className={inputStyle}
+                      className={inpStyle}
                       placeholder=""
                       value={form.personIC_phone_number}
                       onChange={handlePhoneChange}
@@ -755,18 +726,7 @@ const BenForm = () => {
         )}
       </section>
 
-      <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            theme="light"
-            transition={Bounce} 
-        />
+      
     </>
   );
 };

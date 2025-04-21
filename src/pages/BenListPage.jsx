@@ -98,18 +98,7 @@ const BenList = () => {
   return (
     <>
       <Header />
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        theme="light"
-        transition={Bounce}
-      />
+      
       <section className="flex flex-col items-center rounded-lg w-full relative z-40 p-2">
       <div className="flex flex-1 items-center justify-center gap-10  px-4 py-8 ">
             <BsFillPeopleFill size={40}/>

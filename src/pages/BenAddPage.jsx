@@ -1,5 +1,5 @@
 import { Header } from "../components/Header"
-import Form from "../components/Forms/BenAdd"
+import BenForm from "../components/Forms/BenAdd"
 
 
 const BenAdd =()=>{
@@ -9,7 +9,7 @@ const BenAdd =()=>{
     return(
         <>
         <Header/>
-        <Form/>
+        <BenForm/>
         
         
         </>
