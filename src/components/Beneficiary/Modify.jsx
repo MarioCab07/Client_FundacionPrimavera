@@ -4,7 +4,7 @@ import CheckboxValue from "../Checkbox";
 import BasicSelect from "../Select";
 import { BsPencilSquare } from "react-icons/bs";
 import { updateBeneficiary } from "../../services/api.services";
-import { sleep } from "../../tools/tools";
+import { sleep,handleNumbers,handlePhoneChange } from "../../tools/tools";
 import { toast } from "react-toastify";
 
 
@@ -47,15 +47,7 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
     setModifiedBen((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handlePhoneChange = (e) => {
-    const field = e.target.id;
-    let value = e.target.value.replace(/\D/g, ""); // Remove all non-numeric characters
-    if (value.length > 4) {
-      value = value.slice(0, 4) + "-" + value.slice(4, 8); // Add a '-' after the first 8 digits
-    }
-    setModifiedBen((prev) => ({ ...prev, [field]: value }));
-    // Update the form state with the formatted value
-  };
+  
   const handlePhoneChangePersonIC = (e) => {
     const value = e.target.value.replace(/\D/g, ""); // Elimina todos los caracteres no numéricos
     const formattedValue =
@@ -206,7 +198,7 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
                   id="phone_number"
                   className={inputStyle}
                   value={modifiedBen.phone_number}
-                  onChange={handlePhoneChange}
+                  onChange={(e)=>{handlePhoneChange(e,setModifiedBen,modifiedBen)}}
                 />
               </label>
               <label htmlFor="affiliation" className="flex flex-col gap-2">
@@ -295,7 +287,7 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
                   id="weight"
                   className={inputStyle}
                   value={modifiedBen.weight}
-                  onChange={handleChange}
+                  onChange={(e)=>{handleNumbers(e,setModifiedBen,modifiedBen)}}
                 />
               </label>
               <label htmlFor="height" className="flex flex-col gap-2">
@@ -306,7 +298,7 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
                   id="height"
                   className={inputStyle}
                   value={modifiedBen.height}
-                  onChange={handleChange}
+                  onChange={(e)=>{handleNumbers(e,setModifiedBen,modifiedBen)}}
                 />
               </label>
               <label htmlFor="illness" className="flex flex-col gap-2">

@@ -103,17 +103,7 @@ const DashBoard = ()=>{
   </Link>
 ))}
 </article>
-        <ToastContainer
-            position="top-left"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            draggable
-            theme="light"
-            transition={Bounce} 
-        />
+       
         </section>
         </>
     )
