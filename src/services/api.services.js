@@ -89,12 +89,11 @@ export const findBeneficiary = async(benId)=>{
     }
 }
 
-export const getInactiveBeneficiaries = async(page=1, pageSize =10)=>{
+export const getInactiveBeneficiaries = async(page=1, limit =10)=>{
     try {
-        const skip = (page - 1) * pageSize;
-        const limit = pageSize;
+        
 
-        return await api.get("beneficiary/inactive",{params:{skip,limit}});
+        return await api.get("beneficiary/inactive",{params:{page,limit}});
 
     } catch (error) {
         throw error;
@@ -221,12 +220,10 @@ export const deleteItem = async(inventId)=>{
 
 
 //VolunteerFunctions
-export const getVolunteers = async(page=1, pageSize =10)=>{
+export const getVolunteers = async(page=1, limit =10,active = true)=>{
     try {
-        const skip = (page - 1) * pageSize;
-        const limit = pageSize;
 
-        return await api.get("volunteer/getAll",{params:{skip,limit}});
+        return await api.get("volunteer/getAll",{params:{page,limit,active}});
 
     } catch (error) {
         throw error;

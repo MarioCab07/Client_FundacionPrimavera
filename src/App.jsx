@@ -6,6 +6,7 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 import BenAdd from "./pages/BenAddPage";
 import BenList from "./pages/BenListPage";
 import VolAdd from "./pages/VolAddPage";
+import VolListPage from "./pages/VolListPage";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 import bg from "./assets/images/background.jpg"
@@ -36,6 +37,7 @@ function App() {
           <Route path="/RegistrarBeneficiario" element={<BenAdd />} />
           <Route path="/GestionarBeneficiarios" element={<BenList />} />
           <Route path="/RegistrarVoluntario" element={<VolAdd />} />
+          <Route path="/Voluntarios" element={<VolListPage />} />
           
       </Route>
       </Routes>

@@ -573,7 +573,7 @@ const BenForm = () => {
                       className={inpStyle}
                       placeholder=""
                       value={form.personIC_dui}
-                      onChange={handleDuiChange}
+                      onChange={(e)=>{handleDuiChange(e,setForm, form)}}
                     />
                     <label className="font-semibold" htmlFor="personIC_dui">
                       DUI
@@ -588,7 +588,8 @@ const BenForm = () => {
                       className={inpStyle}
                       placeholder=""
                       value={form.personIC_phone_number}
-                      onChange={handlePhoneChange}
+                      onChange={(e)=>{handlePhoneChange(e,setForm, form)}}
+
                     />
                     <label
                       className="font-semibold"
