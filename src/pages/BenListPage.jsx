@@ -29,14 +29,12 @@ import Pagination from "../components/Pagination";
 const BenList = () => {
 
     const [data,setData] = useState([]);
-    const [inactive,setInactive] = useState([]);
-    const [active,setActive] = useState([]);
     const [loading,setLoading] = useState(false);
     const [benSelected,setBenSelected] = useState();
     const [showActive,setShowActive] = useState(true);
     const [page,setPage] = useState(1);
     const [totalPages,setTotalPages] = useState(1);
-    const [searched,setSearched]= useState();
+    
 
 
     const fetchData = async () => {
