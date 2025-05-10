@@ -2,12 +2,15 @@ import { useEffect,useState } from "react";
 import { sanitizeDate } from "../../tools/tools";
 import Modify from "./Modify";
 import Deactive from "./Deactive";
+import Reactive from "./Reactive";
 import { HiTrendingDown } from "react-icons/hi";
 import { BsPencilSquare } from "react-icons/bs";
+import { AiOutlineReload } from 'react-icons/ai'
 
 
 
-const Details = ({vol,showCreate,setShowCreate,showDeactive,setShowDeactive,showDelete,setShowDelete,setVolSelected,handleClose,setShowModify})=>{
+
+const Details = ({vol,setShowReactive,showReactive,showCreate,setShowCreate,showDeactive,setShowDeactive,showDelete,setShowDelete,setVolSelected,handleClose,setShowModify})=>{
     const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
 
     return(
@@ -122,7 +125,15 @@ const Details = ({vol,showCreate,setShowCreate,showDeactive,setShowDeactive,show
                           Dar de Baja <HiTrendingDown />{" "}
                         </button>
                         ):
-                        null
+                        <button className="bg-lime-400 rounded-2xl p-3 w-fit flex gap-4 items-center hover:bg-green-50 transition-all duration-500 ease-in-out cursor-pointer"
+                          style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                          onClick={()=>{
+                            setShowReactive(true);
+                          }}
+                          >
+                            Reactivar <AiOutlineReload size={20} />
+
+                        </button>
                         }
                           </>
                         ):(null)}
@@ -151,6 +162,8 @@ const VolDetails = ({vol,setVolSelected})=>{
     const [showDelete,setShowDelete] = useState(false);
     const [showModify,setShowModify] = useState(false);
     const [showCreate,setShowCreate] = useState(false);
+    const [showReactive,setShowReactive] = useState(false);
+
     const [isClosing,setIsClosing] = useState(false);
     
     const handleClose = () => {
@@ -174,9 +187,11 @@ const VolDetails = ({vol,setVolSelected})=>{
   } z-40 flex flex-col gap-4 bg-white rounded-lg p-4 shadow-lg w-1/2 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-amber-300 border-2 border-solid min-h-fit`}
 >
 
-{!showModify && !showDeactive ? (
+{!showModify && !showDeactive && !showReactive ? (
   <Details 
     vol={vol}
+    showReactive={showReactive}
+    setShowReactive={setShowReactive}
     setShowCreate={setShowCreate}
     showCreate={showCreate}
     showDeactive={showDeactive} 
@@ -200,6 +215,9 @@ showModify ?
 showDeactive ?
 <Deactive vol={vol} setShowDeactive={setShowDeactive} />
 
+:
+showReactive ? 
+<Reactive vol={vol} setShowReactive={setShowReactive} />
 :null
 
 
