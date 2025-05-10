@@ -4,18 +4,21 @@ import Modify from "./Modify";
 import Deactive from "./Deactive";
 import Reactive from "./Reactive";
 import Delete from "./Delete";
+import CreateUserVol from "./CreateUserVol";
 import { HiTrendingDown } from "react-icons/hi";
 import { BsPencilSquare } from "react-icons/bs";
+import { FiUserPlus } from 'react-icons/fi'
 import { AiOutlineReload,AiOutlineDelete } from 'react-icons/ai'
 
 
 
 
 
-const Details = ({vol,setShowReactive,setShowCreate,setShowDeactive,setShowDelete,setVolSelected,handleClose,setShowModify})=>{
+const Details = ({vol,setShowReactive,setShowCreate,setShowDeactive,setShowDelete,handleClose,setShowModify})=>{
     const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
     const [isSuperAdmin] = useState(localStorage.getItem("isSuperAdmin") === "true");
-    console.log(localStorage.getItem("isSuperAdmin"));
+    
+    
     
     return(
         <>
@@ -109,13 +112,19 @@ const Details = ({vol,setShowReactive,setShowCreate,setShowDeactive,setShowDelet
                   <div className="flex flex-col gap-2 flex-1 items-start h-max">
                   <h4 className="font-bold">Credenciales</h4>
                   <p>
-                        {vol.userName ? (
+                        {vol.userName!=="NA" ? (
                           <>
                             Usuario: <span className="font-semibold">{vol.userName}</span>
                           </>
                         ):
                         <>
                         <span className="font-semibold">No tiene credenciales</span>
+                        <button
+                        style={{boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"}}
+                        onClick={()=>{
+                          setShowCreate(true);
+                        }} 
+                        className="bg-amber-300 rounded-2xl p-3 w-fit gap-4 flex items-center hover:bg-amber-50 cursor-pointer">Crear Usuario <FiUserPlus/> </button>
                         </>
 
                       }
@@ -226,14 +235,13 @@ const VolDetails = ({vol,setVolSelected})=>{
   max-w-fit mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-amber-300 border-2 border-solid min-h-fit`}
 >
 
-{!showModify && !showDeactive && !showReactive && !showDelete ? (
+{!showModify && !showDeactive && !showReactive && !showDelete && !showCreate ? (
   <Details 
     vol={vol}
     setShowReactive={setShowReactive}
     setShowCreate={setShowCreate} 
     setShowDeactive={setShowDeactive}
     setShowDelete={setShowDelete}
-    setVolSelected={setVolSelected} 
     setShowModify={setShowModify}
     handleClose={handleClose}
   />
@@ -256,6 +264,10 @@ showReactive ?
 :
 showDelete ?
 <Delete vol={vol} setShowDelete={setShowDelete} />
+:
+
+showCreate ? 
+<CreateUserVol vol={vol} setShowCreate={setShowCreate} />
 :
 null
 
