@@ -117,7 +117,6 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
     try {
         const response = await updateBeneficiary(modifiedBen._id, form);
         await sleep(800);
-        console.log(response);
         
         if (response.status === 200) {
           toast.update(toastId, {
