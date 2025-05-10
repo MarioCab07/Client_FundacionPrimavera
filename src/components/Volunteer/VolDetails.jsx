@@ -3,16 +3,20 @@ import { sanitizeDate } from "../../tools/tools";
 import Modify from "./Modify";
 import Deactive from "./Deactive";
 import Reactive from "./Reactive";
+import Delete from "./Delete";
 import { HiTrendingDown } from "react-icons/hi";
 import { BsPencilSquare } from "react-icons/bs";
-import { AiOutlineReload } from 'react-icons/ai'
+import { AiOutlineReload,AiOutlineDelete } from 'react-icons/ai'
 
 
 
 
-const Details = ({vol,setShowReactive,showReactive,showCreate,setShowCreate,showDeactive,setShowDeactive,showDelete,setShowDelete,setVolSelected,handleClose,setShowModify})=>{
+
+const Details = ({vol,setShowReactive,setShowCreate,setShowDeactive,setShowDelete,setVolSelected,handleClose,setShowModify})=>{
     const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
-
+    const [isSuperAdmin] = useState(localStorage.getItem("isSuperAdmin") === "true");
+    console.log(localStorage.getItem("isSuperAdmin"));
+    
     return(
         <>
         <h2 className="text-2xl font-bold text-center">
@@ -100,6 +104,29 @@ const Details = ({vol,setShowReactive,showReactive,showCreate,setShowCreate,show
 
                 </div>
 
+                {isSuperAdmin ? (
+                  <>
+                  <div className="flex flex-col gap-2 flex-1 items-start h-max">
+                  <h4 className="font-bold">Credenciales</h4>
+                  <p>
+                        {vol.userName ? (
+                          <>
+                            Usuario: <span className="font-semibold">{vol.userName}</span>
+                          </>
+                        ):
+                        <>
+                        <span className="font-semibold">No tiene credenciales</span>
+                        </>
+
+                      }
+
+                    </p>
+
+                </div>
+                  </>
+                ):null}
+                
+
             </div>
             <div className="flex gap-4 justify-center items-center">
                 {isAdmin ? (
@@ -116,7 +143,7 @@ const Details = ({vol,setShowReactive,showReactive,showCreate,setShowCreate,show
                         </button>
                         {vol.active ? (
                           <button
-                          className="bg-red-500 rounded-2xl p-3 w-fit flex gap-4 items-center hover:bg-amber-50 cursor-pointer"
+                          className="bg-orange-400 rounded-2xl p-3 w-fit flex gap-4 items-center hover:bg-amber-50 cursor-pointer"
                           style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
                           onClick={() => {
                             setShowDeactive(true);
@@ -135,6 +162,15 @@ const Details = ({vol,setShowReactive,showReactive,showCreate,setShowCreate,show
 
                         </button>
                         }
+                        <button
+                          className="bg-red-500 rounded-2xl p-3 w-fit flex gap-4 items-center hover:bg-amber-50 cursor-pointer"
+                          style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                          onClick={() => {
+                            setShowDelete(true);
+                          }}
+                        >
+                          Eliminar <AiOutlineDelete size={20} />{" "}
+                        </button>
                           </>
                         ):(null)}
 
@@ -166,6 +202,8 @@ const VolDetails = ({vol,setVolSelected})=>{
 
     const [isClosing,setIsClosing] = useState(false);
     
+   
+
     const handleClose = () => {
         setIsClosing(true);
         setTimeout(() => {
@@ -184,19 +222,16 @@ const VolDetails = ({vol,setVolSelected})=>{
       : vol
       ? "scale-in-center"
       : "scale-out-center"
-  } z-40 flex flex-col gap-4 bg-white rounded-lg p-4 shadow-lg w-1/2 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-amber-300 border-2 border-solid min-h-fit`}
+  } z-40 flex flex-col gap-4 bg-white rounded-lg p-4 shadow-lg min-w-1/2
+  max-w-fit mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-amber-300 border-2 border-solid min-h-fit`}
 >
 
-{!showModify && !showDeactive && !showReactive ? (
+{!showModify && !showDeactive && !showReactive && !showDelete ? (
   <Details 
     vol={vol}
-    showReactive={showReactive}
     setShowReactive={setShowReactive}
-    setShowCreate={setShowCreate}
-    showCreate={showCreate}
-    showDeactive={showDeactive} 
+    setShowCreate={setShowCreate} 
     setShowDeactive={setShowDeactive}
-    showDelete={showDelete}
     setShowDelete={setShowDelete}
     setVolSelected={setVolSelected} 
     setShowModify={setShowModify}
@@ -218,7 +253,11 @@ showDeactive ?
 :
 showReactive ? 
 <Reactive vol={vol} setShowReactive={setShowReactive} />
-:null
+:
+showDelete ?
+<Delete vol={vol} setShowDelete={setShowDelete} />
+:
+null
 
 
 }

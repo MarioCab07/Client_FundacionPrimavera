@@ -58,7 +58,7 @@ const Deactive = ({vol,setShowDeactive}) => {
         isClosing ? "slide-out-right" : "slide-in-right"
       } z-50 flex flex-col gap-6 bg-white rounded-lg p-6 shadow-lg w-1/2 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-amber-300 border-2 h-fit`}>
 
-        <h3 className="text-center font-bold text-2xl text-red-500">
+        <h3 className="text-center font-bold text-2xl text-orange-500">
             Desactivar Voluntario
         </h3>
         <p className="text-center text-gray-700">
@@ -82,7 +82,7 @@ const Deactive = ({vol,setShowDeactive}) => {
             className={`rounded-2xl p-3 flex items-center text-white  ${
                 confirm !== "confirmar"
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-red-500 hover:bg-red-200 hover:text-red-500 cursor-pointer"
+                  : "bg-orange-500 hover:bg-orange-200 hover:text-orange-500 cursor-pointer"
               }`}
               disabled={confirm !== "confirmar"}
               type="submit">Confirmar <AiOutlineDelete size={20} /></button>
