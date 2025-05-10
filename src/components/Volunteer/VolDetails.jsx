@@ -1,6 +1,7 @@
 import { useEffect,useState } from "react";
 import { sanitizeDate } from "../../tools/tools";
 import Modify from "./Modify";
+import Deactive from "./Deactive";
 import { HiTrendingDown } from "react-icons/hi";
 import { BsPencilSquare } from "react-icons/bs";
 
@@ -163,15 +164,17 @@ const VolDetails = ({vol,setVolSelected})=>{
 
       return(<>
       
-        <section className={` ${
-          isClosing
-            ? "scale-out-center"
-            : vol
-            ? "scale-in-center"
-            : "scale-out-center"
-        }  z-40 flex flex-col gap-4 bg-white rounded-lg p-4 shadow-lg w-1/2 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-amber-300 border-2 border-solid overflow-hidden`}>
+        <section
+  className={` ${
+    isClosing
+      ? "scale-out-center"
+      : vol
+      ? "scale-in-center"
+      : "scale-out-center"
+  } z-40 flex flex-col gap-4 bg-white rounded-lg p-4 shadow-lg w-1/2 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-amber-300 border-2 border-solid min-h-fit`}
+>
 
-{!showModify ? (
+{!showModify && !showDeactive ? (
   <Details 
     vol={vol}
     setShowCreate={setShowCreate}
@@ -184,15 +187,25 @@ const VolDetails = ({vol,setVolSelected})=>{
     setShowModify={setShowModify}
     handleClose={handleClose}
   />
-) : (
+) 
+:
+showModify ? 
+(
   <Modify 
     vol={vol} 
     setShowModify={setShowModify} 
     setVolSelected={setVolSelected} 
   />
-)}
+):
+showDeactive ?
+<Deactive vol={vol} setShowDeactive={setShowDeactive} />
 
-        </section>
+:null
+
+
+}
+
+</section>
       
       </>)
 
