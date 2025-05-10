@@ -12,8 +12,9 @@ const ListVolunteers = ({ data, setVolSelected }) => {
       <div className="flex flex-col max-h-[600px] overflow-y-scroll gap-6 w-full custom-scrollbar">
         {data.map((vol) => (
           <div
+          style={{boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"}}
             key={vol._id}
-            className="flex flex-col bg-white shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out rounded-xl p-6 cursor-pointer"
+            className="flex flex-col hover:bg-gray-300 transition-all duration-500 ease-in-out bg-white rounded-xl p-6 cursor-pointer"
             onClick={() => handleClick(vol)}
           >
             <div className="flex justify-evenly items-center gap-6 w-full">
