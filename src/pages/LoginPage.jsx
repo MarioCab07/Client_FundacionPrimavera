@@ -48,8 +48,9 @@ const LoginPage = ()=>{
                     isLoading: false,
                     autoClose: 3000, // Close after 3 seconds
                 });
-                const isAdmin = parseRol(response.data.role);
-                localStorage.setItem("isAdmin",isAdmin)
+                const Admin = parseRol(response.data.role);
+                localStorage.setItem("isAdmin",String(Admin.isAdmin));
+                localStorage.setItem("isSuperAdmin",String(Admin.isSuperAdmin))
                 await sleep(800);
             if(response.data.role!="COLABORADOR" || response.data.role!="VOLUNTARIO"){
                 navigate("/Dashboard");

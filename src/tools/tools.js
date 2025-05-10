@@ -82,11 +82,9 @@ export const parseRol = (role) => {
   const isSuperAdmin = role === "SUPER_ADMIN";
   const isAdmin = role === "SUPER_ADMIN" || role === "ADMIN";
 
-  if (isSuperAdmin) {
-    localStorage.setItem("super_admin", true);
-  }
+  
 
-  return isAdmin;
+  return {isAdmin, isSuperAdmin};
 };
 
 
