@@ -70,7 +70,7 @@ const BenForm = () => {
   const [image,setImage] = useState(null);
   const [birthDate, setBirthDate] = useState(dayjs().utc());
   const [startingDate, setStartingDate] = useState(dayjs().utc());
-  const [dependent, setDependent] = useState("");
+  const [dependent, setDependent] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Functions
@@ -91,10 +91,10 @@ const BenForm = () => {
   const handleAddDependent = () => {
     if (dependent) {
       const updatedDependents = [...form.dependents, dependent]; // Add the new dependent to the array
-      console.log(updatedDependents);
+      
       
       setForm({ ...form, dependents: updatedDependents }); // Update the form state
-      setDependent(""); // Reset the dependent state
+      setDependent([]); // Reset the dependent state
     } 
   };
 

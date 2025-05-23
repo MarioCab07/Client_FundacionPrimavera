@@ -161,6 +161,15 @@ export const deleteBenDocument = async(benId,data)=>{
     }
 }
 
+export const generateCSV = async(data)=>{
+    try{
+        return await api.get("beneficiary/csv",data,{responseType: "blob"});
+
+    }catch(error){
+        throw error;
+    }
+}
+
 
 //Inventory Functions
 export const getImage = async(inventId)=>{
