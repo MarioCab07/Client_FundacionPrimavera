@@ -6,7 +6,7 @@ import {Loading} from "./Loading"
 const ProtectedRoutes = ({allowedRoles}) => {
     const {user,loading} = useAuth();
 
-    if(loading) return <Loading/>;
+    if(loading) return <Loading fullscreen/>;
     if(!user) return <Navigate to="/"/>
     if(!allowedRoles.includes(user.role)) return <Navigate to="/"/>
     return <Outlet/>
