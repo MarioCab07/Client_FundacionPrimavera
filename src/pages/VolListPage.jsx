@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { GrGroup } from 'react-icons/gr'
 import ListVolunteers from "../components/Volunteer/ListVolunteers";
 import VolDetails from "../components/Volunteer/VolDetails";
+import Pagination from "../components/Pagination";
 
 
 
@@ -21,7 +22,6 @@ const VolListPage=()=>{
     const [loading,setLoading] = useState(false);
     const [page,setPage] = useState(1);
     const [totalPages,setTotalPages] = useState(1);
-    const [searched,setSearched]= useState();
     const [showActive,setShowActive] = useState(true);
     const [volSelected,setVolSelected] = useState();
 
@@ -32,8 +32,12 @@ const VolListPage=()=>{
             
             if(response.status===200 && response.data){
                 setData(response.data.volunteers) 
-                setPage(response.data.currentPage);
-                setTotalPages(response.data.totalPages);
+                setPage(response.data.page);
+                if(response.data.pages < 1){
+                    setTotalPages(1);
+                  }else{
+                    setTotalPages(response.data.pages);
+                  }
 
             }
 
@@ -124,6 +128,7 @@ const VolListPage=()=>{
       </p>
     )}
   </div>
+  <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange}/>
 
         </article>
         { volSelected && (<VolDetails setVolSelected={setVolSelected} vol={volSelected}/>)   }
