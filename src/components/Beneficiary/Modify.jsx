@@ -25,7 +25,7 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
   const [pension, setPension] = useState(ben.pension);
   const [house_type, setHouseType] = useState(ben.house_type);
   const [isClosing, setIsClosing] = useState(false);
-  const [dependents, setDependents] = useState(ben.dependents[0].split(",") );
+  const [dependents, setDependents] = useState(ben.dependents);
   const [dependentName, setDependentName] = useState("");
   const [personIC, setPersonIc] = useState({
     name: ben.person_in_charge.name,
@@ -108,7 +108,7 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
         shoe_size: modifiedBen.shoe_size,
         discapacities: modifiedBen.discapacities,
         affiliation: modifiedBen.affiliation,
-        dependents: dependents.join(","),
+        dependents: dependents,
         active:true,
         reason: " ",
         gender: modifiedBen.gender,

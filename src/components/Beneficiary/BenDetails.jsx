@@ -213,7 +213,7 @@ const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
           <div className="flex flex-col">
             <h2 className="font-bold">Personas que Cuida</h2>
             {ben.dependents && ben.dependents.length > 0 ? (
-              ben.dependents[0].split(",").map((dependent, index) => (
+              ben.dependents.map((dependent, index) => (
                 <p key={index} className="font-semibold">
                   {dependent}
                 </p>
@@ -308,7 +308,7 @@ const BenDetails = ({ ben, setBenSelected }) => {
             : ben
             ? "scale-in-center"
             : "scale-out-center"
-        }  z-40 flex flex-col gap-4 bg-white rounded-lg p-4 shadow-lg w-1/2 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-amber-300 border-2 border-solid overflow-hidden`}
+        }  z-40 flex flex-col gap-4 bg-white rounded-lg p-4 shadow-lg w-1/2 mx-auto absolute top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-amber-300 border-2 border-solid overflow-scroll h-max`}
       >
         {!showDocuments && !showModify ? (
           <Details
