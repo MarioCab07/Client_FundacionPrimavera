@@ -27,6 +27,7 @@ function App() {
     backgroundRepeat: "repeat",
     backgroundPosition: "center",
     minHeight: "100vh",
+    maxHeight:"fit-content",
   }}>
       <AuthProvider>
       

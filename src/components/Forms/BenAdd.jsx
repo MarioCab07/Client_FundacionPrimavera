@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Components Import
 import DatePicker from "../DatePicker";
@@ -70,7 +70,7 @@ const BenForm = () => {
   const [image,setImage] = useState(null);
   const [birthDate, setBirthDate] = useState(dayjs().utc());
   const [startingDate, setStartingDate] = useState(dayjs().utc());
-  const [dependent, setDependent] = useState([]);
+  const [dependent, setDependent] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Functions
@@ -89,15 +89,16 @@ const BenForm = () => {
 
   // Function to handle the addition of a dependent to the form state
   const handleAddDependent = () => {
-    if (dependent) {
-      const updatedDependents = [...form.dependents, dependent]; // Add the new dependent to the array
-      
-      
-      setForm({ ...form, dependents: updatedDependents }); // Update the form state
-      setDependent([]); // Reset the dependent state
-    } 
-  };
+  if (dependent) {
+    setForm({ ...form, dependents: [...form.dependents, dependent] });
+    setDependent(""); // Limpiar el select después de agregar
+  }
+};
 
+useEffect(()=>{
+  console.log(form.dependents);
+  
+},[form.dependents])
  
   // Function to handle the change in other input fields
   const handleChange = (e) => {
@@ -148,9 +149,14 @@ const BenForm = () => {
       const formData = new FormData();
        // Append the picture file to the FormData object
       
-      for(const key in updatedForm) {
-        formData.append(key, updatedForm[key]); // Append all other form fields to the FormData object
-      }
+      for (const key in updatedForm) {
+  const value = updatedForm[key];
+  if (Array.isArray(value)) {
+    formData.append(key, JSON.stringify(value));
+  } else {
+    formData.append(key, value);
+  }
+}
       formData.append("photo", image);
 
       
