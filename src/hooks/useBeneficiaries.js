@@ -10,8 +10,8 @@ export const useBeneficiaries = ({page = 1,limit = 10,showActive})=>{
       showActive
         ? getBeneficiaries(page, limit).then(r => r.data)
         : getInactiveBeneficiaries(page, limit).then(r => r.data),
-    staleTime: 5 * 60 * 1000,
-    cacheTime: 30 * 60 * 1000,
+    staleTime: 30 * 60 * 1000,
+    cacheTime: 60 * 60 * 1000,
     keepPreviousData: true,
     refetchOnWindowFocus: false,
     refetchOnMount: false,

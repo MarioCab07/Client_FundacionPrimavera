@@ -18,6 +18,7 @@ const Details = ({
   setShowDocuments,
   setShowModify,
   handleClose,
+  page,
 }) => {
   const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
 
@@ -224,6 +225,7 @@ const Details = ({
             ben={ben}
             setBenSelected={setBenSelected}
             setShowMenu={setShowMenu}
+            page={page}
           />
         )}
       </div>
@@ -309,6 +311,7 @@ const BenDetails = ({ ben, setBenSelected, page }) => {
             setShowDocuments={setShowDocuments}
             setShowModify={setShowModify}
             handleClose={handleClose}
+            page={page}
           />
         ) : showDocuments ? (
           <Documents ben={ben} setShowDocuments={setShowDocuments} />
