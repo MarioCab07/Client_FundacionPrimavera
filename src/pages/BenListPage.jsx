@@ -49,7 +49,7 @@ const BenList = () => {
     <>
       <Header />
 
-      <section className="flex flex-col items-center rounded-lg w-full relative z-40 p-2">
+      <section className="flex flex-col items-center rounded-lg w-full relative z-40 p-2 min-h-fit">
         <div className="flex flex-1 items-center justify-center gap-10  px-4 py-8 ">
           <BsFillPeopleFill size={40} />
           <h3 className=" text-6xl ms-madi-regular ">Beneficiarios</h3>
@@ -114,7 +114,7 @@ const BenList = () => {
           </div>
 
           {/* Content */}
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center min-h-fit">
             {isFetching ? (
               <Loading />
             ) : beneficiaries.length > 0 ? (

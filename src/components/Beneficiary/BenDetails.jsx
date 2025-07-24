@@ -293,37 +293,40 @@ const BenDetails = ({ ben, setBenSelected, page }) => {
 
   return (
     <>
-      <section
-        className={` ${
-          isClosing
-            ? "scale-out-center"
-            : ben
-            ? "scale-in-center"
-            : "scale-out-center"
-        }  z-40 flex flex-col gap-4 bg-white rounded-lg p-4 shadow-lg w-1/2 mx-auto absolute top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-amber-300 border-2 border-solid overflow-scroll h-max`}
-      >
-        {!showDocuments && !showModify ? (
-          <Details
-            ben={ben}
-            showMenu={showMenu}
-            setShowMenu={setShowMenu}
-            setBenSelected={setBenSelected}
-            setShowDocuments={setShowDocuments}
-            setShowModify={setShowModify}
-            handleClose={handleClose}
-            page={page}
-          />
-        ) : showDocuments ? (
-          <Documents ben={ben} setShowDocuments={setShowDocuments} />
-        ) : showModify ? (
-          <Modify
-            ben={ben}
-            setShowModify={setShowModify}
-            setBenSelected={setBenSelected}
-            page={page}
-          />
-        ) : null}
-      </section>
+      <div className="modal-backdrop" onClick={handleClose}>
+        <section
+          className={` ${
+            isClosing
+              ? "scale-out-center"
+              : ben
+              ? "scale-in-center"
+              : "scale-out-center"
+          } modal-container `}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {!showDocuments && !showModify ? (
+            <Details
+              ben={ben}
+              showMenu={showMenu}
+              setShowMenu={setShowMenu}
+              setBenSelected={setBenSelected}
+              setShowDocuments={setShowDocuments}
+              setShowModify={setShowModify}
+              handleClose={handleClose}
+              page={page}
+            />
+          ) : showDocuments ? (
+            <Documents ben={ben} setShowDocuments={setShowDocuments} />
+          ) : showModify ? (
+            <Modify
+              ben={ben}
+              setShowModify={setShowModify}
+              setBenSelected={setBenSelected}
+              page={page}
+            />
+          ) : null}
+        </section>
+      </div>
     </>
   );
 };

@@ -153,47 +153,44 @@ const Modify = ({ ben, setShowModify, setBenSelected, page }) => {
     <>
       <form
         onSubmit={handleSubmit}
-        className={` ${
+        className={`${
           isClosing ? "slide-out-left" : "slide-in-left"
-        } flex flex-col gap-5 justify-center items-center w-full h-full p-10 bg-white rounded-lg shadow-lg`}
-        style={{
-          boxShadow: " rgba(0, 0, 0, 0.35) 0px 5px 15px",
-          maxHeight: "90vh",
-        }}
+        } flex flex-col w-full h-[90vh] bg-white rounded-lg shadow-lg`}
+        style={{ boxShadow: "rgba(0,0,0,0.35) 0px 5px 15px" }}
       >
-        <h3 className="font-bold">Modificar Beneficiario</h3>
-        <div className="w-full flex justify-center items-center gap-6 flex-wrap">
-          <h4>
-            Beneficiario:{" "}
-            <span className="font-semibold">{modifiedBen.name}</span>
-          </h4>
-          <h4>
-            DUI: <span className="font-semibold">{modifiedBen.dui}</span>
-          </h4>
-          <h4>
-            Edad: <span className="font-semibold">{modifiedBen.age}</span>
-          </h4>
-          <h4>
-            Género: <span className="font-semibold">{modifiedBen.gender}</span>
-          </h4>
-          <h4>
-            Fecha de Nacimiento:{" "}
-            <span className="font-semibold">
-              {sanitizeDate(modifiedBen.birth_date)}
-            </span>
-          </h4>
-          <h4>
-            Fecha de Inicio:{" "}
-            <span className="font-semibold">
-              {sanitizeDate(modifiedBen.starting_date)}
-            </span>
-          </h4>
+        <div className="flex flex-col items-center gap-2 px-10 py-4 border-b">
+          <h3 className="font-bold p-4 text-center">Modificar Beneficiario</h3>
+          <div className="w-full flex justify-center items-center gap-6 flex-wrap">
+            <h4>
+              Beneficiario:{" "}
+              <span className="font-semibold">{modifiedBen.name}</span>
+            </h4>
+            <h4>
+              DUI: <span className="font-semibold">{modifiedBen.dui}</span>
+            </h4>
+            <h4>
+              Edad: <span className="font-semibold">{modifiedBen.age}</span>
+            </h4>
+            <h4>
+              Género:{" "}
+              <span className="font-semibold">{modifiedBen.gender}</span>
+            </h4>
+            <h4>
+              Fecha de Nacimiento:{" "}
+              <span className="font-semibold">
+                {sanitizeDate(modifiedBen.birth_date)}
+              </span>
+            </h4>
+            <h4>
+              Fecha de Inicio:{" "}
+              <span className="font-semibold">
+                {sanitizeDate(modifiedBen.starting_date)}
+              </span>
+            </h4>
+          </div>
         </div>
-        <div
-          className="flex flex-col gap-5 overflow-y-auto w-full"
-          style={{ maxHeight: "calc(90vh - 150px)" }}
-        >
-          <div className="flex gap-5 justify-center place-items-stretch flex-wrap">
+        <div className="flex-1 min-h-0 overflow-y-auto px-10 py-4 space-y-6">
+          <div className="flex flex-wrap gap-5">
             <div className="flex flex-col gap-2 justify-center items-center h-max  flex-1">
               <h5 className="font-bold">Información de Contacto</h5>
               <label htmlFor="phone_number" className="flex flex-col gap-2">
@@ -457,7 +454,16 @@ const Modify = ({ ben, setShowModify, setBenSelected, page }) => {
           </div>
         </div>
 
-        <div className="flex flex-1 w-full justify-between gap-8 items-center">
+        {/* Botones SIEMPRE visibles */}
+        <div className="flex-shrink-0 bg-white px-10 py-4 border-t flex justify-between gap-8">
+          <button
+            style={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
+            type="button"
+            className="bg-amber-200 rounded-2xl px-4 py-2  cursor-pointer hover:bg-amber-50 transition ease-in-out 0.5s "
+            onClick={handleClose}
+          >
+            Volver
+          </button>
           <button
             type="submit"
             className="p-5 rounded-2xl w-40 text-white relative overflow-hidden cursor-pointer group"
@@ -476,14 +482,6 @@ const Modify = ({ ben, setShowModify, setBenSelected, page }) => {
             <span className="absolute inset-0 flex items-center justify-center transition-transform duration-500 transform translate-x-full group-hover:translate-x-0">
               <BsPencilSquare size={20} />
             </span>
-          </button>
-          <button
-            style={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
-            type="button"
-            className="bg-amber-200 rounded-2xl px-4 py-2  cursor-pointer hover:bg-amber-50 transition ease-in-out 0.5s "
-            onClick={handleClose}
-          >
-            Volver
           </button>
         </div>
       </form>
