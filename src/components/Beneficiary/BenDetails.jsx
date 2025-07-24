@@ -8,11 +8,7 @@ import Deactivate from "./Deactivate";
 import Modify from "./Modify";
 import "../../style/animations.css";
 
-
-
-
 import { Documents } from "./Documents";
-
 
 const Details = ({
   ben,
@@ -23,8 +19,7 @@ const Details = ({
   setShowModify,
   handleClose,
 }) => {
-  
-const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
+  const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
 
   return (
     <>
@@ -233,34 +228,31 @@ const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
         )}
       </div>
       <div className="flex gap-4 justify-center items-center">
-
         {isAdmin ? (
           <>
-          <button
-          onClick={()=>{
-            setShowModify(true);
-          }}
-          style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
-          className="bg-amber-300 rounded-2xl p-3 w-fit gap-4 flex items-center hover:bg-amber-50 cursor-pointer"
-        >
-          Modificar <BsPencilSquare size={20} />{" "}
-        </button>
-        {ben.active.value ? (
-          <button
-          className="bg-red-500 rounded-2xl p-3 w-fit flex gap-4 items-center hover:bg-amber-50 cursor-pointer"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
-          onClick={() => {
-            setShowMenu(true);
-          }}
-        >
-          Dar de Baja <HiTrendingDown />{" "}
-        </button>
-        ):
-        null
-        }
+            <button
+              onClick={() => {
+                setShowModify(true);
+              }}
+              style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+              className="bg-amber-300 rounded-2xl p-3 w-fit gap-4 flex items-center hover:bg-amber-50 cursor-pointer"
+            >
+              Modificar <BsPencilSquare size={20} />{" "}
+            </button>
+            {ben.active.value ? (
+              <button
+                className="bg-red-500 rounded-2xl p-3 w-fit flex gap-4 items-center hover:bg-amber-50 cursor-pointer"
+                style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                onClick={() => {
+                  setShowMenu(true);
+                }}
+              >
+                Dar de Baja <HiTrendingDown />{" "}
+              </button>
+            ) : null}
           </>
-        ):(null)}
-        
+        ) : null}
+
         <button
           onClick={() => {
             setShowDocuments(true);
@@ -271,8 +263,7 @@ const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
           Ver Documentos
           <AiOutlineFilePdf size={20} />
         </button>
-        
-        
+
         <button
           style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
           className="bg-gray-400 text-white rounded-2xl p-3 w-fit hover:bg-amber-50 cursor-pointer transition ease-in-out 0.5s hover:text-gray-400"
@@ -285,8 +276,7 @@ const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
   );
 };
 
-
-const BenDetails = ({ ben, setBenSelected }) => {
+const BenDetails = ({ ben, setBenSelected, page }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showDocuments, setShowDocuments] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -320,15 +310,16 @@ const BenDetails = ({ ben, setBenSelected }) => {
             setShowModify={setShowModify}
             handleClose={handleClose}
           />
-        ) :
-        showDocuments ?(
+        ) : showDocuments ? (
           <Documents ben={ben} setShowDocuments={setShowDocuments} />
-        ):
-        showModify ? 
-        <Modify ben={ben} setShowModify={setShowModify} setBenSelected={setBenSelected} />
-        : null
-         }
-        
+        ) : showModify ? (
+          <Modify
+            ben={ben}
+            setShowModify={setShowModify}
+            setBenSelected={setBenSelected}
+            page={page}
+          />
+        ) : null}
       </section>
     </>
   );
