@@ -144,3 +144,7 @@ export const handlePhoneChange = (e,setForm,form) => {
   }
   setForm({ ...form, [field]: value }); // Update the form state with the formatted value
 };
+
+export const hasRole = (user, role) => user?.role === role;
+
+export const hasAnyRole = (user, roles = []) => roles.includes(user?.role);

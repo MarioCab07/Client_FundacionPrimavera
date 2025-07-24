@@ -1,6 +1,10 @@
 import axios from "axios";
 import profileIcon from "../assets/icons/ProfileIcon.jpg";
-
+import {getAccessToken,setAccessToken,clearAccessToken} from "./tokenStore"
+import {queryClient} from "./queryClient"
+import { navigate } from "./nav";
+import { forceClearSession, pushUserFromRefresh } from "../context/AuthContext";
+import { doRefresh } from "./refreshHelper";
 
 const apiURL = import.meta.env.VITE_BASE_URL+"api/v1/";
 
@@ -8,11 +12,78 @@ const api = axios.create({
     baseURL: apiURL,
     withCredentials: true,
 })
+
+export default api;
+
+api.interceptors.request.use((config)=>{
+
+    if(!config.url.includes('/auth/login') && !config.url.includes('/auth/refresh')) {
+        
+        const token = getAccessToken();
+        if(token){
+            config.headers = config.headers || {};
+            config.headers.Authorization = `Bearer ${token}`;
+        } 
+        
+    }
+        return config;
+    
+})
+
+
+
+api.interceptors.response.use(
+  (res) => res,
+  async (err) => {
+    const original = err.config;
+    const status = err.response?.status;
+
+    if (status === 401 && !getAccessToken()) {
+      return Promise.reject(err);
+    }
+
+    // Intento de refresh solo una vez
+    if (status === 401 && !original._retry && !original.url.includes('/auth/refresh')) {
+      original._retry = true;
+      try {
+        const { data } = await doRefresh();
+        setAccessToken(data.accessToken);
+        pushUserFromRefresh?.(data.user); 
+        original.headers.Authorization = `Bearer ${data.accessToken}`;
+        return api(original);
+      } catch (e) {
+        
+        forceClearSession();
+        
+
+        return Promise.reject(e);
+      }
+    }
+
+    // Si es un 401 y ya lo intentamos refrescar, también limpia
+    if (status === 401 && original._retry) {
+      forceClearSession();
+    }
+
+    return Promise.reject(err);
+  }
+);
+
+
 //Auth Functions
 export const Login = async(data)=>{
     try {
         return await api.post("auth/login",data);
     } catch (error) {
+        throw error;
+    }
+}
+
+export const Refresh = async()=>{
+    try {
+        return await api.post("auth/refresh");
+    } catch (error) {
+        forceClearSession();
         throw error;
     }
 }
