@@ -139,13 +139,7 @@ const BenList = () => {
         {benSelected && (
           <BenDetails ben={benSelected} setBenSelected={setBenSelected} />
         )}
-        {showCSV && (
-          <GenerateCSV
-            beneficiaries={beneficiaries}
-            showCSV={showCSV}
-            setShowCSV={setShowCSV}
-          />
-        )}
+        {showCSV && <GenerateCSV showCSV={showCSV} setShowCSV={setShowCSV} />}
       </section>
     </>
   );

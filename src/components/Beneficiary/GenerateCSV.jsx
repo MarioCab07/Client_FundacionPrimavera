@@ -1,22 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { getBeneficiaries, generateCSV } from "../../services/api.services";
 import { toast } from "react-toastify";
 import { Loading } from "../Loading";
 import CheckboxValue from "../Checkbox";
 import { GrDocumentCsv } from "react-icons/gr";
+import { useAllActivesCsv } from "../../hooks/useAllActivesCsv";
 
-const GenerateCSV = ({ beneficiaries, showCSV, setShowCSV }) => {
+const GenerateCSV = ({ showCSV, setShowCSV }) => {
   const [isClosing, setIsClosing] = useState(false);
-  const [listBen, setListBen] = useState(beneficiaries);
-  const [loading, setLoading] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedDUIs, setSelectedDUIs] = useState([]);
+
+  const { data: listBen = [], isLoading } = useAllActivesCsv(showCSV);
+  const currentIds = useMemo(() => listBen.map((b) => b.dui), [listBen]);
 
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
       setShowCSV(false);
       setIsClosing(false);
+      setSelectAll(false);
+      setSelectedDUIs([]);
     }, 500);
   };
 
@@ -34,13 +38,11 @@ const GenerateCSV = ({ beneficiaries, showCSV, setShowCSV }) => {
       return newSelected;
     });
   };
-  useEffect(() => {
-    if (selectAll) {
-      setSelectedDUIs(listBen.map((ben) => ben.dui));
-    } else if (selectedDUIs.length !== listBen.length) {
-      setSelectedDUIs((prev) => (prev.length === listBen.length ? [] : prev));
-    }
-  }, [selectAll, listBen]);
+
+  const handleToggleAll = (checked) => {
+    setSelectAll(checked);
+    setSelectedDUIs(checked ? currentIds : []); // selecciona o limpia TODO
+  };
 
   const generateCSVFile = async () => {
     const toastId = toast.loading("Generando CSV...");
@@ -111,11 +113,11 @@ const GenerateCSV = ({ beneficiaries, showCSV, setShowCSV }) => {
         <div className="flex justify-center mb-2">
           <CheckboxValue
             checked={selectAll}
-            setChecked={setSelectAll}
+            setChecked={handleToggleAll}
             label={"Seleccionar Todos"}
           />
         </div>
-        {loading ? (
+        {isLoading ? (
           <div className="flex justify-center items-center h-60">
             <Loading />
           </div>

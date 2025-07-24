@@ -152,6 +152,16 @@ export const getBeneficiaries = async(page=1, limit =10)=>{
     }
 }
 
+export const getBeneficiariesForCSV = async()=>{
+    try {
+        return await api.get("beneficiary/getAll/csv");
+
+    } catch (error) {
+        throw error;
+        
+    }
+}
+
 export const findBeneficiary = async(benId)=>{
     try {
         return await api.get(`beneficiary/find/${benId}`);
