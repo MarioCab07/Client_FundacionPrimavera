@@ -32,7 +32,6 @@ export const AuthProvider = ({ children }) => {
     (async () => {
       try {
         const { data } = await doRefresh();
-        console.log(data);
 
         setAccessToken(data.accessToken);
         setUser(data.user || null);
