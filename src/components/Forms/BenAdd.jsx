@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 // Components Import
 import DatePicker from "../DatePicker";
@@ -14,7 +14,7 @@ import { BsFillPeopleFill } from "react-icons/bs";
 
 // Default Profile Icon
 import profileIcon from "../../assets/icons/ProfileIcon.jpg";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Day.js plugins
 import dayjs from "dayjs";
@@ -23,10 +23,20 @@ dayjs.extend(utc);
 
 import { addBeneficiary } from "../../services/api.services";
 import { ToastContainer, toast, Bounce } from "react-toastify";
-import { sleep, inputStyle,handleDuiChange,handleNumbers,handlePhoneChange } from "../../tools/tools";
+import {
+  sleep,
+  inputStyle,
+  handleDuiChange,
+  handleNumbers,
+  handlePhoneChange,
+} from "../../tools/tools";
 
+import { useQueryClient } from "@tanstack/react-query";
 
 const BenForm = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
   // Styles
   const inpStyle = inputStyle();
   const spanStyle = `
@@ -67,11 +77,14 @@ const BenForm = () => {
     gender: "",
   });
   const [picture, setPicture] = useState(profileIcon);
-  const [image,setImage] = useState(null);
+  const [image, setImage] = useState(null);
   const [birthDate, setBirthDate] = useState(dayjs().utc());
   const [startingDate, setStartingDate] = useState(dayjs().utc());
   const [dependent, setDependent] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const newActive = useRef(false);
+  const newInactive = useRef(false);
 
   // Functions
   // Function to handle the opening and closing of the modal
@@ -89,29 +102,23 @@ const BenForm = () => {
 
   // Function to handle the addition of a dependent to the form state
   const handleAddDependent = () => {
-  if (dependent) {
-    setForm({ ...form, dependents: [...form.dependents, dependent] });
-    setDependent(""); // Limpiar el select después de agregar
-  }
-};
+    if (dependent) {
+      setForm({ ...form, dependents: [...form.dependents, dependent] });
+      setDependent(""); // Limpiar el select después de agregar
+    }
+  };
 
-useEffect(()=>{
-  console.log(form.dependents);
-  
-},[form.dependents])
- 
   // Function to handle the change in other input fields
   const handleChange = (e) => {
     const field = e.target.id;
     let value;
-    if(field==="adress"){
-        value = e.target.value;
-    }else{
-        value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "");
+    if (field === "adress") {
+      value = e.target.value;
+    } else {
+      value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "");
     }
-    
-    
-    setForm({ ...form, [field]: value }); 
+
+    setForm({ ...form, [field]: value });
   };
 
   // Function to handle the change in the file input field
@@ -127,45 +134,37 @@ useEffect(()=>{
     }
   };
 
-  
-
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    
-    
+
     const toastId = toast.loading("Agregando Beneficiario...");
     const starting_date = startingDate.format("MM-DD-YYYY");
     const birth_date = birthDate.format("MM-DD-YYYY");
-        const updatedForm = {
-            ...form,
-            birth_date,
-            starting_date,
-        };
+    const updatedForm = {
+      ...form,
+      birth_date,
+      starting_date,
+    };
     try {
-      
       await sleep(500);
       const formData = new FormData();
-       // Append the picture file to the FormData object
-      
-      for (const key in updatedForm) {
-  const value = updatedForm[key];
-  if (Array.isArray(value)) {
-    formData.append(key, JSON.stringify(value));
-  } else {
-    formData.append(key, value);
-  }
-}
-      formData.append("photo", image);
+      // Append the picture file to the FormData object
 
-      
-      
+      for (const key in updatedForm) {
+        const value = updatedForm[key];
+        if (Array.isArray(value)) {
+          formData.append(key, JSON.stringify(value));
+        } else {
+          formData.append(key, value);
+        }
+      }
+      formData.append("photo", image);
+      if (form.active) newActive.current = true;
+      if (!form.active) newInactive.current = true;
 
       const response = await addBeneficiary(formData);
-      
-      
-      
+
       if (response.status === 201) {
         toast.update(toastId, {
           render: "Beneficiario agregado exitosamente!",
@@ -209,9 +208,7 @@ useEffect(()=>{
         setPicture(profileIcon); // Reset the picture to the default icon
         setBirthDate(dayjs().utc()); // Reset the birth date to the current date
         setStartingDate(dayjs().utc()); // Reset the starting date to the current date
-
-      }else {
-
+      } else {
         toast.update(toastId, {
           render: "Ya existe Beneficiario con ese DUI!",
           type: "error",
@@ -219,11 +216,7 @@ useEffect(()=>{
           autoClose: 3000, // Close after 3 seconds
         });
       }
-
-
     } catch (error) {
-      
-      
       toast.update(toastId, {
         render: error.response.data.error || "Error al agregar beneficiario",
         type: "error",
@@ -231,6 +224,31 @@ useEffect(()=>{
         autoClose: 3000, // Close after 3 seconds
       });
     }
+  };
+
+  const handleNavigate = async () => {
+    if (newActive.current && newInactive.current) {
+      await queryClient.refetchQueries({
+        queryKey: ["beneficiaries", "active"],
+      });
+      await queryClient.refetchQueries({
+        queryKey: ["beneficiaries", "inactive"],
+      });
+    } else if (newActive.current) {
+      await queryClient.refetchQueries({
+        queryKey: ["beneficiaries", "active"],
+      });
+    } else if (newInactive.current) {
+      await queryClient.refetchQueries({
+        queryKey: ["beneficiaries", "inactive"],
+      });
+    }
+
+    // Resetear los flags si quieres que no afecten navegación futura
+    newActive.current = false;
+    newInactive.current = false;
+
+    navigate("/GestionarBeneficiarios");
   };
 
   return (
@@ -241,9 +259,15 @@ useEffect(()=>{
           <h2 className=" text-6xl ms-madi-regular ">Nuevo Beneficiario...</h2>
         </article>
         <div className="flex gap-4 items-center justify-end w-full">
-            <Link style={{boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"}} className="cursor-pointer w-fit p-3 rounded-lg flex gap-3 justify-center items-center text-white font-bold bg-amber-300 hover:scale-105 transition-all duration-300 hover:bg-yellow-50 hover:text-amber-300 text-center  " to={"/GestionarBeneficiarios"}> Beneficiarios <BsFillPeopleFill size={30}/></Link>
-            
-          </div>
+          <button
+            style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+            className="cursor-pointer w-fit p-3 rounded-lg flex gap-3 justify-center items-center text-white font-bold bg-amber-300 hover:scale-105 transition-all duration-300 hover:bg-yellow-50 hover:text-amber-300 text-center  "
+            onClick={handleNavigate}
+          >
+            {" "}
+            Beneficiarios <BsFillPeopleFill size={30} />
+          </button>
+        </div>
         <article
           style={{
             boxShadow:
@@ -336,7 +360,9 @@ useEffect(()=>{
                     className={inpStyle}
                     placeholder="12345678-9"
                     value={form.dui} // Bind the value to the form state
-                    onChange={(e)=>{handleDuiChange(e,setForm,form)}} // Format the input dynamically
+                    onChange={(e) => {
+                      handleDuiChange(e, setForm, form);
+                    }} // Format the input dynamically
                     maxLength={10}
                     required // Limit the input length to 10 characters (8 digits + 1 dash)
                   />
@@ -352,7 +378,9 @@ useEffect(()=>{
                     className={inpStyle}
                     placeholder="lb"
                     value={form.weight}
-                    onChange={(e)=>{ handleNumbers(e,setForm,form)}}
+                    onChange={(e) => {
+                      handleNumbers(e, setForm, form);
+                    }}
                   />
                 </span>
                 <span className={spanStyle}>
@@ -366,7 +394,9 @@ useEffect(()=>{
                     className={inpStyle}
                     placeholder="cm"
                     value={form.height}
-                    onChange={(e)=>{ handleNumbers(e,setForm,form)}}
+                    onChange={(e) => {
+                      handleNumbers(e, setForm, form);
+                    }}
                   />
                 </span>
                 <CheckboxValue
@@ -383,7 +413,9 @@ useEffect(()=>{
                   </label>
                   <input
                     value={form.phone_number}
-                    onChange={(e)=>{handlePhoneChange(e,setForm,form)}}
+                    onChange={(e) => {
+                      handlePhoneChange(e, setForm, form);
+                    }}
                     id="phone_number"
                     type="text"
                     className={inpStyle}
@@ -579,7 +611,9 @@ useEffect(()=>{
                       className={inpStyle}
                       placeholder=""
                       value={form.personIC_dui}
-                      onChange={(e)=>{handleDuiChange(e,setForm, form)}}
+                      onChange={(e) => {
+                        handleDuiChange(e, setForm, form);
+                      }}
                     />
                     <label className="font-semibold" htmlFor="personIC_dui">
                       DUI
@@ -594,8 +628,9 @@ useEffect(()=>{
                       className={inpStyle}
                       placeholder=""
                       value={form.personIC_phone_number}
-                      onChange={(e)=>{handlePhoneChange(e,setForm, form)}}
-
+                      onChange={(e) => {
+                        handlePhoneChange(e, setForm, form);
+                      }}
                     />
                     <label
                       className="font-semibold"
@@ -641,6 +676,35 @@ useEffect(()=>{
                 >
                   Agregar <RiUserAddLine />
                 </button>
+
+                <div>
+                  <h3 className="font-bold w-full text-center">
+                    Estado del beneficiario
+                  </h3>
+                  <CheckboxValue
+                    label={"Activo"}
+                    checked={form.active}
+                    setChecked={(value) => setForm({ ...form, active: value })}
+                  />
+                  <p className="text-sm text-gray-500 italic">
+                    {/* Suggestion to add a reason if the beneficiary is inactive */}
+                    *Si el beneficiario está inactivo se sugiere agregar una
+                    razon
+                  </p>
+                  <span className={spanStyle}>
+                    <label className="font-semibold" htmlFor="reason">
+                      Razon
+                    </label>
+                    <input
+                      id="reason"
+                      type="text"
+                      className={inpStyle}
+                      placeholder="Razon de inactividad"
+                      value={form.reason}
+                      onChange={handleChange}
+                    />
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -732,8 +796,6 @@ useEffect(()=>{
           </div>
         )}
       </section>
-
-      
     </>
   );
 };

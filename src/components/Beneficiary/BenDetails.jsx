@@ -8,11 +8,7 @@ import Deactivate from "./Deactivate";
 import Modify from "./Modify";
 import "../../style/animations.css";
 
-
-
-
 import { Documents } from "./Documents";
-
 
 const Details = ({
   ben,
@@ -22,9 +18,9 @@ const Details = ({
   setShowDocuments,
   setShowModify,
   handleClose,
+  page,
 }) => {
-  
-const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
+  const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
 
   return (
     <>
@@ -229,38 +225,36 @@ const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
             ben={ben}
             setBenSelected={setBenSelected}
             setShowMenu={setShowMenu}
+            page={page}
           />
         )}
       </div>
       <div className="flex gap-4 justify-center items-center">
-
         {isAdmin ? (
           <>
-          <button
-          onClick={()=>{
-            setShowModify(true);
-          }}
-          style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
-          className="bg-amber-300 rounded-2xl p-3 w-fit gap-4 flex items-center hover:bg-amber-50 cursor-pointer"
-        >
-          Modificar <BsPencilSquare size={20} />{" "}
-        </button>
-        {ben.active.value ? (
-          <button
-          className="bg-red-500 rounded-2xl p-3 w-fit flex gap-4 items-center hover:bg-amber-50 cursor-pointer"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
-          onClick={() => {
-            setShowMenu(true);
-          }}
-        >
-          Dar de Baja <HiTrendingDown />{" "}
-        </button>
-        ):
-        null
-        }
+            <button
+              onClick={() => {
+                setShowModify(true);
+              }}
+              style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+              className="bg-amber-300 rounded-2xl p-3 w-fit gap-4 flex items-center hover:bg-amber-50 cursor-pointer"
+            >
+              Modificar <BsPencilSquare size={20} />{" "}
+            </button>
+            {ben.active.value ? (
+              <button
+                className="bg-red-500 rounded-2xl p-3 w-fit flex gap-4 items-center hover:bg-amber-50 cursor-pointer"
+                style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                onClick={() => {
+                  setShowMenu(true);
+                }}
+              >
+                Dar de Baja <HiTrendingDown />{" "}
+              </button>
+            ) : null}
           </>
-        ):(null)}
-        
+        ) : null}
+
         <button
           onClick={() => {
             setShowDocuments(true);
@@ -271,8 +265,7 @@ const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
           Ver Documentos
           <AiOutlineFilePdf size={20} />
         </button>
-        
-        
+
         <button
           style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
           className="bg-gray-400 text-white rounded-2xl p-3 w-fit hover:bg-amber-50 cursor-pointer transition ease-in-out 0.5s hover:text-gray-400"
@@ -285,8 +278,7 @@ const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
   );
 };
 
-
-const BenDetails = ({ ben, setBenSelected }) => {
+const BenDetails = ({ ben, setBenSelected, page }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showDocuments, setShowDocuments] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -301,35 +293,45 @@ const BenDetails = ({ ben, setBenSelected }) => {
 
   return (
     <>
-      <section
-        className={` ${
-          isClosing
-            ? "scale-out-center"
-            : ben
-            ? "scale-in-center"
-            : "scale-out-center"
-        }  z-40 flex flex-col gap-4 bg-white rounded-lg p-4 shadow-lg w-1/2 mx-auto absolute top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-amber-300 border-2 border-solid overflow-scroll h-max`}
-      >
-        {!showDocuments && !showModify ? (
-          <Details
-            ben={ben}
-            showMenu={showMenu}
-            setShowMenu={setShowMenu}
-            setBenSelected={setBenSelected}
-            setShowDocuments={setShowDocuments}
-            setShowModify={setShowModify}
-            handleClose={handleClose}
-          />
-        ) :
-        showDocuments ?(
-          <Documents ben={ben} setShowDocuments={setShowDocuments} />
-        ):
-        showModify ? 
-        <Modify ben={ben} setShowModify={setShowModify} setBenSelected={setBenSelected} />
-        : null
-         }
-        
-      </section>
+      <div className="modal-backdrop" onClick={handleClose}>
+        <section
+          className={` ${
+            isClosing
+              ? "scale-out-center"
+              : ben
+              ? "scale-in-center"
+              : "scale-out-center"
+          } modal-container `}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {!showDocuments && !showModify ? (
+            <Details
+              ben={ben}
+              showMenu={showMenu}
+              setShowMenu={setShowMenu}
+              setBenSelected={setBenSelected}
+              setShowDocuments={setShowDocuments}
+              setShowModify={setShowModify}
+              handleClose={handleClose}
+              page={page}
+            />
+          ) : showDocuments ? (
+            <Documents
+              ben={ben}
+              setShowDocuments={setShowDocuments}
+              page={page}
+              setBenSelected={setBenSelected}
+            />
+          ) : showModify ? (
+            <Modify
+              ben={ben}
+              setShowModify={setShowModify}
+              setBenSelected={setBenSelected}
+              page={page}
+            />
+          ) : null}
+        </section>
+      </div>
     </>
   );
 };

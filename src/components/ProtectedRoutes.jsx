@@ -1,16 +1,20 @@
-import {Navigate,Outlet} from 'react-router-dom';
-import {useAuth} from "../context/AuthContext";
-import {Loading} from "./Loading"
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { Loading } from "./Loading";
 
+const ProtectedRoutes = ({ allowedRoles, fallback = "/403" }) => {
+  const { user, loading, hasAnyRole } = useAuth();
+  const location = useLocation();
 
-const ProtectedRoutes = ({allowedRoles}) => {
-    const {user,loading} = useAuth();
+  if (loading) return <Loading fullscreen />;
 
-    if(loading) return <Loading fullscreen/>;
-    if(!user) return <Navigate to="/"/>
-    if(!allowedRoles.includes(user.role)) return <Navigate to="/"/>
-    return <Outlet/>
+  if (!user) return <Navigate to="/" replace state={{ from: location }} />;
 
-}
+  if (allowedRoles?.length && !hasAnyRole(allowedRoles)) {
+    return <Navigate to={fallback} replace state={{ from: location }} />;
+  }
+
+  return <Outlet />;
+};
 
 export default ProtectedRoutes;

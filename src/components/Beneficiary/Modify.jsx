@@ -4,11 +4,11 @@ import CheckboxValue from "../Checkbox";
 import BasicSelect from "../Select";
 import { BsPencilSquare } from "react-icons/bs";
 import { updateBeneficiary } from "../../services/api.services";
-import { sleep,handleNumbers,handlePhoneChange } from "../../tools/tools";
+import { sleep, handleNumbers, handlePhoneChange } from "../../tools/tools";
 import { toast } from "react-toastify";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-
-const Modify = ({ ben, setShowModify,setBenSelected }) => {
+const Modify = ({ ben, setShowModify, setBenSelected, page }) => {
   const inputStyle = `
     border-b border-black 
     bg-transparent 
@@ -32,12 +32,33 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
     phone_number: ben.person_in_charge.phone_number,
     dui: ben.person_in_charge.dui,
   });
+
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: mutateBen, isLoading: saving } = useMutation({
+    mutationFn: ({ id, form }) => updateBeneficiary(id, form),
+    onSuccess: ({ data }) => {
+      const ben = data.beneficiary;
+      const statusKey = ben.active?.value ? "active" : "inactive";
+      const key = ["beneficiaries", statusKey, page];
+
+      setBenSelected?.(ben);
+
+      queryClient.invalidateQueries({ queryKey: key, exact: true });
+
+      toast.success("Beneficiario actualizado!");
+      handleClose();
+    },
+    onError: () => {
+      toast.error("Hubo un problema!");
+    },
+  });
+
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
       setShowModify(false);
       setIsClosing(false);
-      
     }, 500);
   };
 
@@ -47,7 +68,6 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
     setModifiedBen((prev) => ({ ...prev, [field]: value }));
   };
 
-  
   const handlePhoneChangePersonIC = (e) => {
     const value = e.target.value.replace(/\D/g, ""); // Elimina todos los caracteres no numéricos
     const formattedValue =
@@ -78,116 +98,99 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
     setDependents((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async(e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const form = {
-        name: modifiedBen.name,
-        dui: modifiedBen.dui,
-        birth_date: modifiedBen.birth_date,
-        starting_date: modifiedBen.starting_date,
-        phone_number: modifiedBen.phone_number,
-        adress: modifiedBen.adress,
-        birth_place: modifiedBen.birth_place,
-        work_occup: modifiedBen.work_occup,
-        income_level: income,
-        pension: pension,
-        weight: modifiedBen.weight,
-        height: modifiedBen.height,
-        phone_company: phone_company,
-        whatsapp: whatsapp,
-        illness: modifiedBen.illness,
-        medicines: modifiedBen.medicines,
-        blood_type: modifiedBen.blood_type,
-        personIC_name: personIC.name,
-        personIC_phone_number: personIC.phone_number,
-        personIC_dui: personIC.dui,
-        medical_service: modifiedBen.medical_service,
-        house_type: house_type,
-        shirt_size: modifiedBen.shirt_size,
-        shoe_size: modifiedBen.shoe_size,
-        discapacities: modifiedBen.discapacities,
-        affiliation: modifiedBen.affiliation,
-        dependents: dependents,
-        active:true,
-        reason: " ",
-        gender: modifiedBen.gender,
-    }
+      name: modifiedBen.name,
+      dui: modifiedBen.dui,
+      birth_date: modifiedBen.birth_date,
+      starting_date: modifiedBen.starting_date,
+      phone_number: modifiedBen.phone_number,
+      adress: modifiedBen.adress,
+      birth_place: modifiedBen.birth_place,
+      work_occup: modifiedBen.work_occup,
+      income_level: income,
+      pension: pension,
+      weight: modifiedBen.weight,
+      height: modifiedBen.height,
+      phone_company: phone_company,
+      whatsapp: whatsapp,
+      illness: modifiedBen.illness,
+      medicines: modifiedBen.medicines,
+      blood_type: modifiedBen.blood_type,
+      personIC_name: personIC.name,
+      personIC_phone_number: personIC.phone_number,
+      personIC_dui: personIC.dui,
+      medical_service: modifiedBen.medical_service,
+      house_type: house_type,
+      shirt_size: modifiedBen.shirt_size,
+      shoe_size: modifiedBen.shoe_size,
+      discapacities: modifiedBen.discapacities,
+      affiliation: modifiedBen.affiliation,
+      dependents: dependents,
+      active: true,
+      reason: " ",
+      gender: modifiedBen.gender,
+    };
     const toastId = toast.loading("Actualizando Beneficiario...");
     try {
-        const response = await updateBeneficiary(modifiedBen._id, form);
-        await sleep(800);
-        
-        if (response.status === 200) {
-          toast.update(toastId, {
-            render: "Beneficiario actualizado!",
-            type: "success",
-            isLoading: false,
-            autoClose: 3000, 
-          });
-          await sleep(800);
-          setBenSelected(response.data.beneficiary);
-          handleClose();
-          window.location.reload();
-            
-        }
+      await mutateBen({ id: modifiedBen._id, form });
+      toast.dismiss(toastId);
     } catch (error) {
-        toast.update(toastId, {
-            render: "Hubo un problema!",
-            type: "error",
-            isLoading: false,
-            autoClose: 3000,
-        })
-    }
-    
+      console.log(error);
 
-      
-  }
+      toast.update(toastId, {
+        render: "Hubo un problema!",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
+    }
+  };
 
   return (
     <>
-      <form onSubmit={handleSubmit}
-        className={` ${
+      <form
+        onSubmit={handleSubmit}
+        className={`${
           isClosing ? "slide-out-left" : "slide-in-left"
-        } flex flex-col gap-5 justify-center items-center w-full h-full p-10 bg-white rounded-lg shadow-lg`}
-        style={{
-          boxShadow: " rgba(0, 0, 0, 0.35) 0px 5px 15px",
-          maxHeight: "90vh",
-        }}
+        } flex flex-col w-full h-[90vh] bg-white rounded-lg shadow-lg`}
+        style={{ boxShadow: "rgba(0,0,0,0.35) 0px 5px 15px" }}
       >
-        <h3 className="font-bold">Modificar Beneficiario</h3>
-        <div className="w-full flex justify-center items-center gap-6 flex-wrap">
-          <h4>
-            Beneficiario:{" "}
-            <span className="font-semibold">{modifiedBen.name}</span>
-          </h4>
-          <h4>
-            DUI: <span className="font-semibold">{modifiedBen.dui}</span>
-          </h4>
-          <h4>
-            Edad: <span className="font-semibold">{modifiedBen.age}</span>
-          </h4>
-          <h4>
-            Género: <span className="font-semibold">{modifiedBen.gender}</span>
-          </h4>
-          <h4>
-            Fecha de Nacimiento:{" "}
-            <span className="font-semibold">
-              {sanitizeDate(modifiedBen.birth_date)}
-            </span>
-          </h4>
-          <h4>
-            Fecha de Inicio:{" "}
-            <span className="font-semibold">
-              {sanitizeDate(modifiedBen.starting_date)}
-            </span>
-          </h4>
+        <div className="flex flex-col items-center gap-2 px-10 py-4 border-b">
+          <h3 className="font-bold p-4 text-center">Modificar Beneficiario</h3>
+          <div className="w-full flex justify-center items-center gap-6 flex-wrap">
+            <h4>
+              Beneficiario:{" "}
+              <span className="font-semibold">{modifiedBen.name}</span>
+            </h4>
+            <h4>
+              DUI: <span className="font-semibold">{modifiedBen.dui}</span>
+            </h4>
+            <h4>
+              Edad: <span className="font-semibold">{modifiedBen.age}</span>
+            </h4>
+            <h4>
+              Género:{" "}
+              <span className="font-semibold">{modifiedBen.gender}</span>
+            </h4>
+            <h4>
+              Fecha de Nacimiento:{" "}
+              <span className="font-semibold">
+                {sanitizeDate(modifiedBen.birth_date)}
+              </span>
+            </h4>
+            <h4>
+              Fecha de Inicio:{" "}
+              <span className="font-semibold">
+                {sanitizeDate(modifiedBen.starting_date)}
+              </span>
+            </h4>
+          </div>
         </div>
-        <div
-          className="flex flex-col gap-5 overflow-y-auto w-full"
-          style={{ maxHeight: "calc(90vh - 150px)" }}
-        >
-          <div className="flex gap-5 justify-center place-items-stretch flex-wrap">
+        <div className="flex-1 min-h-0 overflow-y-auto px-10 py-4 space-y-6">
+          <div className="flex flex-wrap gap-5">
             <div className="flex flex-col gap-2 justify-center items-center h-max  flex-1">
               <h5 className="font-bold">Información de Contacto</h5>
               <label htmlFor="phone_number" className="flex flex-col gap-2">
@@ -197,7 +200,9 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
                   id="phone_number"
                   className={inputStyle}
                   value={modifiedBen.phone_number}
-                  onChange={(e)=>{handlePhoneChange(e,setModifiedBen,modifiedBen)}}
+                  onChange={(e) => {
+                    handlePhoneChange(e, setModifiedBen, modifiedBen);
+                  }}
                 />
               </label>
               <label htmlFor="affiliation" className="flex flex-col gap-2">
@@ -257,7 +262,7 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
                   onChange={handleChange}
                 />
               </label>
-              
+
               <BasicSelect
                 label={"Nivel de Ingresos"}
                 value={income}
@@ -286,7 +291,9 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
                   id="weight"
                   className={inputStyle}
                   value={modifiedBen.weight}
-                  onChange={(e)=>{handleNumbers(e,setModifiedBen,modifiedBen)}}
+                  onChange={(e) => {
+                    handleNumbers(e, setModifiedBen, modifiedBen);
+                  }}
                 />
               </label>
               <label htmlFor="height" className="flex flex-col gap-2">
@@ -297,13 +304,14 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
                   id="height"
                   className={inputStyle}
                   value={modifiedBen.height}
-                  onChange={(e)=>{handleNumbers(e,setModifiedBen,modifiedBen)}}
+                  onChange={(e) => {
+                    handleNumbers(e, setModifiedBen, modifiedBen);
+                  }}
                 />
               </label>
               <label htmlFor="illness" className="flex flex-col gap-2">
                 <span className="text-sm font-semibold">Enfermedades</span>
                 <input
-                 
                   type="text"
                   id="illness"
                   className={inputStyle}
@@ -314,7 +322,6 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
               <label htmlFor="medicines" className="flex flex-col gap-2">
                 <span className="text-sm font-semibold">Medicinas</span>
                 <input
-                  
                   type="text"
                   id="medicines"
                   className={inputStyle}
@@ -325,7 +332,6 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
               <label htmlFor="medical_service" className="flex flex-col gap-2">
                 <span className="text-sm font-semibold">Servicio Médico</span>
                 <input
-                  
                   type="text"
                   id="medical_service"
                   className={inputStyle}
@@ -337,7 +343,6 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
               <label htmlFor="discapacities" className="flex flex-col gap-2">
                 <span className="text-sm font-semibold">Discapacidades</span>
                 <input
-                  
                   type="text"
                   id="discapacities"
                   className={inputStyle}
@@ -391,17 +396,13 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
                 {dependents.length ? (
                   dependents.map((dep, index) => {
                     return (
-                      <div
-                        key={index}
-                        className="relative min-w-24"
-                        
-                      >
+                      <div key={index} className="relative min-w-24">
                         {/* Botón del dependiente */}
                         <div
                           type="button"
                           style={{
                             boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                        }}
+                          }}
                           className="rounded-2xl bg-amber-300 text-amber-50 p-2 flex justify-center items-center"
                         >
                           {dep}
@@ -443,7 +444,7 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
               <button
                 type="button"
                 onClick={handleAddDependent}
-                style={{boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"}}
+                style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
                 className="bg-amber-200 cursor-pointer px-4 py-2 rounded-2xl hover:bg-amber-50 transition ease-in-out 0.5s"
               >
                 {" "}
@@ -453,16 +454,24 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
           </div>
         </div>
 
-        <div className="flex flex-1 w-full justify-between gap-8 items-center">
+        {/* Botones SIEMPRE visibles */}
+        <div className="flex-shrink-0 bg-white px-10 py-4 border-t flex justify-between gap-8">
           <button
-          type="submit"
+            style={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
+            type="button"
+            className="bg-amber-200 rounded-2xl px-4 py-2  cursor-pointer hover:bg-amber-50 transition ease-in-out 0.5s "
+            onClick={handleClose}
+          >
+            Volver
+          </button>
+          <button
+            type="submit"
             className="p-5 rounded-2xl w-40 text-white relative overflow-hidden cursor-pointer group"
             style={{
               background:
                 "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(27,238,189,1) 0%, rgba(58,238,13,1) 87%)",
               boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
             }}
-            
           >
             {/* Texto que desaparece al hacer hover */}
             <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 transform group-hover:-translate-x-full font-bold">
@@ -473,14 +482,6 @@ const Modify = ({ ben, setShowModify,setBenSelected }) => {
             <span className="absolute inset-0 flex items-center justify-center transition-transform duration-500 transform translate-x-full group-hover:translate-x-0">
               <BsPencilSquare size={20} />
             </span>
-          </button>
-          <button
-          style={{boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"}}
-            type="button"
-            className="bg-amber-200 rounded-2xl px-4 py-2  cursor-pointer hover:bg-amber-50 transition ease-in-out 0.5s "
-            onClick={handleClose}
-          >
-            Volver
           </button>
         </div>
       </form>

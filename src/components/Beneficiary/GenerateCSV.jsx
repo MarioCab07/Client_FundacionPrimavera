@@ -1,52 +1,30 @@
-import { useState,useEffect } from "react";
-import { getBeneficiaries,generateCSV } from "../../services/api.services";
+import { useState, useEffect, useMemo } from "react";
+import { getBeneficiaries, generateCSV } from "../../services/api.services";
 import { toast } from "react-toastify";
 import { Loading } from "../Loading";
 import CheckboxValue from "../Checkbox";
-import { GrDocumentCsv } from 'react-icons/gr'
+import { GrDocumentCsv } from "react-icons/gr";
+import { useAllActivesCsv } from "../../hooks/useAllActivesCsv";
 
-const GenerateCSV = ({ showCSV,setShowCSV }) => {
-    const [isClosing, setIsClosing] = useState(false);
-    const [listBen, setListBen] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [selectAll, setSelectAll] = useState(false);
-    const [selectedDUIs, setSelectedDUIs] = useState([]);
+const GenerateCSV = ({ showCSV, setShowCSV }) => {
+  const [isClosing, setIsClosing] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedDUIs, setSelectedDUIs] = useState([]);
 
-    const handleClose = () => {
+  const { data: listBen = [], isLoading } = useAllActivesCsv(showCSV);
+  const currentIds = useMemo(() => listBen.map((b) => b.dui), [listBen]);
+
+  const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
       setShowCSV(false);
       setIsClosing(false);
-      
+      setSelectAll(false);
+      setSelectedDUIs([]);
     }, 500);
   };
 
-    const fetchData = async () => {
-         setLoading(true);
-        try {
-            const response = await getBeneficiaries(1, 1000);
-            if (response.status === 200 && response.data) {
-                setListBen(response.data.beneficiaries);
-            }
-        } catch (error) {
-            toast.update(error, {
-                        render: "Problemas al obtener los beneficiarios",
-                        type: "error",
-                        isLoading: false,
-                        autoClose: 2000, 
-                      });
-        }finally {
-            setLoading(false);
-        }
-    }
-
-    useEffect(()=>{
-        if(showCSV){
-            fetchData();
-        }
-    },[showCSV]);
-
-    const handleSelect = (dui) => {
+  const handleSelect = (dui) => {
     setSelectedDUIs((prev) => {
       let newSelected;
       if (prev.includes(dui)) {
@@ -60,24 +38,29 @@ const GenerateCSV = ({ showCSV,setShowCSV }) => {
       return newSelected;
     });
   };
-useEffect(() => {
-    if (selectAll) {
-      setSelectedDUIs(listBen.map((ben) => ben.dui));
-    } else if (selectedDUIs.length !== listBen.length) {
-      setSelectedDUIs((prev) => (prev.length === listBen.length ? [] : prev));
-    }
-  }, [selectAll, listBen]);
-  
+
+  const handleToggleAll = (checked) => {
+    setSelectAll(checked);
+    setSelectedDUIs(checked ? currentIds : []); // selecciona o limpia TODO
+  };
 
   const generateCSVFile = async () => {
     const toastId = toast.loading("Generando CSV...");
     try {
-        const getAll = selectAll ? 1 : 0;
-        const data  ={
-            duiList: selectedDUIs,
-            getAll: getAll
-
-        }
+      const getAll = selectAll ? 1 : 0;
+      if (selectedDUIs.length === 0 && !getAll) {
+        toast.update(toastId, {
+          render: "Seleccione al menos un beneficiario",
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+        });
+        return;
+      }
+      const data = {
+        duiList: selectedDUIs,
+        getAll: getAll,
+      };
       const response = await generateCSV(data);
       if (response.status === 200) {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -101,12 +84,12 @@ useEffect(() => {
         isLoading: false,
         autoClose: 2000,
       });
-    }finally{
-        handleClose();
+    } finally {
+      handleClose();
     }
-  }
+  };
 
-   return (
+  return (
     <>
       <section
         className={`${
@@ -121,12 +104,20 @@ useEffect(() => {
           borderRadius: "2rem",
         }}
       >
-        <h3 className="w-full text-center font-bold text-2xl text-amber-600 mb-2">Generar CSV</h3>
-        <h5 className="text-center text-gray-700 mb-4">Elija los beneficiarios para generar el CSV</h5>
+        <h3 className="w-full text-center font-bold text-2xl text-amber-600 mb-2">
+          Generar CSV
+        </h3>
+        <h5 className="text-center text-gray-700 mb-4">
+          Elija los beneficiarios para generar el CSV
+        </h5>
         <div className="flex justify-center mb-2">
-          <CheckboxValue checked={selectAll} setChecked={setSelectAll} label={"Seleccionar Todos"} />
+          <CheckboxValue
+            checked={selectAll}
+            setChecked={handleToggleAll}
+            label={"Seleccionar Todos"}
+          />
         </div>
-        {loading ? (
+        {isLoading ? (
           <div className="flex justify-center items-center h-60">
             <Loading />
           </div>
@@ -178,6 +169,6 @@ useEffect(() => {
       </section>
     </>
   );
-}
+};
 
 export default GenerateCSV;
