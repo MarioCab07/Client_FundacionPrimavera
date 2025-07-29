@@ -316,7 +316,12 @@ const BenDetails = ({ ben, setBenSelected, page }) => {
               page={page}
             />
           ) : showDocuments ? (
-            <Documents ben={ben} setShowDocuments={setShowDocuments} />
+            <Documents
+              ben={ben}
+              setShowDocuments={setShowDocuments}
+              page={page}
+              setBenSelected={setBenSelected}
+            />
           ) : showModify ? (
             <Modify
               ben={ben}

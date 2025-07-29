@@ -55,8 +55,6 @@ const LoginPage = () => {
         isLoading: false,
         autoClose: 3000, // Close after 3 seconds
       });
-      console.log("LOGIN OK → user:", user);
-      console.log("navegando");
 
       navigate("/Dashboard");
     } catch (err) {
