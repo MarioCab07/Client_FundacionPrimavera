@@ -65,7 +65,7 @@
 }
 
 .prev-button {
-  background-color: #fbbf24; /* Color de fondo amarillo */
+  background-color: #4747473f; /* Color de fondo amarillo */
   color: white; /* Color del texto */
   padding: 0.5rem 1rem; /* Espaciado interno */
   border: none; /* Sin borde */
@@ -75,5 +75,5 @@
 }
 
 .prev-button:hover {
-  background-color: #f59e0b; /* Color de fondo más oscuro al pasar el cursor */
+  background-color: #2c2c2c; /* Color de fondo más oscuro al pasar el cursor */
 }

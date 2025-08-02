@@ -130,7 +130,7 @@ export const handleNumbers = (e,setForm,form) => {
   const field = e.target.id;
   let value = e.target.value.replace(/\D/g, "");
   if (!value) {
-    value = null;
+    value = 0;
   } // Remove all non-numeric characters
   value = parseInt(value);
   setForm({ ...form, [field]: value });

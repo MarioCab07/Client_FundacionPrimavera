@@ -11,6 +11,30 @@ import {
 } from "../../tools/tools";
 const inpStyle = inputStyle();
 const spanStyle = `flex flex-col gap-1`;
+const departmentsElSalvador = [
+  "Ahuachapán",
+  "Cabañas",
+  "Chalatenango",
+  "Cuscatlán",
+  "La Libertad",
+  "La Paz",
+  "La Unión",
+  "Morazán",
+  "San Miguel",
+  "San Salvador",
+  "San Vicente",
+  "Santa Ana",
+  "Sonsonate",
+  "Usulután",
+];
+
+const roomCondition = ["Propia", "Alquilada", "Dormitorio Publico"];
+const relationships = [
+  "Solo/a",
+  "Familia (pareja, hijos,padres)",
+  "Conocidos o amigos",
+  "Personas ajenas",
+];
 
 export const GeneralSection = ({
   picture,
@@ -24,9 +48,10 @@ export const GeneralSection = ({
 }) => {
   return (
     <>
-      <article className="flex w-full flex-col px-4 py-8">
-        <div className="flex w-full">
-          <div className="p-2 flex flex-col items-center justify-center gap-4  w-1/4 ">
+      <article className="flex h-full w-full flex-col px-4 py-8">
+        <h4 className="text-center font-bold text-2xl">Informacion General</h4>
+        <div className="flex w-full items-center justify-center h-full">
+          <div className="p-2 flex flex-col items-center justify-center gap-4  w-1/4 h-full ">
             <img
               className="rounded-full w-60 h-60 object-cover"
               src={picture}
@@ -182,6 +207,209 @@ export const GeneralSection = ({
           >
             <div className="text-xs">Informacion de:</div>
             <div className="font-bold">Contacto</div>
+          </button>
+        </div>
+      </article>
+    </>
+  );
+};
+
+export const ContactSection = ({ form, setForm, handleChangeSection }) => {
+  return (
+    <>
+      <article className="flex w-full flex-col px-4 py-8 h-full">
+        <h4 className="text-center font-bold text-2xl">
+          Informacion de Contacto
+        </h4>
+        <div className="flex flex-col w-full gap-12 p-4 items-center h-full justify-center">
+          <span className={`${spanStyle} w-1/3`}>
+            <label className="font-semibold" htmlFor="phone_number">
+              Telefono Celular
+            </label>
+            <input
+              value={form.phone_number}
+              onChange={(e) => {
+                handlePhoneChange(e, setForm, form);
+              }}
+              id="phone_number"
+              type="text"
+              className={inpStyle}
+            />
+          </span>
+          <span className={`${spanStyle}  w-1/3 gap-6`}>
+            <BasicSelect
+              label={"Compañía Telefónica"}
+              options={["Movistar", "Tigo", "Claro", "Digicel"]}
+              value={form.phone_company}
+              setValue={(value) => setForm({ ...form, phone_company: value })}
+            />
+          </span>
+          <span className={`${spanStyle} w-1/3`}>
+            <label className="font-semibold" htmlFor="phone_number">
+              Telefono Fijo
+            </label>
+            <input
+              value={form.home_phone}
+              onChange={(e) => {
+                handlePhoneChange(e, setForm, form);
+              }}
+              id="phone_number"
+              type="text"
+              className={inpStyle}
+            />
+          </span>
+          <span className={` w-1/3 flex items-center gap-5`}>
+            <p className="font-semibold">Posee whatsapp?</p>
+            <CheckboxValue
+              label={"Whatsapp"}
+              checked={form.whatsapp}
+              setChecked={(value) => setForm({ ...form, whatsapp: value })}
+            />
+          </span>
+        </div>
+        <div className="flex w-full justify-between">
+          <button
+            type="button"
+            onClick={() => handleChangeSection("Información general")}
+            className="prev-button"
+          >
+            <div className="text-xs">Informacion:</div>
+            <div className="font-bold">General</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleChangeSection("Información de vivienda")}
+            className="next-button"
+          >
+            <div className="text-xs">Informacion de:</div>
+            <div className="font-bold">Vivienda</div>
+          </button>
+        </div>
+      </article>
+    </>
+  );
+};
+
+export const HouseSection = ({ form, setForm, handleChange }) => {
+  return (
+    <>
+      <article className="flex w-full flex-col px-4 py-8 h-full">
+        <h4 className="text-center font-bold text-2xl">
+          Informacion de Vivienda
+        </h4>
+        <div className="flex flex-col w-full p-4 items-center h-full justify-center gap-14">
+          <div className="flex gap-10 w-full">
+            <span className={`${spanStyle} w-1/3`}>
+              <BasicSelect
+                label={"Zona"}
+                options={["Urbana", "Rural"]}
+                value={form.zone}
+                setValue={(value) => setForm({ ...form, zone: value })}
+              />
+            </span>
+            <span className={`${spanStyle} w-1/3`}>
+              <BasicSelect
+                label={"Departamento"}
+                options={departmentsElSalvador}
+                value={form.department}
+                setValue={(value) => setForm({ ...form, department: value })}
+              />
+            </span>
+            <span className={`${spanStyle} w-1/3`}>
+              <label className="font-semibold" htmlFor="municipality">
+                Municipio
+              </label>
+              <input
+                value={form.municipality}
+                onChange={handleChange}
+                id="municipality"
+                type="text"
+                className={inpStyle}
+              />
+            </span>
+          </div>
+          <div className="flex gap-10 w-full">
+            <span className={`${spanStyle} w-1/2`}>
+              <label className="font-semibold" htmlFor="address">
+                Direccion
+              </label>
+              <input
+                value={form.address}
+                onChange={handleChange}
+                id="address"
+                type="text"
+                className={inpStyle}
+              />
+            </span>
+            <span className={`${spanStyle} w-1/2`}>
+              <label className="font-semibold" htmlFor="reference_address">
+                Punto de Referencia
+              </label>
+              <input
+                value={form.reference_address}
+                onChange={handleChange}
+                id="reference_address"
+                type="text"
+                className={inpStyle}
+              />
+            </span>
+          </div>
+          <div className="flex gap-10 w-full">
+            <span className={`${spanStyle} w-1/3`}>
+              <BasicSelect
+                label={"Condicion Habitacional"}
+                options={roomCondition}
+                value={form.house_condition}
+                setValue={(value) =>
+                  setForm({ ...form, house_condition: value })
+                }
+              />
+            </span>
+            <span className={`${spanStyle} w-1/4`}>
+              <label
+                className="font-semibold"
+                htmlFor="people_in_house_quantity"
+              >
+                Cantidad de personas que viven con beneficiario
+              </label>
+              <input
+                value={form.people_in_house_quantity}
+                onChange={(e) => {
+                  handleNumbers(e, setForm, form);
+                }}
+                id="people_in_house_quantity"
+                type="text"
+                className={inpStyle}
+              />
+            </span>
+            <span className={`${spanStyle} w-1/3`}>
+              <BasicSelect
+                label={"Relacion con personas que vive"}
+                options={relationships}
+                value={form.people_in_house_relationship}
+                setValue={(value) =>
+                  setForm({ ...form, people_in_house_relationship: value })
+                }
+              />
+            </span>
+          </div>
+        </div>
+        <div className="flex w-full justify-between">
+          <button
+            type="button"
+            onClick={() => handleChangeSection("Información de contacto")}
+            className="prev-button"
+          >
+            <div className="text-xs">Informacion de:</div>
+            <div className="font-bold">Contacto</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleChangeSection("Información médica")}
+            className="next-button"
+          >
+            <div className="text-xs">Informacion :</div>
+            <div className="font-bold">Médica</div>
           </button>
         </div>
       </article>

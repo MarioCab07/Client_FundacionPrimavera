@@ -32,7 +32,11 @@ import {
 } from "../../tools/tools";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { GeneralSection } from "./BenAddComponents";
+import {
+  GeneralSection,
+  ContactSection,
+  HouseSection,
+} from "./BenAddComponents";
 
 const BenForm = () => {
   const queryClient = useQueryClient();
@@ -61,6 +65,7 @@ const BenForm = () => {
     birth_date: "",
     starting_date: "",
     phone_number: "",
+    home_phone: "",
     address: "",
     birth_place: "",
     occupation: "",
@@ -140,7 +145,7 @@ const BenForm = () => {
   const handleChange = (e) => {
     const field = e.target.id;
     let value;
-    if (field === "adress") {
+    if (field === "address") {
       value = e.target.value;
     } else {
       value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "");
@@ -331,7 +336,7 @@ const BenForm = () => {
               </div>
             </div>
           </article>
-          <form className="w-full flex-1 bg-amber-50">
+          <form className="w-full flex-1 bg-white/75 backdrop-blur-sm p-6 shadow-xl min-h-[700px]">
             {activeSection === "Información general" && (
               <GeneralSection
                 picture={picture}
@@ -342,6 +347,21 @@ const BenForm = () => {
                 setBirthDate={setBirthDate}
                 setForm={setForm}
                 handleChangeSection={handleChangeSection}
+              />
+            )}
+            {activeSection === "Información de contacto" && (
+              <ContactSection
+                form={form}
+                setForm={setForm}
+                handleChangeSection={handleChangeSection}
+              />
+            )}
+            {activeSection === "Información de vivienda" && (
+              <HouseSection
+                form={form}
+                setForm={setForm}
+                handleChangeSection={handleChangeSection}
+                handleChange={handleChange}
               />
             )}
           </form>
