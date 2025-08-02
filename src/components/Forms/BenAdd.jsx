@@ -22,7 +22,7 @@ import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 
 import { addBeneficiary } from "../../services/api.services";
-import { ToastContainer, toast, Bounce } from "react-toastify";
+import { toast } from "react-toastify";
 import {
   sleep,
   inputStyle,
@@ -32,6 +32,7 @@ import {
 } from "../../tools/tools";
 
 import { useQueryClient } from "@tanstack/react-query";
+import { GeneralSection } from "./BenAddComponents";
 
 const BenForm = () => {
   const queryClient = useQueryClient();
@@ -42,6 +43,16 @@ const BenForm = () => {
   const spanStyle = `
     flex flex-col gap-1
     `;
+  const sections = [
+    "Información general",
+    "Información de contacto",
+    "Información de vivienda",
+    "Información médica",
+    "Información de oficio",
+    "Información familiar",
+    "Información de fundación",
+    "Registrar Beneficiario",
+  ];
 
   // State Variables
   const [form, setForm] = useState({
@@ -50,11 +61,10 @@ const BenForm = () => {
     birth_date: "",
     starting_date: "",
     phone_number: "",
-    adress: "",
+    address: "",
     birth_place: "",
-    work_occup: "",
-    income_level: "",
-    pension: false,
+    occupation: "",
+    income_type: "",
     weight: "",
     height: "",
     phone_company: "",
@@ -66,7 +76,7 @@ const BenForm = () => {
     personIC_phone_number: "",
     personIC_dui: "",
     medical_service: "",
-    house_type: "",
+    house_condition: "",
     shirt_size: "",
     shoe_size: "",
     discapacities: "",
@@ -75,6 +85,18 @@ const BenForm = () => {
     active: true,
     reason: "",
     gender: "",
+    write_and_read: false,
+    education_level: "",
+    people_in_house_quantity: "",
+    people_in_house_relationship: "",
+    department: "",
+    municipality: "",
+    zone: "",
+    reference_address: "",
+    referral_source: "",
+    transportation_difficulty: "",
+    transportation_difficulty_person: "",
+    agreement: true,
   });
   const [picture, setPicture] = useState(profileIcon);
   const [image, setImage] = useState(null);
@@ -82,11 +104,17 @@ const BenForm = () => {
   const [startingDate, setStartingDate] = useState(dayjs().utc());
   const [dependent, setDependent] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState(sections[0]);
 
   const newActive = useRef(false);
   const newInactive = useRef(false);
 
   // Functions
+
+  const handleChangeSection = (section) => {
+    setActiveSection(section);
+  };
+
   // Function to handle the opening and closing of the modal
   const handleOpenModal = () => {
     setIsModalOpen(true); // Open the modal
@@ -253,12 +281,12 @@ const BenForm = () => {
 
   return (
     <>
-      <section className="flex-col flex items-center justify-center p-10 gap-10">
-        <article className=" w-1/2  font-bold text-3xl  flex justify-center items-center gap-5">
-          <HiOutlinePencilAlt size={50} />
-          <h2 className=" text-6xl ms-madi-regular ">Nuevo Beneficiario...</h2>
+      <section className="flex-col flex items-center justify-center  gap-7 ">
+        <article className=" w-1/2  font-bold text-3xl p-10 flex justify-center items-center gap-5">
+          <HiOutlinePencilAlt size={50} color="#4B5563" />
+          <h2 className=" text-5xl text-gray-500  ">Nuevo Beneficiario...</h2>
         </article>
-        <div className="flex gap-4 items-center justify-end w-full">
+        <div className="flex gap-4 items-center justify-end w-full px-4">
           <button
             style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
             className="cursor-pointer w-fit p-3 rounded-lg flex gap-3 justify-center items-center text-white font-bold bg-amber-300 hover:scale-105 transition-all duration-300 hover:bg-yellow-50 hover:text-amber-300 text-center  "
@@ -268,533 +296,56 @@ const BenForm = () => {
             Beneficiarios <BsFillPeopleFill size={30} />
           </button>
         </div>
-        <article
-          style={{
-            boxShadow:
-              "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
-          }}
-          className="w-full bg-white  py-4 rounded-4xl  "
-        >
-          <form className="flex flex-col max-h-1/2 " onSubmit={handleSubmit}>
-            <div className=" flex  gap-10 justify-center">
-              {/* Upload Picture*/}
-              <div className="p-2 flex flex-col items-center justify-center gap-4  w-1/4 ">
-                <img
-                  className="rounded-full w-60 h-60 object-cover"
-                  src={picture}
-                  alt=""
-                />
-
-                <input
-                  className="hidden"
-                  id="fileInput"
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePictureChange}
-                />
-
-                <label
-                  style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
-                  className="flex justify-center rounded-xl items-center gap-4 py-2 px-3 hover:cursor-pointer hover:bg-black hover:text-[#FFF582] bg-[#FFF582] w-1/2 "
-                  htmlFor="fileInput"
-                >
-                  <h5 className="flex 1">Subir Foto</h5>{" "}
-                  <BsUpload style={{ fontWeight: "bold" }} />{" "}
-                </label>
-              </div>
-
-              <div className="flex flex-col w-1/3 gap-8 p-4">
-                <span className={spanStyle}>
-                  <label className="font-semibold" htmlFor="name">
-                    Nombre
-                  </label>
-                  <input
-                    required
-                    id="name"
-                    type="text"
-                    className={inpStyle}
-                    value={form.name}
-                    onChange={handleChange}
-                  />
-                </span>
-                <span className={spanStyle}>
-                  <label className="font-semibold" htmlFor="adress">
-                    Direccion
-                  </label>
-                  <input
-                    required
-                    id="adress"
-                    type="text"
-                    className={inpStyle}
-                    value={form.adress}
-                    onChange={handleChange}
-                  />
-                </span>
-                <span className={spanStyle}>
-                  <label className="font-semibold" htmlFor="birth_place">
-                    Lugar de Nacimiento
-                  </label>
-                  <input
-                    id="birth_place"
-                    required
-                    type="text"
-                    className={inpStyle}
-                    value={form.birth_place}
-                    onChange={handleChange}
-                  />
-                </span>
-                <span className="flex gap-6 items-center">
-                  <p className="font-semibold">Fecha de Nacimiento</p>
-                  <DatePicker date={birthDate} setDate={setBirthDate} />
-                </span>
-              </div>
-
-              <div className="flex flex-col  gap-4 p-4">
-                <span className={spanStyle}>
-                  <label className="font-semibold" htmlFor="dui">
-                    DUI
-                  </label>
-                  <input
-                    id="dui"
-                    type="text"
-                    className={inpStyle}
-                    placeholder="12345678-9"
-                    value={form.dui} // Bind the value to the form state
-                    onChange={(e) => {
-                      handleDuiChange(e, setForm, form);
-                    }} // Format the input dynamically
-                    maxLength={10}
-                    required // Limit the input length to 10 characters (8 digits + 1 dash)
-                  />
-                </span>
-                <span className={spanStyle}>
-                  <label className="font-semibold" htmlFor="weight">
-                    Peso
-                  </label>
-                  <input
-                    required
-                    id="weight"
-                    type="text"
-                    className={inpStyle}
-                    placeholder="lb"
-                    value={form.weight}
-                    onChange={(e) => {
-                      handleNumbers(e, setForm, form);
-                    }}
-                  />
-                </span>
-                <span className={spanStyle}>
-                  <label className="font-semibold" htmlFor="eight">
-                    Altura
-                  </label>
-                  <input
-                    required
-                    id="height"
-                    type="text"
-                    className={inpStyle}
-                    placeholder="cm"
-                    value={form.height}
-                    onChange={(e) => {
-                      handleNumbers(e, setForm, form);
-                    }}
-                  />
-                </span>
-                <CheckboxValue
-                  label={"Pensión"}
-                  checked={form.pension}
-                  setChecked={(value) => setForm({ ...form, pension: value })}
-                />
-              </div>
-
-              <div className="flex flex-col gap-4 p-4 ">
-                <span className={spanStyle}>
-                  <label className="font-semibold" htmlFor="phone_number">
-                    Telefono
-                  </label>
-                  <input
-                    value={form.phone_number}
-                    onChange={(e) => {
-                      handlePhoneChange(e, setForm, form);
-                    }}
-                    id="phone_number"
-                    type="text"
-                    className={inpStyle}
-                  />
-                </span>
-                <span className={`${spanStyle} gap-6`}>
-                  <BasicSelect
-                    label={"Compañía Telefónica"}
-                    options={["Movistar", "Tigo", "Claro", "Digicel"]}
-                    value={form.phone_company}
-                    setValue={(value) =>
-                      setForm({ ...form, phone_company: value })
-                    }
-                  />
-                </span>
-                <CheckboxValue
-                  label={"Whatsapp"}
-                  checked={form.whatsapp}
-                  setChecked={(value) => setForm({ ...form, whatsapp: value })}
-                />
-                <span className={`${spanStyle} gap-6`}>
-                  <BasicSelect
-                    label={"Genero"}
-                    options={["M", "F"]}
-                    value={form.gender}
-                    setValue={(value) => setForm({ ...form, gender: value })}
-                  />
-                </span>
-              </div>
-            </div>
-
-            <div className=" w-full  gap-6 h-full flex p-4">
-              <div className="flex flex-1 flex-col gap-4 p-4 ">
-                <span className={spanStyle}>
-                  <label className="font-semibold" htmlFor="illness">
-                    Enfermedades
-                  </label>
-                  <input
-                    id="illness"
-                    type="text"
-                    className={inpStyle}
-                    placeholder=""
-                    value={form.illness}
-                    onChange={handleChange}
-                  />
-                </span>
-                <span className={spanStyle}>
-                  <label className="font-semibold" htmlFor="medicines">
-                    Medicinas
-                  </label>
-                  <input
-                    id="medicines"
-                    type="text"
-                    className={inpStyle}
-                    placeholder=""
-                    value={form.medicines}
-                    onChange={handleChange}
-                  />
-                </span>
-                <span className={`${spanStyle} gap-6`}>
-                  <BasicSelect
-                    label={"Tipo de Sangre"}
-                    options={["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]}
-                    value={form.blood_type}
-                    setValue={(value) =>
-                      setForm({ ...form, blood_type: value })
-                    }
-                  />
-                </span>
-                <span className={spanStyle}>
-                  <label className="font-semibold" htmlFor="medical_service">
-                    Servicio Medico
-                  </label>
-                  <input
-                    id="medical_service"
-                    type="text"
-                    className={inpStyle}
-                    placeholder=""
-                    value={form.medical_service}
-                    onChange={handleChange}
-                  />
-                </span>
-                <span className={spanStyle}>
-                  <label className="font-semibold" htmlFor="discapacities">
-                    Discapacidades
-                  </label>
-                  <input
-                    id="discapacities"
-                    type="text"
-                    className={inpStyle}
-                    placeholder=""
-                    value={form.discapacities}
-                    onChange={handleChange}
-                  />
-                </span>
-                <span className="flex gap-6 items-center">
-                  <p className="font-semibold">Fecha de Inicio</p>
-                  <DatePicker date={startingDate} setDate={setStartingDate} />
-                </span>
-              </div>
-
-              <div className="flex w-2xl  flex-wrap  gap-4 p-4">
-                <span className={`flex justify-center items-center gap-6`}>
-                  <p className="font-semibold">Talla de camisa</p>
-                  <BasicSelect
-                    label={"Talla"}
-                    options={["XS", "S", "M", "L", "XL", "XXL"]}
-                    value={form.shirt_size}
-                    setValue={(value) =>
-                      setForm({ ...form, shirt_size: value })
-                    }
-                  />
-                </span>
-                <span className={`flex justify-center items-center gap-6`}>
-                  <p className="font-semibold">Talla de zapatos</p>
-                  <BasicSelect
-                    label={"Talla"}
-                    options={["4", "5", "6", "7", "8", "9", "10", "11"]}
-                    value={form.shoe_size}
-                    setValue={(value) => setForm({ ...form, shoe_size: value })}
-                  />
-                </span>
-                <span className={`flex justify-center items-center gap-6`}>
-                  <p className="font-semibold">Tipo de vivienda</p>
-                  <BasicSelect
-                    label={"Vivienda"}
-                    options={["Meson", "Propia", "Dominio Ajeno", "Rentada"]}
-                    value={form.house_type}
-                    setValue={(value) =>
-                      setForm({ ...form, house_type: value })
-                    }
-                  />
-                </span>
-                <span className={`flex justify-center items-center gap-6`}>
-                  <label className="font-semibold" htmlFor="work_occup">
-                    Ocupacion
-                  </label>
-                  <input
-                    id="work_occup"
-                    type="text"
-                    className={inpStyle}
-                    placeholder=""
-                    value={form.work_occup}
-                    onChange={handleChange}
-                  />
-                </span>
-                <span className={`flex justify-center items-center gap-6`}>
-                  <label className="font-semibold" htmlFor="affiliation">
-                    Afiliacion
-                  </label>
-                  <input
-                    id="affiliation"
-                    type="text"
-                    className={inpStyle}
-                    placeholder="Fundacion Primavera"
-                    value={form.affiliation}
-                    onChange={handleChange}
-                  />
-                </span>
-                <span className={`flex justify-center items-center gap-6`}>
-                  <p className="font-semibold">Nivel de ingresos</p>
-                  <BasicSelect
-                    label={"Ingresos"}
-                    options={["Sin Ingresos", "Bajos", "Medio", "Altos"]}
-                    value={form.income_level}
-                    setValue={(value) =>
-                      setForm({ ...form, income_level: value })
-                    }
-                  />
-                </span>
-                <div className="flex flex-wrap gap-6 justify-center">
-                  <span
-                    className={`flex  w-full justify-start items-center gap-6`}
-                  >
-                    <label className="font-semibold" htmlFor="personIC_name">
-                      Persona Responsable
-                    </label>
-                    <input
-                      id="personIC_name"
-                      type="text"
-                      className={`${inpStyle} flex-1`}
-                      placeholder=""
-                      value={form.personIC_name}
-                      onChange={handleChange}
-                    />
-                  </span>
-                  <span
-                    className={`flex flex-col justify-center items-center gap-2`}
-                  >
-                    <input
-                      id="personIC_dui"
-                      type="text"
-                      className={inpStyle}
-                      placeholder=""
-                      value={form.personIC_dui}
-                      onChange={(e) => {
-                        handleDuiChange(e, setForm, form);
-                      }}
-                    />
-                    <label className="font-semibold" htmlFor="personIC_dui">
-                      DUI
-                    </label>
-                  </span>
-                  <span
-                    className={`flex flex-col justify-center items-center gap-2`}
-                  >
-                    <input
-                      id="personIC_phone_number"
-                      type="text"
-                      className={inpStyle}
-                      placeholder=""
-                      value={form.personIC_phone_number}
-                      onChange={(e) => {
-                        handlePhoneChange(e, setForm, form);
-                      }}
-                    />
-                    <label
-                      className="font-semibold"
-                      htmlFor="personIC_phone_number"
+        <section className="flex w-full h-full">
+          <article className="flex h-full w-1/5 max-w-3xl bg-white/75 backdrop-blur-sm  shadow-xl overflow-hidden">
+            {/* Sidebar */}
+            <div className="p-6 relative flex flex-col gap-5">
+              <h1 className=" font-semibold mb-1 text-3xl">
+                Formulario de Registro
+              </h1>
+              <div className="relative">
+                {/* línea vertical gris */}
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-gray-300 rounded"></div>
+                <ul className="flex flex-col gap-5 pl-4 text-sm">
+                  {sections.map((section) => (
+                    <li
+                      key={section}
+                      onClick={() => handleChangeSection(section)}
+                      className={`relative cursor-pointer transition-colors duration-150 py-1.5 text-lg ${
+                        activeSection === section
+                          ? "text-black font-semibold"
+                          : "text-gray-400"
+                      }`}
+                      aria-current={
+                        activeSection === section ? "page" : undefined
+                      }
                     >
-                      Telefono
-                    </label>
-                  </span>
-                </div>
-              </div>
-              <div className="  w-1/4 flex flex-col  items-center  gap-9">
-                <h5 className="font-bold">Personas que Cuida</h5>
-                {form.dependents.length === 0 ? (
-                  <p className="text-gray-500 italic">
-                    No hay dependientes agregados.
-                  </p>
-                ) : (
-                  <>
-                    <div className="flex gap-10 flex-wrap">
-                      {form.dependents.map((dependent) => {
-                        return (
-                          <div
-                            style={{
-                              boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-                            }}
-                            className="flex max-w-fit min-w-fit p-4 justify-center bg-[#ffffff] border-4 border-amber-200 text-black rounded-2xl"
-                            key={dependent}
-                          >
-                            {dependent}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </>
-                )}
-                <button
-                  className="bg-[#FFFA64] px-4 py-2 rounded-2xl hover:bg-black hover:text-[#FFFA64] hover:cursor-pointer flex items-center gap-4"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleOpenModal();
-                  }}
-                  style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
-                >
-                  Agregar <RiUserAddLine />
-                </button>
-
-                <div>
-                  <h3 className="font-bold w-full text-center">
-                    Estado del beneficiario
-                  </h3>
-                  <CheckboxValue
-                    label={"Activo"}
-                    checked={form.active}
-                    setChecked={(value) => setForm({ ...form, active: value })}
-                  />
-                  <p className="text-sm text-gray-500 italic">
-                    {/* Suggestion to add a reason if the beneficiary is inactive */}
-                    *Si el beneficiario está inactivo se sugiere agregar una
-                    razon
-                  </p>
-                  <span className={spanStyle}>
-                    <label className="font-semibold" htmlFor="reason">
-                      Razon
-                    </label>
-                    <input
-                      id="reason"
-                      type="text"
-                      className={inpStyle}
-                      placeholder="Razon de inactividad"
-                      value={form.reason}
-                      onChange={handleChange}
-                    />
-                  </span>
-                </div>
+                      {/* indicador morado */}
+                      {activeSection === section && (
+                        <span className="absolute -left-3 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-[#d8d512] rounded-r-md"></span>
+                      )}
+                      {section}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-
-            <span className=" flex justify-center p-6">
-              <button
-                className="p-5 rounded-2xl w-40 text-amber-50 relative  overflow-hidden cursor-pointer group"
-                style={{
-                  background:
-                    "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(27,238,189,1) 0%, rgba(58,238,13,1) 87%)",
-                  boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                }}
-                type="submit"
-              >
-                {/* Text that transitions out */}
-                <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 transform group-hover:-translate-x-full font-bold ">
-                  Agregar
-                </span>
-
-                {/* Checkmark that transitions in */}
-                <span className="absolute inset-0 flex items-center justify-center transition-transform duration-500 transform translate-x-full group-hover:translate-x-0">
-                  <FiSave />
-                </span>
-              </button>
-            </span>
+          </article>
+          <form className="w-full flex-1 bg-amber-50">
+            {activeSection === "Información general" && (
+              <GeneralSection
+                picture={picture}
+                handlePictureChange={handlePictureChange}
+                form={form}
+                handleChange={handleChange}
+                birthDate={birthDate}
+                setBirthDate={setBirthDate}
+                setForm={setForm}
+                handleChangeSection={handleChangeSection}
+              />
+            )}
           </form>
-        </article>
-
-        {isModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center z-50">
-            {/* Transparent overlay to keep the form background visible */}
-            <div
-              className="absolute inset-0 bg-transparent"
-              onClick={handleCloseModal} // Close the modal when clicking outside
-            ></div>
-
-            {/* Modal content */}
-            <div
-              style={{
-                boxShadow:
-                  "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
-              }}
-              className="relative bg-[#ffffff] border-4 border-amber-200 p-6 rounded-lg w-1/3"
-            >
-              <h5 className="font-bold text-lg mb-4">Personas que cuida</h5>
-              <div className="flex flex-col gap-4">
-                <label className="font-semibold" htmlFor="relationship">
-                  Parentesco
-                </label>
-                <select
-                  id="relationship"
-                  className="border border-gray-300 rounded p-2"
-                  onChange={handleDependent}
-                  value={dependent}
-                >
-                  <option value="">Seleccionar...</option>
-                  <option value="Padre">Padre</option>
-                  <option value="Madre">Madre</option>
-                  <option value="Hijo">Hijo</option>
-                  <option value="Hija">Hija</option>
-                  <option value="Esposo/a">Esposo/a</option>
-                  <option value="Nieto/a">Nieto/a</option>
-                  <option value="Sobrino/a">Sobrino/a</option>
-                  <option value="Hermano/a">Hermano/a</option>
-                  <option value="Otro">Otro</option>
-                </select>
-              </div>
-              <div className="flex justify-between mt-6">
-                <button
-                  className="bg-green-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-green-600"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleAddDependent();
-                    handleCloseModal(); // Close the modal
-                  }}
-                >
-                  Agregar
-                </button>
-                <button
-                  className="bg-gray-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-gray-600"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleCloseModal();
-                  }}
-                >
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        </section>
       </section>
     </>
   );
