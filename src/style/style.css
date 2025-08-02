@@ -49,3 +49,31 @@
   justify-content: center;
   min-height: 100vh;
 }
+
+.next-button {
+  background-color: #fbbf24; /* Color de fondo amarillo */
+  color: white; /* Color del texto */
+  padding: 0.5rem 1rem; /* Espaciado interno */
+  border: none; /* Sin borde */
+  border-radius: 0.25rem; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  transition: background-color 0.3s ease; /* Transición suave para el color de fondo */
+}
+
+.next-button:hover {
+  background-color: #f59e0b; /* Color de fondo más oscuro al pasar el cursor */
+}
+
+.prev-button {
+  background-color: #fbbf24; /* Color de fondo amarillo */
+  color: white; /* Color del texto */
+  padding: 0.5rem 1rem; /* Espaciado interno */
+  border: none; /* Sin borde */
+  border-radius: 0.25rem; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  transition: background-color 0.3s ease; /* Transición suave para el color de fondo */
+}
+
+.prev-button:hover {
+  background-color: #f59e0b; /* Color de fondo más oscuro al pasar el cursor */
+}
