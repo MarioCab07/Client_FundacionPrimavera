@@ -755,6 +755,7 @@ export const FamilySection = ({
   setForm,
   handleAddDependent,
   handleChange,
+  handleChangeSection,
 }) => {
   const [modal, setModal] = useState(false);
   const [dependent, setDependent] = useState("");
@@ -889,6 +890,24 @@ export const FamilySection = ({
               </button>
             </div>
           </div>
+        </div>
+        <div className="flex w-full justify-between">
+          <button
+            type="button"
+            onClick={() => handleChangeSection("Información de oficio")}
+            className="prev-button"
+          >
+            <div className="text-xs">Informacion de :</div>
+            <div className="font-bold">Oficio</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleChangeSection("Información de fundación")}
+            className="next-button"
+          >
+            <div className="text-xs">Informacion de:</div>
+            <div className="font-bold">Fundación</div>
+          </button>
         </div>
       </article>
 
