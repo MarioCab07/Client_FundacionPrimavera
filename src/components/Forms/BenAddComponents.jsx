@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import { BsUpload } from "react-icons/bs";
 import DatePicker from "../DatePicker";
 import CheckboxValue from "../Checkbox";
 import BasicSelect from "../Select";
+import OptionCheckBox from "../YesNoExclusive";
 
 import {
   inputStyle,
@@ -9,6 +11,7 @@ import {
   handleNumbers,
   handlePhoneChange,
 } from "../../tools/tools";
+import { Input } from "postcss";
 const inpStyle = inputStyle();
 const spanStyle = `flex flex-col gap-1`;
 const departmentsElSalvador = [
@@ -35,6 +38,7 @@ const relationships = [
   "Conocidos o amigos",
   "Personas ajenas",
 ];
+const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
 export const GeneralSection = ({
   picture,
@@ -245,7 +249,7 @@ export const ContactSection = ({ form, setForm, handleChangeSection }) => {
             />
           </span>
           <span className={`${spanStyle} w-1/3`}>
-            <label className="font-semibold" htmlFor="phone_number">
+            <label className="font-semibold" htmlFor="home_phone">
               Telefono Fijo
             </label>
             <input
@@ -253,7 +257,7 @@ export const ContactSection = ({ form, setForm, handleChangeSection }) => {
               onChange={(e) => {
                 handlePhoneChange(e, setForm, form);
               }}
-              id="phone_number"
+              id="home_phone"
               type="text"
               className={inpStyle}
             />
@@ -290,7 +294,12 @@ export const ContactSection = ({ form, setForm, handleChangeSection }) => {
   );
 };
 
-export const HouseSection = ({ form, setForm, handleChange }) => {
+export const HouseSection = ({
+  form,
+  setForm,
+  handleChange,
+  handleChangeSection,
+}) => {
   return (
     <>
       <article className="flex w-full flex-col px-4 py-8 h-full">
@@ -410,6 +419,176 @@ export const HouseSection = ({ form, setForm, handleChange }) => {
           >
             <div className="text-xs">Informacion :</div>
             <div className="font-bold">Médica</div>
+          </button>
+        </div>
+      </article>
+    </>
+  );
+};
+
+export const MedicalSection = ({
+  form,
+  setForm,
+  handleChange,
+  handleChangeSection,
+}) => {
+  const [illnessFilter, setIllnessFilter] = useState(null);
+  const [medicineFilter, setMedicineFilter] = useState(null);
+  const [discapacitiesFilter, setDiscapacitiesFilter] = useState(null);
+  const [medicalServiceFilter, setMedicalServiceFilter] = useState(null);
+
+  return (
+    <>
+      <article className="flex h-full w-full flex-col px-4 py-8">
+        <h4 className="text-center font-bold text-2xl">Informacion Medica</h4>
+        <div className="flex flex-col w-full gap-12 p-4 items-center h-full justify-center">
+          <div className="flex gap-10 w-full justify-center">
+            <span className={`${spanStyle} gap-6 w-1/3`}>
+              <BasicSelect
+                label={"Tipo de Sangre"}
+                options={bloodTypes}
+                value={form.blood_type}
+                setValue={(value) => setForm({ ...form, blood_type: value })}
+              />
+            </span>
+          </div>
+          <div
+            className={`flex gap-10  justify-center ${
+              illnessFilter === "si" ? "w-full" : "w-1/3"
+            } transition-all ease-in-out duration-500`}
+          >
+            <span className={`flex gap-6 w-full items-center`}>
+              <p>Posee alguna enfermedad?</p>
+              <OptionCheckBox
+                label={"Si"}
+                selected={illnessFilter === "si"}
+                onSelect={() => setIllnessFilter("si")}
+              />
+              <OptionCheckBox
+                label={"No"}
+                selected={illnessFilter === "no"}
+                onSelect={() => setIllnessFilter("no")}
+              />
+
+              {illnessFilter === "si" && (
+                <input
+                  id="illness"
+                  value={form.illness}
+                  onChange={handleChange}
+                  type="text"
+                  className={`${inpStyle} w-full`}
+                  placeholder="Especificar enfermedad(es)"
+                />
+              )}
+            </span>
+          </div>
+          <div
+            className={`flex gap-10  justify-center ${
+              medicineFilter === "si" ? "w-full" : "w-1/3"
+            } transition-all ease-in-out duration-500`}
+          >
+            <span className={`flex gap-6 w-full items-center`}>
+              <p>Depende de algun medicamento?</p>
+              <OptionCheckBox
+                label={"Si"}
+                selected={medicineFilter === "si"}
+                onSelect={() => setMedicineFilter("si")}
+              />
+              <OptionCheckBox
+                label={"No"}
+                selected={medicineFilter === "no"}
+                onSelect={() => setMedicineFilter("no")}
+              />
+
+              {medicineFilter === "si" && (
+                <input
+                  id="medicines"
+                  value={form.medicines}
+                  onChange={handleChange}
+                  type="text"
+                  className={`${inpStyle} w-full`}
+                  placeholder="Especificar medicamento(s)"
+                />
+              )}
+            </span>
+          </div>
+          <div
+            className={`flex gap-10  justify-center ${
+              discapacitiesFilter === "si" ? "w-full" : "w-1/3"
+            } transition-all ease-in-out duration-500`}
+          >
+            <span className={`flex gap-6 w-full items-center`}>
+              <p>Posee alguna discapacidad?</p>
+              <OptionCheckBox
+                label={"Si"}
+                selected={discapacitiesFilter === "si"}
+                onSelect={() => setDiscapacitiesFilter("si")}
+              />
+              <OptionCheckBox
+                label={"No"}
+                selected={discapacitiesFilter === "no"}
+                onSelect={() => setDiscapacitiesFilter("no")}
+              />
+
+              {discapacitiesFilter === "si" && (
+                <input
+                  id="discapacities"
+                  value={form.discapacities}
+                  onChange={handleChange}
+                  type="text"
+                  className={`${inpStyle} w-full`}
+                  placeholder="Especificar discapacidad(s)"
+                />
+              )}
+            </span>
+          </div>
+          <div
+            className={`flex gap-10  justify-center ${
+              medicalServiceFilter === "si" ? "w-full" : "w-1/3"
+            } transition-all ease-in-out duration-500`}
+          >
+            <span className={`flex gap-6 w-full items-center`}>
+              <p>Posee algún servicio médico?</p>
+              <OptionCheckBox
+                label={"Si"}
+                selected={medicalServiceFilter === "si"}
+                onSelect={() => setMedicalServiceFilter("si")}
+              />
+              <OptionCheckBox
+                label={"No"}
+                selected={medicalServiceFilter === "no"}
+                onSelect={() => setMedicalServiceFilter("no")}
+              />
+
+              {medicalServiceFilter === "si" && (
+                <input
+                  id="medical_service"
+                  value={form.medical_service}
+                  onChange={handleChange}
+                  type="text"
+                  className={`${inpStyle} w-full`}
+                  placeholder="Especificar servicio médico(s) o seguro(s) médico(s)"
+                />
+              )}
+            </span>
+          </div>
+        </div>
+        <div className="flex w-full justify-between">
+          <button
+            type="button"
+            onClick={() => handleChangeSection("Información de vivienda")}
+            className="prev-button"
+          >
+            <div className="text-xs">Informacion de:</div>
+            <div className="font-bold">Vivienda</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleChangeSection("Información de oficio")}
+            className="next-button"
+          >
+            <div className="text-xs">Informacion de :</div>
+            <div className="font-bold">Oficio</div>
           </button>
         </div>
       </article>

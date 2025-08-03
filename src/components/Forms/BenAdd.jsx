@@ -36,6 +36,7 @@ import {
   GeneralSection,
   ContactSection,
   HouseSection,
+  MedicalSection,
 } from "./BenAddComponents";
 
 const BenForm = () => {
@@ -99,8 +100,8 @@ const BenForm = () => {
     zone: "",
     reference_address: "",
     referral_source: "",
-    transportation_difficulty: "",
-    transportation_difficulty_person: "",
+    transportation_difficulty: false,
+    transportation_difficulty_person: false,
     agreement: true,
   });
   const [picture, setPicture] = useState(profileIcon);
@@ -145,7 +146,13 @@ const BenForm = () => {
   const handleChange = (e) => {
     const field = e.target.id;
     let value;
-    if (field === "address") {
+    if (
+      field === "address" ||
+      field === "illness" ||
+      field === "medicines" ||
+      field === "discapacities" ||
+      field === "medical_service"
+    ) {
       value = e.target.value;
     } else {
       value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "");
@@ -358,6 +365,14 @@ const BenForm = () => {
             )}
             {activeSection === "Información de vivienda" && (
               <HouseSection
+                form={form}
+                setForm={setForm}
+                handleChangeSection={handleChangeSection}
+                handleChange={handleChange}
+              />
+            )}
+            {activeSection === "Información médica" && (
+              <MedicalSection
                 form={form}
                 setForm={setForm}
                 handleChangeSection={handleChangeSection}
