@@ -39,6 +39,7 @@ import {
   MedicalSection,
   WorkSection,
   FamilySection,
+  FoundationSection,
 } from "./BenAddComponents";
 
 const BenForm = () => {
@@ -396,6 +397,16 @@ const BenForm = () => {
                 handleChange={handleChange}
                 handleAddDependent={handleAddDependent}
                 setForm={setForm}
+              />
+            )}
+            {activeSection === "Información de fundación" && (
+              <FoundationSection
+                form={form}
+                setForm={setForm}
+                handleChangeSection={handleChangeSection}
+                handleChange={handleChange}
+                setStartingDate={setStartingDate}
+                startingDate={startingDate}
               />
             )}
           </form>

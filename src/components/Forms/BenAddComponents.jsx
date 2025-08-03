@@ -41,6 +41,7 @@ const relationships = [
 ];
 const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 const educationLevels = ["Basica", "Media", "Superior"];
+const programs = ["Fundacion Primavera", "Programa 2", "Programa 3"];
 
 export const GeneralSection = ({
   picture,
@@ -632,7 +633,7 @@ export const WorkSection = ({
               <BasicSelect
                 options={educationLevels}
                 value={form.education_level}
-                onChange={(value) =>
+                setValue={(value) =>
                   setForm({ ...form, education_level: value })
                 }
                 label={"Nivel de educación"}
@@ -975,5 +976,187 @@ export const FamilySection = ({
         </div>
       )}
     </>
+  );
+};
+
+export const FoundationSection = ({
+  form,
+  setForm,
+  handleChange,
+  handleChangeSection,
+  startingDate,
+  setStartingDate,
+}) => {
+  const [referralControl, setReferralControl] = useState(false);
+
+  return (
+    <article className="flex w-full flex-col px-4 py-8 h-full">
+      <h4 className="text-center font-bold text-2xl">
+        Información de Fundación
+      </h4>
+      <div className="flex flex-col w-full p-4 items-center h-full justify-center gap-14">
+        <div className=" gap-10 w-1/2 justify-center flex ">
+          <span className="w-full">
+            <BasicSelect
+              label={"Programa"}
+              options={programs}
+              value={form.affiliation}
+              setValue={(value) => setForm({ ...form, affiliation: value })}
+            />
+          </span>
+          <span className="w-full">
+            <DatePicker
+              label={"Fecha de inicio"}
+              date={startingDate}
+              setDate={setStartingDate}
+            />
+          </span>
+        </div>
+        <div
+          className={`flex flex-col  justify-center transition-all ease-in-out duration-500`}
+        >
+          <div className="flex gap-6 w-full items-center">
+            <p className="font-bold">Como se entero de la fundacion?</p>
+            <OptionCheckBox
+              label={"Referido Institucional"}
+              selected={form.referral_source === "Referido Institucional"}
+              onSelect={() => {
+                setForm({ ...form, referral_source: "Referido Institucional" });
+                setReferralControl(false);
+              }}
+            />
+            <OptionCheckBox
+              label={"Redes Sociales"}
+              selected={form.referral_source === "Redes Sociales"}
+              onSelect={() => {
+                setForm({ ...form, referral_source: "Redes Sociales" });
+                setReferralControl(false);
+              }}
+            />
+            <OptionCheckBox
+              label={"Usuario Fundacion"}
+              selected={referralControl}
+              onSelect={() => {
+                setForm({ ...form, referral_source: "" });
+                setReferralControl(true);
+              }}
+            />
+          </div>
+          <div
+            className={`overflow-hidden transition-[max-height,opacity,margin] duration-300 ${
+              referralControl
+                ? "max-h-40 opacity-100 mt-4"
+                : "max-h-0 opacity-0 mt-0"
+            }`}
+          >
+            <input
+              id="referral_source"
+              value={form.referral_source}
+              onChange={handleChange}
+              type="text"
+              className={`${inpStyle} w-full`}
+              placeholder="Indicar nombre de usuario"
+              disabled={!referralControl}
+              aria-hidden={!referralControl}
+            />
+          </div>
+        </div>
+        <div className="flex gap-10 ">
+          <div className="flex flex-col w-1/2">
+            <h5 className="font-bold">Estado del Beneficiario</h5>
+            <p className="text-xs text-gray-500">
+              *Si el beneficiario esta inactivo se debe Especificar el motivo
+            </p>
+            <CheckboxValue
+              label={"Beneficiario Activo"}
+              checked={form.active}
+              setChecked={() => setForm({ ...form, active: !form.active })}
+            />
+            <div
+              className={`overflow-hidden transition-[max-height,opacity,margin] duration-300 ${
+                !form.active
+                  ? "max-h-40 opacity-100 mt-4"
+                  : "max-h-0 opacity-0 mt-0"
+              }`}
+            >
+              <input
+                id="reason"
+                value={form.reason}
+                onChange={handleChange}
+                type="text"
+                className={`${inpStyle} w-full`}
+                placeholder="Indique motivo de inactividad"
+                disabled={form.active}
+                aria-hidden={form.active}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col w-1/2 justify-center gap-1">
+            <h5 className="font-bold">Transporte</h5>
+            <p>Posee dificultad para trasladarse a la sede?</p>
+            <div className="w-1/2 flex">
+              <OptionCheckBox
+                label={"Si"}
+                selected={form.transportation_difficulty}
+                onSelect={() =>
+                  setForm({ ...form, transportation_difficulty: true })
+                }
+              />
+              <OptionCheckBox
+                label={"No"}
+                selected={!form.transportation_difficulty}
+                onSelect={() =>
+                  setForm({ ...form, transportation_difficulty: false })
+                }
+              />
+            </div>
+            <div
+              className={`overflow-hidden transition-[max-height,opacity,margin] duration-300 ${
+                form.transportation_difficulty
+                  ? "max-h-40 opacity-100 mt-4"
+                  : "max-h-0 opacity-0 mt-0"
+              }`}
+            >
+              <p>
+                Algun familiar o conocido estaria dispuesto a trasladarlo a la
+                fundacion?
+              </p>
+              <OptionCheckBox
+                label={"Si"}
+                selected={form.transportation_difficulty_person}
+                onSelect={() =>
+                  setForm({ ...form, transportation_difficulty_person: true })
+                }
+              />
+              <OptionCheckBox
+                label={"No"}
+                selected={!form.transportation_difficulty_person}
+                onSelect={() =>
+                  setForm({ ...form, transportation_difficulty_person: false })
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex w-full justify-between">
+        <button
+          type="button"
+          onClick={() => handleChangeSection("Información familiar")}
+          className="prev-button"
+        >
+          <div className="text-xs">Informacion :</div>
+          <div className="font-bold">Familiar</div>
+        </button>
+        <button
+          type="button"
+          onClick={() => handleChangeSection("Registrar Beneficiario")}
+          className="next-button"
+        >
+          <div className="text-xs">Registro de :</div>
+          <div className="font-bold">Beneficiario</div>
+        </button>
+      </div>
+    </article>
   );
 };
