@@ -4,6 +4,7 @@ import DatePicker from "../DatePicker";
 import CheckboxValue from "../Checkbox";
 import BasicSelect from "../Select";
 import OptionCheckBox from "../YesNoExclusive";
+import { RiUserAddLine } from "react-icons/ri";
 
 import {
   inputStyle,
@@ -11,7 +12,7 @@ import {
   handleNumbers,
   handlePhoneChange,
 } from "../../tools/tools";
-import { Input } from "postcss";
+
 const inpStyle = inputStyle();
 const spanStyle = `flex flex-col gap-1`;
 const departmentsElSalvador = [
@@ -745,6 +746,215 @@ export const WorkSection = ({
           </button>
         </div>
       </article>
+    </>
+  );
+};
+
+export const FamilySection = ({
+  form,
+  setForm,
+  handleAddDependent,
+  handleChange,
+}) => {
+  const [modal, setModal] = useState(false);
+  const [dependent, setDependent] = useState("");
+  const [responsible, setResponsible] = useState("");
+  const handleDependent = (e) => {
+    setDependent(e.target.value);
+  };
+
+  return (
+    <>
+      <article className="flex h-full w-full flex-col px-4 py-8">
+        <h4 className="text-center font-bold text-2xl">Informacion Familiar</h4>
+        <div className="flex flex-col w-full gap-12 p-4 items-center h-full justify-center transition-all ease-in-out duration-500">
+          <div className="flex flex-col w-1/2 justify-center items-center transition-all ease-in-out duration-500">
+            <span className="flex items-center gap-4 w-full justify-center">
+              <p>Depende de alguna persona?</p>
+              <OptionCheckBox
+                label={"Si"}
+                selected={responsible}
+                onSelect={() => setResponsible(true)}
+              />
+              <OptionCheckBox
+                label={"No"}
+                selected={!responsible}
+                onSelect={() => setResponsible(false)}
+              />
+            </span>
+
+            <div
+              className={`overflow-hidden transition-[max-height,opacity,margin] duration-300 w-full flex justify-center ${
+                responsible
+                  ? "max-h-[300px] opacity-100 mt-6"
+                  : "max-h-0 opacity-0 mt-0 pointer-events-none"
+              }`}
+              aria-hidden={!responsible}
+            >
+              <div className="flex gap-6">
+                <span className="flex flex-col justify-center items-center gap-2">
+                  <input
+                    id="personIC_name"
+                    type="text"
+                    className={`${inpStyle} flex-1`}
+                    placeholder=""
+                    value={form.personIC_name}
+                    onChange={handleChange}
+                    disabled={!responsible}
+                  />
+                  <label className="font-semibold" htmlFor="personIC_name">
+                    Nombre Responsable
+                  </label>
+                </span>
+                <span className="flex flex-col justify-center items-center gap-2">
+                  <input
+                    id="personIC_dui"
+                    type="text"
+                    className={inpStyle}
+                    placeholder=""
+                    value={form.personIC_dui}
+                    onChange={(e) => {
+                      handleDuiChange(e, setForm, form);
+                    }}
+                    disabled={!responsible}
+                  />
+                  <label className="font-semibold" htmlFor="personIC_dui">
+                    DUI
+                  </label>
+                </span>
+                <span className="flex flex-col justify-center items-center gap-2">
+                  <input
+                    id="personIC_phone_number"
+                    type="text"
+                    className={inpStyle}
+                    placeholder=""
+                    value={form.personIC_phone_number}
+                    onChange={(e) => {
+                      handlePhoneChange(e, setForm, form);
+                    }}
+                    disabled={!responsible}
+                  />
+                  <label
+                    className="font-semibold"
+                    htmlFor="personIC_phone_number"
+                  >
+                    Telefono
+                  </label>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="  w-full flex flex-col  items-center  gap-9">
+            <h5 className="font-bold">
+              Personas que dependen del beneficiario
+            </h5>
+            {form.dependents.length === 0 ? (
+              <p className="text-gray-500 italic">
+                No hay dependientes agregados.
+              </p>
+            ) : (
+              <>
+                <div className="flex gap-10 flex-wrap">
+                  {form.dependents.map((dependent) => {
+                    return (
+                      <div
+                        style={{
+                          boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+                        }}
+                        className="flex max-w-fit min-w-fit p-4 justify-center bg-[#ffffff] border-4 border-amber-200 text-black rounded-2xl"
+                        key={dependent}
+                      >
+                        {dependent}
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+            <div className="flex gap-6 w-full justify-center items-center">
+              <button
+                className="bg-[#FFFA64] px-4 py-2 rounded-2xl hover:bg-black hover:text-[#FFFA64] hover:cursor-pointer flex items-center gap-4"
+                onClick={() => setModal(true)}
+                style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                type="button"
+              >
+                Agregar <RiUserAddLine />
+              </button>
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, dependents: [] })}
+                className="bg-red-500 px-4 py-2 rounded-2xl hover:bg-red-600 hover:cursor-pointer text-white"
+              >
+                Limpiar dependientes
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      {modal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          {/* Transparent overlay to keep the form background visible */}
+          <div
+            className="absolute inset-0 bg-transparent"
+            onClick={() => setModal(false)} // Close the modal when clicking outside
+          ></div>
+
+          {/* Modal content */}
+          <div
+            style={{
+              boxShadow:
+                "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
+            }}
+            className="relative bg-[#ffffff] border-4 border-amber-200 p-6 rounded-lg w-1/3"
+          >
+            <h5 className="font-bold text-lg mb-4">Personas que cuida</h5>
+            <div className="flex flex-col gap-4">
+              <label className="font-semibold" htmlFor="relationship">
+                Parentesco
+              </label>
+              <select
+                id="relationship"
+                className="border border-gray-300 rounded p-2"
+                onChange={handleDependent}
+                value={dependent}
+              >
+                <option value="">Seleccionar...</option>
+                <option value="Padre">Padre</option>
+                <option value="Madre">Madre</option>
+                <option value="Hijo">Hijo</option>
+                <option value="Hija">Hija</option>
+                <option value="Esposo/a">Esposo/a</option>
+                <option value="Nieto/a">Nieto/a</option>
+                <option value="Sobrino/a">Sobrino/a</option>
+                <option value="Hermano/a">Hermano/a</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+            <div className="flex justify-between mt-6">
+              <button
+                type="button"
+                className="bg-green-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-green-600"
+                onClick={() => {
+                  handleAddDependent(dependent, setDependent);
+                  setModal(false); // Close the modal
+                }}
+              >
+                Agregar
+              </button>
+              <button
+                type="button"
+                className="bg-gray-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-gray-600"
+                onClick={() => {
+                  setModal(false); // Close the modal
+                }}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

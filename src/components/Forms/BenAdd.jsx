@@ -38,6 +38,7 @@ import {
   HouseSection,
   MedicalSection,
   WorkSection,
+  FamilySection,
 } from "./BenAddComponents";
 
 const BenForm = () => {
@@ -109,7 +110,7 @@ const BenForm = () => {
   const [image, setImage] = useState(null);
   const [birthDate, setBirthDate] = useState(dayjs().utc());
   const [startingDate, setStartingDate] = useState(dayjs().utc());
-  const [dependent, setDependent] = useState("");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(sections[0]);
 
@@ -136,7 +137,7 @@ const BenForm = () => {
   };
 
   // Function to handle the addition of a dependent to the form state
-  const handleAddDependent = () => {
+  const handleAddDependent = (dependent, setDependent) => {
     if (dependent) {
       setForm({ ...form, dependents: [...form.dependents, dependent] });
       setDependent(""); // Limpiar el select después de agregar
@@ -386,6 +387,15 @@ const BenForm = () => {
                 setForm={setForm}
                 handleChangeSection={handleChangeSection}
                 handleChange={handleChange}
+              />
+            )}
+            {activeSection === "Información familiar" && (
+              <FamilySection
+                form={form}
+                handleChangeSection={handleChangeSection}
+                handleChange={handleChange}
+                handleAddDependent={handleAddDependent}
+                setForm={setForm}
               />
             )}
           </form>
