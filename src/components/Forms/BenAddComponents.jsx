@@ -39,6 +39,7 @@ const relationships = [
   "Personas ajenas",
 ];
 const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+const educationLevels = ["Basica", "Media", "Superior"];
 
 export const GeneralSection = ({
   picture,
@@ -218,7 +219,12 @@ export const GeneralSection = ({
   );
 };
 
-export const ContactSection = ({ form, setForm, handleChangeSection }) => {
+export const ContactSection = ({
+  form,
+  setForm,
+  handleChange,
+  handleChangeSection,
+}) => {
   return (
     <>
       <article className="flex w-full flex-col px-4 py-8 h-full">
@@ -589,6 +595,153 @@ export const MedicalSection = ({
           >
             <div className="text-xs">Informacion de :</div>
             <div className="font-bold">Oficio</div>
+          </button>
+        </div>
+      </article>
+    </>
+  );
+};
+
+export const WorkSection = ({
+  form,
+  setForm,
+  handleChange,
+  handleChangeSection,
+}) => {
+  const [occupationFilter, setOccupationFilter] = useState(null);
+  const [incomeControl, setIncomeControl] = useState(false);
+  return (
+    <>
+      <article className="flex h-full w-full flex-col px-4 py-8">
+        <h4 className="text-center font-bold text-2xl">
+          Informacion de Oficio
+        </h4>
+        <div className="flex flex-col w-full gap-12 p-4 items-center h-full justify-center">
+          <div className="flex w-1/2 justify-items-stretch items-center">
+            <span className={`${spanStyle} w-full `}>
+              <CheckboxValue
+                label={"Puede leer y escribir"}
+                checked={form.write_and_read}
+                setChecked={(value) =>
+                  setForm({ ...form, write_and_read: value })
+                }
+              />
+            </span>
+            <span className={`${spanStyle} w-full  `}>
+              <BasicSelect
+                options={educationLevels}
+                value={form.education_level}
+                onChange={(value) =>
+                  setForm({ ...form, education_level: value })
+                }
+                label={"Nivel de educación"}
+              />
+            </span>
+          </div>
+          <div
+            className={`flex gap-10  justify-center ${
+              occupationFilter === "si" ? "w-1/2" : "w-1/3"
+            } transition-all ease-in-out duration-500`}
+          >
+            <span className={`flex gap-6 w-full items-center`}>
+              <p>Posee trabajo fijo o negocio propio?</p>
+              <OptionCheckBox
+                label={"Si"}
+                selected={occupationFilter === "si"}
+                onSelect={() => setOccupationFilter("si")}
+              />
+              <OptionCheckBox
+                label={"No"}
+                selected={occupationFilter === "no"}
+                onSelect={() => setOccupationFilter("no")}
+              />
+
+              {occupationFilter === "si" && (
+                <input
+                  id="occupation"
+                  value={form.occupation}
+                  onChange={handleChange}
+                  type="text"
+                  className={`${inpStyle} w-full`}
+                  placeholder="Especificar ocupación"
+                />
+              )}
+            </span>
+          </div>
+          <div
+            className={`flex flex-col  justify-center transition-all ease-in-out duration-500`}
+          >
+            <div className="flex gap-6 w-full items-center">
+              <p>Que tipo de ingreso economico recibe?</p>
+              <OptionCheckBox
+                label={"Pension"}
+                selected={form.income_level === "Pension"}
+                onSelect={() => {
+                  setForm({ ...form, income_level: "Pension" });
+                  setIncomeControl(false);
+                }}
+              />
+              <OptionCheckBox
+                label={"Remesa"}
+                selected={form.income_level === "Remesa"}
+                onSelect={() => {
+                  setForm({ ...form, income_level: "Remesa" });
+                  setIncomeControl(false);
+                }}
+              />
+              <OptionCheckBox
+                label={"Familia"}
+                selected={form.income_level === "Familia"}
+                onSelect={() => {
+                  setForm({ ...form, income_level: "Familia" });
+                  setIncomeControl(false);
+                }}
+              />
+              <OptionCheckBox
+                label={"Otros"}
+                selected={incomeControl}
+                onSelect={() => {
+                  setIncomeControl(true);
+                  setForm({ ...form, income_level: "" });
+                }}
+              />
+            </div>
+            <div
+              className={`overflow-hidden transition-[max-height,opacity,margin] duration-300 ${
+                incomeControl
+                  ? "max-h-40 opacity-100 mt-4"
+                  : "max-h-0 opacity-0 mt-0"
+              }`}
+            >
+              <input
+                id="income_level"
+                value={form.income_level}
+                onChange={handleChange}
+                type="text"
+                className={`${inpStyle} w-full`}
+                placeholder="Especificar ingreso economico"
+                disabled={!incomeControl}
+                aria-hidden={!incomeControl}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex w-full justify-between">
+          <button
+            type="button"
+            onClick={() => handleChangeSection("Información médica")}
+            className="prev-button"
+          >
+            <div className="text-xs">Informacion :</div>
+            <div className="font-bold">Médica</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleChangeSection("Información familiar")}
+            className="next-button"
+          >
+            <div className="text-xs">Informacion :</div>
+            <div className="font-bold">Familiar</div>
           </button>
         </div>
       </article>

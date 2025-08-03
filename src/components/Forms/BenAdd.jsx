@@ -37,6 +37,7 @@ import {
   ContactSection,
   HouseSection,
   MedicalSection,
+  WorkSection,
 } from "./BenAddComponents";
 
 const BenForm = () => {
@@ -373,6 +374,14 @@ const BenForm = () => {
             )}
             {activeSection === "Información médica" && (
               <MedicalSection
+                form={form}
+                setForm={setForm}
+                handleChangeSection={handleChangeSection}
+                handleChange={handleChange}
+              />
+            )}
+            {activeSection === "Información de oficio" && (
+              <WorkSection
                 form={form}
                 setForm={setForm}
                 handleChangeSection={handleChangeSection}
