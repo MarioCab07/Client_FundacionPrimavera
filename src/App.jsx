@@ -31,7 +31,7 @@ const NavBinder = () => {
   useEffect(() => setNavigator(nav), [nav]);
 };
 
-function App() {
+const App = () => {
   return (
     <>
       <NavBinder />
@@ -88,6 +88,6 @@ function App() {
       </section>
     </>
   );
-}
+};
 
 export default App;

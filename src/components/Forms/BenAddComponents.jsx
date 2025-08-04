@@ -88,7 +88,7 @@ export const GeneralSection = ({
             <div className="flex w-full gap-10 items-center ">
               <span className={`${spanStyle} w-1/2`}>
                 <label className="font-semibold" htmlFor="name">
-                  Nombre Completo
+                  Nombre completo
                 </label>
                 <input
                   required
@@ -440,12 +440,9 @@ export const MedicalSection = ({
   setForm,
   handleChange,
   handleChangeSection,
+  medicalFilter,
+  setMedicalFilter,
 }) => {
-  const [illnessFilter, setIllnessFilter] = useState(null);
-  const [medicineFilter, setMedicineFilter] = useState(null);
-  const [discapacitiesFilter, setDiscapacitiesFilter] = useState(null);
-  const [medicalServiceFilter, setMedicalServiceFilter] = useState(null);
-
   return (
     <>
       <article className="flex h-full w-full flex-col px-4 py-8">
@@ -463,23 +460,27 @@ export const MedicalSection = ({
           </div>
           <div
             className={`flex gap-10  justify-center ${
-              illnessFilter === "si" ? "w-full" : "w-1/3"
+              medicalFilter.illness === "si" ? "w-full" : "w-1/3"
             } transition-all ease-in-out duration-500`}
           >
             <span className={`flex gap-6 w-full items-center`}>
               <p>Posee alguna enfermedad?</p>
               <OptionCheckBox
                 label={"Si"}
-                selected={illnessFilter === "si"}
-                onSelect={() => setIllnessFilter("si")}
+                selected={medicalFilter.illness === "si"}
+                onSelect={() =>
+                  setMedicalFilter({ ...medicalFilter, illness: "si" })
+                }
               />
               <OptionCheckBox
                 label={"No"}
-                selected={illnessFilter === "no"}
-                onSelect={() => setIllnessFilter("no")}
+                selected={medicalFilter.illness === "no"}
+                onSelect={() =>
+                  setMedicalFilter({ ...medicalFilter, illness: "no" })
+                }
               />
 
-              {illnessFilter === "si" && (
+              {medicalFilter.illness === "si" && (
                 <input
                   id="illness"
                   value={form.illness}
@@ -493,23 +494,27 @@ export const MedicalSection = ({
           </div>
           <div
             className={`flex gap-10  justify-center ${
-              medicineFilter === "si" ? "w-full" : "w-1/3"
+              medicalFilter.medicines === "si" ? "w-full" : "w-1/3"
             } transition-all ease-in-out duration-500`}
           >
             <span className={`flex gap-6 w-full items-center`}>
               <p>Depende de algun medicamento?</p>
               <OptionCheckBox
                 label={"Si"}
-                selected={medicineFilter === "si"}
-                onSelect={() => setMedicineFilter("si")}
+                selected={medicalFilter.medicines === "si"}
+                onSelect={() =>
+                  setMedicalFilter({ ...medicalFilter, medicines: "si" })
+                }
               />
               <OptionCheckBox
                 label={"No"}
-                selected={medicineFilter === "no"}
-                onSelect={() => setMedicineFilter("no")}
+                selected={medicalFilter.medicines === "no"}
+                onSelect={() =>
+                  setMedicalFilter({ ...medicalFilter, medicines: "no" })
+                }
               />
 
-              {medicineFilter === "si" && (
+              {medicalFilter.medicines === "si" && (
                 <input
                   id="medicines"
                   value={form.medicines}
@@ -523,23 +528,27 @@ export const MedicalSection = ({
           </div>
           <div
             className={`flex gap-10  justify-center ${
-              discapacitiesFilter === "si" ? "w-full" : "w-1/3"
+              medicalFilter.discapacities === "si" ? "w-full" : "w-1/3"
             } transition-all ease-in-out duration-500`}
           >
             <span className={`flex gap-6 w-full items-center`}>
               <p>Posee alguna discapacidad?</p>
               <OptionCheckBox
                 label={"Si"}
-                selected={discapacitiesFilter === "si"}
-                onSelect={() => setDiscapacitiesFilter("si")}
+                selected={medicalFilter.discapacities === "si"}
+                onSelect={() =>
+                  setMedicalFilter({ ...medicalFilter, discapacities: "si" })
+                }
               />
               <OptionCheckBox
                 label={"No"}
-                selected={discapacitiesFilter === "no"}
-                onSelect={() => setDiscapacitiesFilter("no")}
+                selected={medicalFilter.discapacities === "no"}
+                onSelect={() =>
+                  setMedicalFilter({ ...medicalFilter, discapacities: "no" })
+                }
               />
 
-              {discapacitiesFilter === "si" && (
+              {medicalFilter.discapacities === "si" && (
                 <input
                   id="discapacities"
                   value={form.discapacities}
@@ -553,23 +562,27 @@ export const MedicalSection = ({
           </div>
           <div
             className={`flex gap-10  justify-center ${
-              medicalServiceFilter === "si" ? "w-full" : "w-1/3"
+              medicalFilter.medical_service === "si" ? "w-full" : "w-1/3"
             } transition-all ease-in-out duration-500`}
           >
             <span className={`flex gap-6 w-full items-center`}>
               <p>Posee algún servicio médico?</p>
               <OptionCheckBox
                 label={"Si"}
-                selected={medicalServiceFilter === "si"}
-                onSelect={() => setMedicalServiceFilter("si")}
+                selected={medicalFilter.medical_service === "si"}
+                onSelect={() =>
+                  setMedicalFilter({ ...medicalFilter, medical_service: "si" })
+                }
               />
               <OptionCheckBox
                 label={"No"}
-                selected={medicalServiceFilter === "no"}
-                onSelect={() => setMedicalServiceFilter("no")}
+                selected={medicalFilter.medical_service === "no"}
+                onSelect={() =>
+                  setMedicalFilter({ ...medicalFilter, medical_service: "no" })
+                }
               />
 
-              {medicalServiceFilter === "si" && (
+              {medicalFilter.medical_service === "si" && (
                 <input
                   id="medical_service"
                   value={form.medical_service}
@@ -610,9 +623,9 @@ export const WorkSection = ({
   setForm,
   handleChange,
   handleChangeSection,
+  workFilter,
+  setWorkFilter,
 }) => {
-  const [occupationFilter, setOccupationFilter] = useState(null);
-  const [incomeControl, setIncomeControl] = useState(false);
   return (
     <>
       <article className="flex h-full w-full flex-col px-4 py-8">
@@ -643,23 +656,27 @@ export const WorkSection = ({
           </div>
           <div
             className={`flex gap-10  justify-center ${
-              occupationFilter === "si" ? "w-1/2" : "w-1/3"
+              workFilter.occupation === "si" ? "w-1/2" : "w-1/3"
             } transition-all ease-in-out duration-500`}
           >
             <span className={`flex gap-6 w-full items-center`}>
               <p>Posee trabajo fijo o negocio propio?</p>
               <OptionCheckBox
                 label={"Si"}
-                selected={occupationFilter === "si"}
-                onSelect={() => setOccupationFilter("si")}
+                selected={workFilter.occupation === "si"}
+                onSelect={() =>
+                  setWorkFilter({ ...workFilter, occupation: "si" })
+                }
               />
               <OptionCheckBox
                 label={"No"}
-                selected={occupationFilter === "no"}
-                onSelect={() => setOccupationFilter("no")}
+                selected={workFilter.occupation === "no"}
+                onSelect={() =>
+                  setWorkFilter({ ...workFilter, occupation: "no" })
+                }
               />
 
-              {occupationFilter === "si" && (
+              {workFilter.occupation === "si" && (
                 <input
                   id="occupation"
                   value={form.occupation}
@@ -681,7 +698,7 @@ export const WorkSection = ({
                 selected={form.income_type === "Pension"}
                 onSelect={() => {
                   setForm({ ...form, income_type: "Pension" });
-                  setIncomeControl(false);
+                  setWorkFilter({ ...workFilter, income: false });
                 }}
               />
               <OptionCheckBox
@@ -689,7 +706,7 @@ export const WorkSection = ({
                 selected={form.income_type === "Remesa"}
                 onSelect={() => {
                   setForm({ ...form, income_type: "Remesa" });
-                  setIncomeControl(false);
+                  setWorkFilter({ ...workFilter, income: false });
                 }}
               />
               <OptionCheckBox
@@ -697,21 +714,21 @@ export const WorkSection = ({
                 selected={form.income_type === "Familia"}
                 onSelect={() => {
                   setForm({ ...form, income_type: "Familia" });
-                  setIncomeControl(false);
+                  setWorkFilter({ ...workFilter, income: false });
                 }}
               />
               <OptionCheckBox
                 label={"Otros"}
-                selected={incomeControl}
+                selected={workFilter.income}
                 onSelect={() => {
-                  setIncomeControl(true);
+                  setWorkFilter({ ...workFilter, income: true });
                   setForm({ ...form, income_type: "" });
                 }}
               />
             </div>
             <div
               className={`overflow-hidden transition-[max-height,opacity,margin] duration-300 ${
-                incomeControl
+                workFilter.income
                   ? "max-h-40 opacity-100 mt-4"
                   : "max-h-0 opacity-0 mt-0"
               }`}
@@ -723,8 +740,8 @@ export const WorkSection = ({
                 type="text"
                 className={`${inpStyle} w-full`}
                 placeholder="Especificar ingreso economico"
-                disabled={!incomeControl}
-                aria-hidden={!incomeControl}
+                disabled={!workFilter.income}
+                aria-hidden={!workFilter.income}
               />
             </div>
           </div>
@@ -758,10 +775,11 @@ export const FamilySection = ({
   handleAddDependent,
   handleChange,
   handleChangeSection,
+  responsible,
+  setResponsible,
 }) => {
   const [modal, setModal] = useState(false);
   const [dependent, setDependent] = useState("");
-  const [responsible, setResponsible] = useState("");
   const handleDependent = (e) => {
     setDependent(e.target.value);
   };
@@ -987,9 +1005,9 @@ export const FoundationSection = ({
   handleChangeSection,
   startingDate,
   setStartingDate,
+  referralControl,
+  setReferralControl,
 }) => {
-  const [referralControl, setReferralControl] = useState(false);
-
   return (
     <article className="flex w-full flex-col px-4 py-8 h-full">
       <h4 className="text-center font-bold text-2xl">

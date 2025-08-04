@@ -115,6 +115,18 @@ const BenForm = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(sections[0]);
+  const [medicalFilter, setMedicalFilter] = useState({
+    illness: null,
+    medicines: null,
+    discapacities: null,
+    medical_service: null,
+  });
+  const [workFilter, setWorkFilter] = useState({
+    occupation: null,
+    income: false,
+  });
+  const [responsible, setResponsible] = useState("");
+  const [referralControl, setReferralControl] = useState(false);
 
   const newActive = useRef(false);
   const newInactive = useRef(false);
@@ -394,6 +406,8 @@ const BenForm = () => {
                 setForm={setForm}
                 handleChangeSection={handleChangeSection}
                 handleChange={handleChange}
+                medicalFilter={medicalFilter}
+                setMedicalFilter={setMedicalFilter}
               />
             )}
             {activeSection === "Información de oficio" && (
@@ -402,6 +416,8 @@ const BenForm = () => {
                 setForm={setForm}
                 handleChangeSection={handleChangeSection}
                 handleChange={handleChange}
+                workFilter={workFilter}
+                setWorkFilter={setWorkFilter}
               />
             )}
             {activeSection === "Información familiar" && (
@@ -411,6 +427,8 @@ const BenForm = () => {
                 handleChange={handleChange}
                 handleAddDependent={handleAddDependent}
                 setForm={setForm}
+                responsible={responsible}
+                setResponsible={setResponsible}
               />
             )}
             {activeSection === "Información de fundación" && (
@@ -421,6 +439,8 @@ const BenForm = () => {
                 handleChange={handleChange}
                 setStartingDate={setStartingDate}
                 startingDate={startingDate}
+                referralControl={referralControl}
+                setReferralControl={setReferralControl}
               />
             )}
             {activeSection === "Registrar Beneficiario" && (
