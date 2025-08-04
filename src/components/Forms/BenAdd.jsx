@@ -40,6 +40,7 @@ import {
   WorkSection,
   FamilySection,
   FoundationSection,
+  RegisterSection,
 } from "./BenAddComponents";
 
 const BenForm = () => {
@@ -189,8 +190,8 @@ const BenForm = () => {
       birth_date,
       starting_date,
     };
+
     try {
-      await sleep(500);
       const formData = new FormData();
       // Append the picture file to the FormData object
 
@@ -222,11 +223,11 @@ const BenForm = () => {
           birth_date: "",
           starting_date: "",
           phone_number: "",
-          adress: "",
+          home_phone: "",
+          address: "",
           birth_place: "",
-          work_occup: "",
-          income_level: "",
-          pension: false,
+          occupation: "",
+          income_type: "",
           weight: "",
           height: "",
           phone_company: "",
@@ -238,7 +239,7 @@ const BenForm = () => {
           personIC_phone_number: "",
           personIC_dui: "",
           medical_service: "",
-          house_type: "",
+          house_condition: "",
           shirt_size: "",
           shoe_size: "",
           discapacities: "",
@@ -247,13 +248,26 @@ const BenForm = () => {
           active: true,
           reason: "",
           gender: "",
+          write_and_read: false,
+          education_level: "",
+          people_in_house_quantity: "",
+          people_in_house_relationship: "",
+          department: "",
+          municipality: "",
+          zone: "",
+          reference_address: "",
+          referral_source: "",
+          transportation_difficulty: false,
+          transportation_difficulty_person: false,
+          agreement: true,
         });
         setPicture(profileIcon); // Reset the picture to the default icon
         setBirthDate(dayjs().utc()); // Reset the birth date to the current date
         setStartingDate(dayjs().utc()); // Reset the starting date to the current date
+        setActiveSection(sections[0]); // Reset the active section to the first one
       } else {
         toast.update(toastId, {
-          render: "Ya existe Beneficiario con ese DUI!",
+          render: response.data,
           type: "error",
           isLoading: false,
           autoClose: 3000, // Close after 3 seconds
@@ -407,6 +421,14 @@ const BenForm = () => {
                 handleChange={handleChange}
                 setStartingDate={setStartingDate}
                 startingDate={startingDate}
+              />
+            )}
+            {activeSection === "Registrar Beneficiario" && (
+              <RegisterSection
+                form={form}
+                setForm={setForm}
+                handleChangeSection={handleChangeSection}
+                handleSubmit={handleSubmit}
               />
             )}
           </form>

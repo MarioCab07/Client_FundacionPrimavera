@@ -5,6 +5,7 @@ import CheckboxValue from "../Checkbox";
 import BasicSelect from "../Select";
 import OptionCheckBox from "../YesNoExclusive";
 import { RiUserAddLine } from "react-icons/ri";
+import { FiSave } from "react-icons/fi";
 
 import {
   inputStyle,
@@ -677,25 +678,25 @@ export const WorkSection = ({
               <p>Que tipo de ingreso economico recibe?</p>
               <OptionCheckBox
                 label={"Pension"}
-                selected={form.income_level === "Pension"}
+                selected={form.income_type === "Pension"}
                 onSelect={() => {
-                  setForm({ ...form, income_level: "Pension" });
+                  setForm({ ...form, income_type: "Pension" });
                   setIncomeControl(false);
                 }}
               />
               <OptionCheckBox
                 label={"Remesa"}
-                selected={form.income_level === "Remesa"}
+                selected={form.income_type === "Remesa"}
                 onSelect={() => {
-                  setForm({ ...form, income_level: "Remesa" });
+                  setForm({ ...form, income_type: "Remesa" });
                   setIncomeControl(false);
                 }}
               />
               <OptionCheckBox
                 label={"Familia"}
-                selected={form.income_level === "Familia"}
+                selected={form.income_type === "Familia"}
                 onSelect={() => {
-                  setForm({ ...form, income_level: "Familia" });
+                  setForm({ ...form, income_type: "Familia" });
                   setIncomeControl(false);
                 }}
               />
@@ -704,7 +705,7 @@ export const WorkSection = ({
                 selected={incomeControl}
                 onSelect={() => {
                   setIncomeControl(true);
-                  setForm({ ...form, income_level: "" });
+                  setForm({ ...form, income_type: "" });
                 }}
               />
             </div>
@@ -716,8 +717,8 @@ export const WorkSection = ({
               }`}
             >
               <input
-                id="income_level"
-                value={form.income_level}
+                id="income_type"
+                value={form.income_type}
                 onChange={handleChange}
                 type="text"
                 className={`${inpStyle} w-full`}
@@ -1158,5 +1159,89 @@ export const FoundationSection = ({
         </button>
       </div>
     </article>
+  );
+};
+
+export const RegisterSection = ({
+  form,
+  setForm,
+  handleChangeSection,
+  handleSubmit,
+}) => {
+  const [confirm, setConfirm] = useState(false);
+  return (
+    <>
+      <article className="flex w-full flex-col px-4 py-8 h-full">
+        <h4 className="text-center font-bold text-2xl">
+          Registro de beneficiario
+        </h4>
+        <div className="flex flex-col w-full p-4 items-center h-full justify-center gap-14">
+          <div className="flex flex-col w-1/2 gap-6">
+            <p className="font-bold">
+              El beneficiario esta de acuerdo con el almacenamiento de la
+              informacion brindada?
+            </p>
+            <div className="flex gap-6">
+              <OptionCheckBox
+                label={"Si"}
+                selected={form.agreement}
+                onSelect={() => setForm({ ...form, agreement: true })}
+              />
+              <OptionCheckBox
+                label={"No"}
+                selected={!form.agreement}
+                onSelect={() => setForm({ ...form, agreement: false })}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col w-1/2 gap-6">
+            <p className="font-bold">
+              Ha confirmado que la informacion ingresada es correcta?
+            </p>
+            <div className="flex gap-6">
+              <OptionCheckBox
+                label={"Si"}
+                selected={confirm}
+                onSelect={() => setConfirm(true)}
+              />
+              <OptionCheckBox
+                label={"No"}
+                selected={!confirm}
+                onSelect={() => setConfirm(false)}
+              />
+            </div>
+          </div>
+
+          <span className=" flex justify-center p-6">
+            <button
+              onClick={(e) => {
+                handleSubmit(e);
+              }}
+              className="p-5 rounded-2xl w-40 text-amber-50 relative  overflow-hidden cursor-pointer group"
+              style={{
+                background: ` ${
+                  confirm && form.agreement
+                    ? "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(27,238,189,1) 0%, rgba(58,238,13,1) 87%)"
+                    : "gray"
+                }  `,
+                boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+              }}
+              type="submit"
+              disabled={!confirm || !form.agreement}
+            >
+              {/* Text that transitions out */}
+              <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 transform group-hover:-translate-x-full font-bold ">
+                Agregar
+              </span>
+
+              {/* Checkmark that transitions in */}
+              <span className="absolute inset-0 flex items-center justify-center transition-transform duration-500 transform translate-x-full group-hover:translate-x-0">
+                <FiSave />
+              </span>
+            </button>
+          </span>
+        </div>
+      </article>
+    </>
   );
 };
