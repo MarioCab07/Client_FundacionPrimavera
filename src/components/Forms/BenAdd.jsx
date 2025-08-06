@@ -279,7 +279,7 @@ const BenForm = () => {
         setActiveSection(sections[0]); // Reset the active section to the first one
       } else {
         toast.update(toastId, {
-          render: response.data,
+          render: "Campos Incompletos, revise la informacion",
           type: "error",
           isLoading: false,
           autoClose: 3000, // Close after 3 seconds

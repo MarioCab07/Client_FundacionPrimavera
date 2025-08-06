@@ -50,9 +50,9 @@ const BenList = () => {
       <Header />
 
       <section className="flex flex-col items-center rounded-lg w-full relative z-40 p-2 min-h-fit">
-        <div className="flex flex-1 items-center justify-center gap-10  px-4 py-8 ">
-          <BsFillPeopleFill size={40} />
-          <h3 className=" text-6xl ms-madi-regular ">Beneficiarios</h3>
+        <div className="flex flex-1 items-center justify-center gap-10  px-4 py-8 text-gray-500">
+          <BsFillPeopleFill size={50} />
+          <h3 className=" text-6xl font-bold ">Beneficiarios</h3>
         </div>
         <article className="flex justify-between items-center gap-20 p-4 w-full relative z-10">
           <Search setBenSelected={setBenSelected} />
