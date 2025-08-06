@@ -1,4 +1,4 @@
-import { Header } from "../components/Header";
+import { Header } from "../../components/Header";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
@@ -6,19 +6,19 @@ import { HiPencilAlt } from "react-icons/hi";
 import { GrDocumentCsv } from "react-icons/gr";
 import { useState, useEffect } from "react";
 
-import { Loading } from "../components/Loading";
-import { useBeneficiaries } from "../hooks/useBeneficiaries";
+import { Loading } from "../../components/Loading";
+import { useBeneficiaries } from "../../hooks/useBeneficiaries";
 
-import ListBeneficiaries from "../components/Beneficiary/ListBeneficiaries";
+import ListBeneficiaries from "../../components/Beneficiary/ListBeneficiaries";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import { ToastContainer, Bounce } from "react-toastify";
-import Search from "../components/Beneficiary/Search";
+import Search from "../../components/Beneficiary/Search";
 
-import BenDetails from "../components/Beneficiary/BenDetails";
-import Pagination from "../components/Pagination";
-import GenerateCSV from "../components/Beneficiary/GenerateCSV";
+import BenDetails from "../../components/Beneficiary/BenDetails";
+import Pagination from "../../components/Pagination";
+import GenerateCSV from "../../components/Beneficiary/GenerateCSV";
 
 const BenList = () => {
   const [benSelected, setBenSelected] = useState();
