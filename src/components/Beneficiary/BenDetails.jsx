@@ -111,7 +111,7 @@ const Details = ({
               Información de Vivienda
             </h3>
             <div className="flex gap-4">
-              <div>
+              <div className="flex flex-col gap-2">
                 <p>
                   Zona: <span className="font-semibold">{ben.zone}</span>
                 </p>
@@ -130,7 +130,7 @@ const Details = ({
                   </span>
                 </p>
               </div>
-              <div>
+              <div className="flex flex-col gap-2">
                 <p>
                   Punto de referencia:{" "}
                   <span className="font-semibold block max-w-sm line-clamp-2">
