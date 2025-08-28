@@ -66,15 +66,28 @@ const Search = ({ setBenSelected }) => {
           >
             {loading ? (
               <Loading />
-            ) : benFound ? (
-              <div
-                className="cursor-pointer p-2 rounded-lg hover:bg-amber-100 transition"
-                onClick={() => handleSelectBeneficiary(benFound)}
-              >
-                <p className="font-bold">{benFound.name}</p>
-                <p>{benFound.age} años</p>
-                <p className="text-sm text-gray-500">DUI: {benFound.dui}</p>
-              </div>
+            ) : benFound.length > 0 ? (
+              benFound.map((data) => {
+                return (
+                  <div
+                    className="cursor-pointer p-2 rounded-lg hover:bg-amber-100 transition"
+                    onClick={() => handleSelectBeneficiary(data)}
+                  >
+                    <span>
+                      <p className="font-bold flex items-center gap-2">
+                        {data.name}{" "}
+                        {data.active.value ? (
+                          <span className="inline-block h-4 w-4 rounded-full bg-green-400 drop-shadow-[0_0_6px_#39ff14]"></span>
+                        ) : (
+                          <span className="inline-block h-4 w-4 rounded-full bg-red-400 drop-shadow-[0_0_6px_#f87171]"></span>
+                        )}
+                      </p>{" "}
+                    </span>
+                    <p>{data.age} años</p>
+                    <p className="text-sm text-gray-500">DUI: {data.dui}</p>
+                  </div>
+                );
+              })
             ) : (
               <p>No se encontraron beneficiarios</p>
             )}
