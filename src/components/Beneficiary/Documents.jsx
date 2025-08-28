@@ -316,116 +316,118 @@ export const Documents = ({ ben, setShowDocuments, page, setBenSelected }) => {
 
   return (
     <>
-      <section
-        className={`${
-          isClosing ? "slide-out-right" : "slide-in-right"
-        } w-full flex flex-col gap-4 bg-white rounded-lg p-4 shadow-lg z-20`}
-      >
-        <h2 className="w-full text-center font-semibold">Documentos</h2>
-        <h3>
-          Beneficiario: <span className="font-bold">{ben.name}</span>
-        </h3>
+      <section className=" p-50 bg-amber-200">
+        <section
+          className={`${
+            isClosing ? "slide-out-right" : "slide-in-right"
+          } w-full flex flex-col gap-4 h-1/2 rounded-lg p-4 shadow-lg z-20 bg-white justify-center`}
+        >
+          <h2 className="w-full text-center font-semibold">Documentos</h2>
+          <h3>
+            Beneficiario: <span className="font-bold">{ben.name}</span>
+          </h3>
 
-        {!showUpload ? (
-          <>
-            {isAdmin && (
-              <button
-                onClick={() => {
-                  setShowUpload(true);
-                }}
-                className="flex gap-2 cursor-pointer items-center bg-amber-300 rounded-2xl hover:bg-amber-50 hover:text-amber-300 transition ease-in-out 0.5s w-fit p-2  "
-              >
-                Subir Documentos <AiOutlineUpload size={20} />{" "}
-              </button>
-            )}
+          {!showUpload ? (
+            <>
+              {isAdmin && (
+                <button
+                  onClick={() => {
+                    setShowUpload(true);
+                  }}
+                  className="flex gap-2 cursor-pointer items-center bg-amber-300 rounded-2xl hover:bg-amber-50 hover:text-amber-300 transition ease-in-out 0.5s w-fit p-2  "
+                >
+                  Subir Documentos <AiOutlineUpload size={20} />{" "}
+                </button>
+              )}
 
-            <article className="flex flex-col gap-4">
-              <div className="flex justify-evenly  w-full gap-10">
-                <h5>Nombre</h5>
-                <h5>Fecha de Subida</h5>
-              </div>
-              <div key={ben._id} className="flex flex-col gap-4">
-                {documents.length > 0 ? (
-                  documents.map((doc, index) => {
-                    return (
-                      <>
-                        <div
-                          style={{
-                            boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
-                          }}
-                          key={index}
-                          className={`flex justify-evenly flex-1 items-center w-full gap-10 p-4 ${
-                            index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                          }`}
-                        >
-                          <div>
-                            <AiFillFile size={20} />
-                          </div>
-                          <div className="flex-1 flex justify-evenly items-center">
-                            <a
-                              className=" underline flex items-center hover:text-blue-600 "
-                              href={doc.url}
-                              target="blank"
-                            >
-                              {" "}
-                              {<IoMdOpen />}
-                              {doc.name}{" "}
-                            </a>
-                            <p className=" w-1/3 text-center ">
-                              {sanitizeDate(doc.date)}
-                            </p>
-                          </div>
-
-                          <div className="flex gap-6">
-                            {isAdmin && (
-                              <button
-                                onClick={() => handleClick(doc.name)}
-                                style={{
-                                  boxShadow:
-                                    "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                                }}
-                                className="font-semibold bg-red-500 p-4 rounded-2xl hover:bg-white hover:text-red-500 transition ease-in-out 0.5s cursor-pointer"
+              <article className="flex flex-col gap-4">
+                <div className="flex justify-evenly  w-full gap-10">
+                  <h5>Nombre</h5>
+                  <h5>Fecha de Subida</h5>
+                </div>
+                <div key={ben._id} className="flex flex-col gap-4">
+                  {documents.length > 0 ? (
+                    documents.map((doc, index) => {
+                      return (
+                        <>
+                          <div
+                            style={{
+                              boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
+                            }}
+                            key={index}
+                            className={`flex justify-evenly flex-1 items-center w-full gap-10 p-4 ${
+                              index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                            }`}
+                          >
+                            <div>
+                              <AiFillFile size={20} />
+                            </div>
+                            <div className="flex-1 flex justify-evenly items-center">
+                              <a
+                                className=" underline flex items-center hover:text-blue-600 "
+                                href={doc.url}
+                                target="blank"
                               >
                                 {" "}
-                                <AiOutlineDelete size={20} />{" "}
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })
-                ) : (
-                  <h5 className="w-full text-center font-sans">
-                    No hay Documentos guardados
-                  </h5>
-                )}
-              </div>
-            </article>
-            <button
-              className="bg-[#FFF582] rounded-2xl p-3 w-fit hover:bg-white transition ease-in-out 0.5s cursor-pointer mt-4 flex gap-4 items-center justify-center mx-auto"
-              style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
-              onClick={handleClose}
-            >
-              Volver
-            </button>
-          </>
-        ) : (
-          <UploadDoc
-            onUploadDocument={handleDocumentUploaded}
-            ben={ben}
-            setShowUpload={setShowUpload}
-          />
-        )}
+                                {<IoMdOpen />}
+                                {doc.name}{" "}
+                              </a>
+                              <p className=" w-1/3 text-center ">
+                                {sanitizeDate(doc.date)}
+                              </p>
+                            </div>
 
-        {showDelete && (
-          <DeleteDoc
-            onDocumentDeleted={handleDocumentDeleted}
-            selectedDoc={selectedDoc}
-            ben={ben}
-            setShowDelete={setShowDelete}
-          />
-        )}
+                            <div className="flex gap-6">
+                              {isAdmin && (
+                                <button
+                                  onClick={() => handleClick(doc.name)}
+                                  style={{
+                                    boxShadow:
+                                      "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                                  }}
+                                  className="font-semibold bg-red-500 p-4 rounded-2xl hover:bg-white hover:text-red-500 transition ease-in-out 0.5s cursor-pointer"
+                                >
+                                  {" "}
+                                  <AiOutlineDelete size={20} />{" "}
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })
+                  ) : (
+                    <h5 className="w-full text-center font-sans">
+                      No hay Documentos guardados
+                    </h5>
+                  )}
+                </div>
+              </article>
+              <button
+                className="bg-[#FFF582] rounded-2xl p-3 w-fit hover:bg-white transition ease-in-out 0.5s cursor-pointer mt-4 flex gap-4 items-center justify-center mx-auto"
+                style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                onClick={handleClose}
+              >
+                Volver
+              </button>
+            </>
+          ) : (
+            <UploadDoc
+              onUploadDocument={handleDocumentUploaded}
+              ben={ben}
+              setShowUpload={setShowUpload}
+            />
+          )}
+
+          {showDelete && (
+            <DeleteDoc
+              onDocumentDeleted={handleDocumentDeleted}
+              selectedDoc={selectedDoc}
+              ben={ben}
+              setShowDelete={setShowDelete}
+            />
+          )}
+        </section>
       </section>
     </>
   );
