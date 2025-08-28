@@ -103,7 +103,12 @@ const Details = ({
               </span>
             </p>
             <p>
-              Telefono fijo: <b>{ben.home_phone}</b>
+              Telefono fijo:{" "}
+              <span className="font-semibold">
+                {!ben.home_phone || ben.home_phone.length === 0
+                  ? "N/A"
+                  : ben.home_phone}
+              </span>
             </p>
           </div>
           <div className="flex flex-col max-w-md min-w-xl gap-2">

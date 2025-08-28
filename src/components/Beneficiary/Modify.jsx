@@ -7,6 +7,14 @@ import { updateBeneficiary } from "../../services/api.services";
 import { sleep, handleNumbers, handlePhoneChange } from "../../tools/tools";
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  ContactModify,
+  HouseModify,
+  MedicalModify,
+  WorkModify,
+  FamilyModify,
+  FoundationModify,
+} from "./ModifyComponents";
 
 const Modify = ({ ben, setShowModify, setBenSelected, page }) => {
   const inputStyle = `
@@ -17,21 +25,12 @@ const Modify = ({ ben, setShowModify, setBenSelected, page }) => {
     focus:rounded-2xl
     outline-none 
     p-2
+
 `;
   const [modifiedBen, setModifiedBen] = useState(ben);
-  const [whatsapp, setWhatsapp] = useState(ben.whatsapp);
-  const [phone_company, setPhoneCompany] = useState(ben.phone_company);
-  const [income, setIncome] = useState(ben.income_level);
-  const [pension, setPension] = useState(ben.pension);
-  const [house_type, setHouseType] = useState(ben.house_type);
   const [isClosing, setIsClosing] = useState(false);
-  const [dependents, setDependents] = useState(ben.dependents);
-  const [dependentName, setDependentName] = useState("");
-  const [personIC, setPersonIc] = useState({
-    name: ben.person_in_charge.name,
-    phone_number: ben.person_in_charge.phone_number,
-    dui: ben.person_in_charge.dui,
-  });
+
+  const [section, setSection] = useState("Contacto");
 
   const queryClient = useQueryClient();
 
@@ -62,80 +61,12 @@ const Modify = ({ ben, setShowModify, setBenSelected, page }) => {
     }, 500);
   };
 
-  const handleChange = (e) => {
-    const field = e.target.id;
-    const value = e.target.value;
-    setModifiedBen((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handlePhoneChangePersonIC = (e) => {
-    const value = e.target.value.replace(/\D/g, ""); // Elimina todos los caracteres no numéricos
-    const formattedValue =
-      value.length > 4
-        ? value.slice(0, 4) + "-" + value.slice(4, 8) // Agrega un '-' después de los primeros 4 dígitos
-        : value;
-
-    setPersonIc((prev) => ({ ...prev, phone_number: formattedValue }));
-  };
-
-  const handleDUIChangePersonIC = (e) => {
-    const value = e.target.value.replace(/\D/g, ""); // Elimina todos los caracteres no numéricos
-    const formattedValue =
-      value.length > 8
-        ? value.slice(0, 8) + "-" + value.slice(8, 9) // Agrega un '-' después de los primeros 8 dígitos
-        : value;
-
-    setPersonIc((prev) => ({ ...prev, dui: formattedValue }));
-  };
-
-  const handleAddDependent = () => {
-    if (dependentName !== "") {
-      setDependents((prev) => [...prev, dependentName]);
-      setDependentName("");
-    }
-  };
-  const handleRemoveDependent = (index) => {
-    setDependents((prev) => prev.filter((_, i) => i !== index));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const form = {
-      name: modifiedBen.name,
-      dui: modifiedBen.dui,
-      birth_date: modifiedBen.birth_date,
-      starting_date: modifiedBen.starting_date,
-      phone_number: modifiedBen.phone_number,
-      adress: modifiedBen.adress,
-      birth_place: modifiedBen.birth_place,
-      work_occup: modifiedBen.work_occup,
-      income_level: income,
-      pension: pension,
-      weight: modifiedBen.weight,
-      height: modifiedBen.height,
-      phone_company: phone_company,
-      whatsapp: whatsapp,
-      illness: modifiedBen.illness,
-      medicines: modifiedBen.medicines,
-      blood_type: modifiedBen.blood_type,
-      personIC_name: personIC.name,
-      personIC_phone_number: personIC.phone_number,
-      personIC_dui: personIC.dui,
-      medical_service: modifiedBen.medical_service,
-      house_type: house_type,
-      shirt_size: modifiedBen.shirt_size,
-      shoe_size: modifiedBen.shoe_size,
-      discapacities: modifiedBen.discapacities,
-      affiliation: modifiedBen.affiliation,
-      dependents: dependents,
-      active: true,
-      reason: " ",
-      gender: modifiedBen.gender,
-    };
     const toastId = toast.loading("Actualizando Beneficiario...");
     try {
-      await mutateBen({ id: modifiedBen._id, form });
+      await mutateBen({ id: modifiedBen._id, form: modifiedBen });
       toast.dismiss(toastId);
     } catch (error) {
       console.log(error);
@@ -190,214 +121,154 @@ const Modify = ({ ben, setShowModify, setBenSelected, page }) => {
           </div>
         </div>
         <div className="flex-1 min-h-0 overflow-y-auto px-10 py-4 space-y-6">
-          <div className="flex flex-wrap gap-5">
-            <div className="flex flex-col gap-2 justify-center items-center h-max  flex-1">
-              <h5 className="font-bold">Información de Contacto</h5>
-              <label htmlFor="phone_number" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Telefono</span>
-                <input
-                  type="text"
-                  id="phone_number"
-                  className={inputStyle}
-                  value={modifiedBen.phone_number}
-                  onChange={(e) => {
-                    handlePhoneChange(e, setModifiedBen, modifiedBen);
-                  }}
-                />
-              </label>
-              <label htmlFor="affiliation" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Afiliación</span>
-                <input
-                  type="text"
-                  id="affiliation"
-                  className={inputStyle}
-                  value={modifiedBen.affiliation}
-                  onChange={handleChange}
-                />
-              </label>
-              <label htmlFor="adress" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Dirección</span>
-                <input
-                  type="text"
-                  id="adress"
-                  className={inputStyle}
-                  value={modifiedBen.adress}
-                  onChange={handleChange}
-                />
-              </label>
-              <label htmlFor="birth_place" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">
-                  Lugar de Nacimiento
-                </span>
-                <input
-                  type="text"
-                  id="birth_place"
-                  className={inputStyle}
-                  value={modifiedBen.birth_place}
-                  onChange={handleChange}
-                />
-              </label>
-              <CheckboxValue
-                checked={whatsapp}
-                setChecked={setWhatsapp}
-                label={"Whatsapp"}
-              />
-              <BasicSelect
-                label={"Compañía Telefonica"}
-                value={phone_company}
-                setValue={setPhoneCompany}
-                options={["Movistar", "Tigo", "Claro", "Digicel"]}
-              />
-            </div>
+          <div className="flex w-full justify-center gap-4 ">
+            <button
+              type="button"
+              className={`${
+                section === "Contacto" ? "mod-sec-act" : "mod-sec-ina"
+              }`}
+              onClick={() => {
+                setSection("Contacto");
+              }}
+            >
+              Contacto
+            </button>
+            <button
+              type="button"
+              className={`${
+                section === "Vivienda" ? "mod-sec-act" : "mod-sec-ina"
+              }`}
+              onClick={() => {
+                setSection("Vivienda");
+              }}
+            >
+              Vivienda
+            </button>
+            <button
+              type="button"
+              className={`${
+                section === "Medica" ? "mod-sec-act" : "mod-sec-ina"
+              }`}
+              onClick={() => {
+                setSection("Medica");
+              }}
+            >
+              Medica
+            </button>
+            <button
+              type="button"
+              className={`${
+                section === "Oficio" ? "mod-sec-act" : "mod-sec-ina"
+              }`}
+              onClick={() => {
+                setSection("Oficio");
+              }}
+            >
+              Oficio
+            </button>
+            <button
+              type="button"
+              className={`${
+                section === "Familiar" ? "mod-sec-act" : "mod-sec-ina"
+              }`}
+              onClick={() => {
+                setSection("Familiar");
+              }}
+            >
+              Familiar
+            </button>
 
-            <div className="flex flex-col gap-6 justify-center items-center h-max  flex-1">
-              <h5 className="font-bold">Información Personal</h5>
-              <label htmlFor="work_occup" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Ocupación</span>
-                <input
-                  type="text"
-                  id="work_occup"
-                  className={inputStyle}
-                  value={modifiedBen.work_occup}
-                  onChange={handleChange}
-                />
-              </label>
-
-              <BasicSelect
-                label={"Nivel de Ingresos"}
-                value={income}
-                setValue={setIncome}
-                options={["Sin Ingresos", "Bajos", "Medio", "Altos"]}
-              />
-              <CheckboxValue
-                checked={pension}
-                setChecked={setPension}
-                label={"Pension"}
-              />
-              <BasicSelect
-                label={"Tipo de Casa"}
-                value={house_type}
-                setValue={setHouseType}
-                options={["Meson", "Propia", "Dominio Ajeno", "Rentada"]}
-              />
-            </div>
-            <div className="flex flex-col gap-6 justify-center items-center h-max  flex-1">
-              <h5 className="font-bold">Información Médica</h5>
-              <label htmlFor="weight" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Peso</span>
-                <input
-                  placeholder="lb"
-                  type="number"
-                  id="weight"
-                  className={inputStyle}
-                  value={modifiedBen.weight}
-                  onChange={(e) => {
-                    handleNumbers(e, setModifiedBen, modifiedBen);
-                  }}
-                />
-              </label>
-              <label htmlFor="height" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Altura</span>
-                <input
-                  placeholder="cm"
-                  type="number"
-                  id="height"
-                  className={inputStyle}
-                  value={modifiedBen.height}
-                  onChange={(e) => {
-                    handleNumbers(e, setModifiedBen, modifiedBen);
-                  }}
-                />
-              </label>
-              <label htmlFor="illness" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Enfermedades</span>
-                <input
-                  type="text"
-                  id="illness"
-                  className={inputStyle}
-                  value={modifiedBen.illness}
-                  onChange={handleChange}
-                />
-              </label>
-              <label htmlFor="medicines" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Medicinas</span>
-                <input
-                  type="text"
-                  id="medicines"
-                  className={inputStyle}
-                  value={modifiedBen.medicines}
-                  onChange={handleChange}
-                />
-              </label>
-              <label htmlFor="medical_service" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Servicio Médico</span>
-                <input
-                  type="text"
-                  id="medical_service"
-                  className={inputStyle}
-                  value={modifiedBen.medical_service}
-                  onChange={handleChange}
-                />
-              </label>
-
-              <label htmlFor="discapacities" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Discapacidades</span>
-                <input
-                  type="text"
-                  id="discapacities"
-                  className={inputStyle}
-                  value={modifiedBen.discapacities}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+            <button
+              type="button"
+              className={`${
+                section === "Fundacion" ? "mod-sec-act" : "mod-sec-ina"
+              }`}
+              onClick={() => {
+                setSection("Fundacion");
+              }}
+            >
+              Fundacion
+            </button>
           </div>
+          <div className="flex flex-wrap gap-5">
+            {section === "Contacto" ? (
+              <ContactModify form={modifiedBen} setForm={setModifiedBen} />
+            ) : (
+              <></>
+            )}
+            {section === "Vivienda" ? (
+              <HouseModify form={modifiedBen} setForm={setModifiedBen} />
+            ) : (
+              <></>
+            )}
+            {section === "Medica" ? (
+              <MedicalModify form={modifiedBen} setForm={setModifiedBen} />
+            ) : (
+              <></>
+            )}
+            {section === "Oficio" ? (
+              <WorkModify form={modifiedBen} setForm={setModifiedBen} />
+            ) : (
+              <></>
+            )}
+            {section === "Familiar" ? (
+              <FamilyModify form={modifiedBen} setForm={setModifiedBen} />
+            ) : (
+              <></>
+            )}
+            {section === "Fundacion" ? (
+              <FoundationModify form={modifiedBen} setForm={setModifiedBen} />
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
 
-          <div className="flex gap-5 justify-center place-items-stretch flex-wrap">
-            <div className="flex flex-col gap-6 justify-center items-center h-max  flex-1">
-              <h5 className="font-bold">Persona Responsable</h5>
-              <label htmlFor="personIC_name" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Nombre</span>
-                <input
-                  type="text"
-                  id="personIC_name"
-                  className={inputStyle}
-                  value={personIC.name}
-                  onChange={(e) =>
-                    setPersonIc((prev) => ({ ...prev, name: e.target.value }))
-                  }
-                />
-              </label>
-              <label htmlFor="personIC_dui" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">DUI</span>
-                <input
-                  type="text"
-                  id="personIC_dui"
-                  className={inputStyle}
-                  value={personIC.dui}
-                  onChange={handleDUIChangePersonIC}
-                />
-              </label>
-              <label htmlFor="personIC_phone" className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Telefono</span>
-                <input
-                  type="text"
-                  id="personIC_phone"
-                  className={inputStyle}
-                  value={personIC.phone_number}
-                  onChange={handlePhoneChangePersonIC}
-                />
-              </label>
-            </div>
+        {/* Botones SIEMPRE visibles */}
+        <div className="flex-shrink-0 bg-white px-10 py-4 border-t flex justify-between gap-8">
+          <button
+            type="submit"
+            className="p-5 rounded-2xl w-40 text-white relative overflow-hidden cursor-pointer group"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(27,238,189,1) 0%, rgba(58,238,13,1) 87%)",
+              boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+            }}
+          >
+            {/* Texto que desaparece al hacer hover */}
+            <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 transform group-hover:-translate-x-full font-bold">
+              Modificar
+            </span>
 
-            <div className="flex flex-col gap-6 justify-center items-center h-max  flex-1">
+            {/* Ícono que aparece al hacer hover */}
+            <span className="absolute inset-0 flex items-center justify-center transition-transform duration-500 transform translate-x-full group-hover:translate-x-0">
+              <BsPencilSquare size={20} />
+            </span>
+          </button>
+          <button
+            style={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
+            type="button"
+            className="bg-amber-200 rounded-2xl px-4 py-2  cursor-pointer hover:bg-amber-50 transition ease-in-out 0.5s "
+            onClick={handleClose}
+          >
+            Volver
+          </button>
+        </div>
+      </form>
+    </>
+  );
+};
+
+export default Modify;
+
+/*<div className="flex flex-col gap-6 justify-center items-center h-max  flex-1">
               <h5 className="font-bold">Personas a las que cuida</h5>
               <div className="flex gap-2">
                 {dependents.length ? (
                   dependents.map((dep, index) => {
                     return (
                       <div key={index} className="relative min-w-24">
-                        {/* Botón del dependiente */}
+                        
                         <div
                           type="button"
                           style={{
@@ -408,7 +279,7 @@ const Modify = ({ ben, setShowModify, setBenSelected, page }) => {
                           {dep}
                         </div>
 
-                        {/* Botón para eliminar */}
+                        
                         <button
                           type="button"
                           onClick={() => handleRemoveDependent(index)}
@@ -450,43 +321,6 @@ const Modify = ({ ben, setShowModify, setBenSelected, page }) => {
                 {" "}
                 Agregar
               </button>
-            </div>
-          </div>
-        </div>
+            </div> 
 
-        {/* Botones SIEMPRE visibles */}
-        <div className="flex-shrink-0 bg-white px-10 py-4 border-t flex justify-between gap-8">
-          <button
-            style={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
-            type="button"
-            className="bg-amber-200 rounded-2xl px-4 py-2  cursor-pointer hover:bg-amber-50 transition ease-in-out 0.5s "
-            onClick={handleClose}
-          >
-            Volver
-          </button>
-          <button
-            type="submit"
-            className="p-5 rounded-2xl w-40 text-white relative overflow-hidden cursor-pointer group"
-            style={{
-              background:
-                "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(27,238,189,1) 0%, rgba(58,238,13,1) 87%)",
-              boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-            }}
-          >
-            {/* Texto que desaparece al hacer hover */}
-            <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 transform group-hover:-translate-x-full font-bold">
-              Modificar
-            </span>
-
-            {/* Ícono que aparece al hacer hover */}
-            <span className="absolute inset-0 flex items-center justify-center transition-transform duration-500 transform translate-x-full group-hover:translate-x-0">
-              <BsPencilSquare size={20} />
-            </span>
-          </button>
-        </div>
-      </form>
-    </>
-  );
-};
-
-export default Modify;
+            */

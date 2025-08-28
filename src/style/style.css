@@ -77,3 +77,24 @@
 .prev-button:hover {
   background-color: #2c2c2c; /* Color de fondo más oscuro al pasar el cursor */
 }
+
+.mod-sec-act{
+  background-color: #f5f10b;
+  padding: 0.5rem 1rem; /* Espaciado interno */
+  border: none; /* Sin borde */
+  border-radius: 0.25rem; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  transition: background-color 0.3s ease;
+  color: black;
+
+}
+
+.mod-sec-ina{
+   background-color: #4747473f; /* Color de fondo amarillo */
+  color: black; /* Color del texto */
+  padding: 0.5rem 1rem; /* Espaciado interno */
+  border: none; /* Sin borde */
+  border-radius: 0.25rem; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  transition: background-color 0.3s ease;
+}
