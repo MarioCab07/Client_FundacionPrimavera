@@ -1,4 +1,4 @@
-import { Header } from "../components/Header";
+import { Header } from "../../components/Header";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
@@ -6,19 +6,19 @@ import { HiPencilAlt } from "react-icons/hi";
 import { GrDocumentCsv } from "react-icons/gr";
 import { useState, useEffect } from "react";
 
-import { Loading } from "../components/Loading";
-import { useBeneficiaries } from "../hooks/useBeneficiaries";
+import { Loading } from "../../components/Loading";
+import { useBeneficiaries } from "../../hooks/useBeneficiaries";
 
-import ListBeneficiaries from "../components/Beneficiary/ListBeneficiaries";
+import ListBeneficiaries from "../../components/Beneficiary/ListBeneficiaries";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import { ToastContainer, Bounce } from "react-toastify";
-import Search from "../components/Beneficiary/Search";
+import Search from "../../components/Beneficiary/Search";
 
-import BenDetails from "../components/Beneficiary/BenDetails";
-import Pagination from "../components/Pagination";
-import GenerateCSV from "../components/Beneficiary/GenerateCSV";
+import BenDetails from "../../components/Beneficiary/BenDetails";
+import Pagination from "../../components/Pagination";
+import GenerateCSV from "../../components/Beneficiary/GenerateCSV";
 
 const BenList = () => {
   const [benSelected, setBenSelected] = useState();
@@ -50,9 +50,9 @@ const BenList = () => {
       <Header />
 
       <section className="flex flex-col items-center rounded-lg w-full relative z-40 p-2 min-h-fit">
-        <div className="flex flex-1 items-center justify-center gap-10  px-4 py-8 ">
-          <BsFillPeopleFill size={40} />
-          <h3 className=" text-6xl ms-madi-regular ">Beneficiarios</h3>
+        <div className="flex flex-1 items-center justify-center gap-10  px-4 py-8 text-gray-500">
+          <BsFillPeopleFill size={50} />
+          <h3 className=" text-6xl font-bold ">Beneficiarios</h3>
         </div>
         <article className="flex justify-between items-center gap-20 p-4 w-full relative z-10">
           <Search setBenSelected={setBenSelected} />

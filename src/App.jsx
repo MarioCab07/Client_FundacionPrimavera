@@ -8,10 +8,10 @@ import { AuthProvider } from "./context/AuthContext";
 import LoginPage from "./pages/LoginPage";
 import DashBoard from "./pages/DashBoard";
 import ProtectedRoutes from "./components/ProtectedRoutes";
-import BenAdd from "./pages/BenAddPage";
-import BenList from "./pages/BenListPage";
-import VolAdd from "./pages/VolAddPage";
-import VolListPage from "./pages/VolListPage";
+import BenAdd from "./pages/Beneficiary/BenAddPage";
+import BenList from "./pages/Beneficiary/BenListPage";
+import VolAdd from "./pages/Volunteer/VolAddPage";
+import VolListPage from "./pages/Volunteer/VolListPage";
 import Forbidden from "./pages/ForbiddenPage";
 import PublicRoute from "./components/PublicRoute";
 
@@ -31,7 +31,7 @@ const NavBinder = () => {
   useEffect(() => setNavigator(nav), [nav]);
 };
 
-function App() {
+const App = () => {
   return (
     <>
       <NavBinder />
@@ -88,6 +88,6 @@ function App() {
       </section>
     </>
   );
-}
+};
 
 export default App;
