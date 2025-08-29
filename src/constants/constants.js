@@ -1,0 +1,33 @@
+export const ROLES = {
+    VOLUNTARIO: "VOLUNTARIO",
+    COLABORADOR: "COLABORADOR",
+    ADMIN: "ADMIN",
+    SUPER_ADMIN: "SUPER_ADMIN",
+    GERENTE: "GERENTE"
+}
+export const CSV_FIELDS = [
+  { label: "Nombre", value: "name" },
+  { label: "DUI", value: "dui" },
+  { label: "Edad", value: "age" },
+  { label: "Fecha de Nacimiento", value: "birth_date" },
+  { label: "Teléfono Celular", value: "phone_number" },
+  { label: "Teléfono Fijo", value: "home_phone" },
+  { label: "Dirección", value: "address" },
+  { label: "Talla de Camisa", value: "shirt_size" },
+  { label: "Talla de Zapatos", value: "shoe_size" },
+  { label: "Género", value: "gender" },
+  { label: "Zona", value: "zone" },
+  { label: "Departamento", value: "department" },
+  { label: "Municipio", value: "municipality" },
+  { label: "Peso", value: "weight" },
+  { label: "Altura", value: "height" },
+  { label: "Enfermedades", value: "illness" },
+  { label: "Medicinas", value: "medicines" },
+  { label: "Tipo de Sangre", value: "blood_type" },
+  { label: "Whatsapp", value: "whatsapp" },
+  { label: "Nivel Educativo", value: "education_level" },
+  { label: "Tipo de Ingreso", value: "income_type" },
+  { label: "Ocupación", value: "occupation" },
+  { label: "Sabe Leer y Escribir", value: "write_and_read" },
+  { label: "Discapacidades", value: "discapacities" },
+];

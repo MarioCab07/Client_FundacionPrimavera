@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+@import "tailwindcss";
+@import "./style/animations.css";
+@layer utilities {
+    .hide-password-toggle::-ms-reveal, 
+    .hide-password-toggle::-ms-clear,
+    .hide-password-toggle::-webkit-contacts-auto-fill-button,
+    .hide-password-toggle::-webkit-credentials-auto-fill-button {
+      display: none;
+    }
+  }
