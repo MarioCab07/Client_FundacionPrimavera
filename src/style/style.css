@@ -98,3 +98,27 @@
   cursor: pointer; /* Cambia el cursor al pasar por encima */
   transition: background-color 0.3s ease;
 }
+
+.field {
+  background-color: #5c5c5c3a;   /* gris suave */
+  color: #222;                 /* letra negra */
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.field:hover {
+  background-color: #e5e5e5;   /* un gris un poco más fuerte al pasar el mouse */
+}
+
+.selected-field {
+   background-color: rgba(241, 237, 1, 0.8);   /* gris suave */
+  color: #222;                 /* letra negra */
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
