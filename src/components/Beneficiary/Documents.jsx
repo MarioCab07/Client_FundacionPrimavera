@@ -1,5 +1,5 @@
 import { ToastContainer, toast, Bounce } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { deleteBenDocument } from "../../services/api.services";
 import { sleep } from "../../tools/tools";
 import { AiFillFile, AiOutlineDelete, AiOutlineUpload } from "react-icons/ai";
@@ -10,6 +10,8 @@ import "../../style/animations.css";
 import { uploadDocuments } from "../../services/api.services";
 import { parseRol } from "../../tools/tools";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "../../context/AuthContext";
+import { Loader } from "../Loading";
 
 const DeleteDoc = ({ ben, selectedDoc, setShowDelete, onDocumentDeleted }) => {
   const [confirm, setConfirm] = useState("");
@@ -266,7 +268,16 @@ export const Documents = ({ ben, setShowDocuments, page, setBenSelected }) => {
   const [showDelete, setShowDelete] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [showUpload, setShowUpload] = useState(false);
-  const [isAdmin] = useState(localStorage.getItem("isAdmin") === "true");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const { user } = useAuth();
+  useEffect(() => {
+    if (user && (user.role === "ADMIN" || user.role === "SUPER_ADMIN")) {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  }, [user]);
+
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
