@@ -10,6 +10,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import Menu from "./Menu";
 
 import { useState } from "react";
+import { navigate } from "../services/nav";
 
 export const DashBoardHeader = () => {
   const navigate = useNavigate();
@@ -30,7 +31,14 @@ export const DashBoardHeader = () => {
       >
         {/* Logo */}
         <div className="flex items-center">
-          <img src={Logo} alt="logo" className="w-28 h-16 object-contain" />
+          <button
+            type="button"
+            onClick={() => {
+              navigate("/DashBoard");
+            }}
+          >
+            <img src={Logo} alt="logo" className="w-28 h-16 object-contain" />
+          </button>
         </div>
 
         {/* Navigation Buttons */}
@@ -81,7 +89,14 @@ export const Header = () => {
       >
         {/* Logo */}
         <div className="flex items-center">
-          <img src={Logo} alt="logo" className="w-40 h-16 object-contain" />
+          <button
+            type="button"
+            onClick={() => {
+              navigate("/DashBoard");
+            }}
+          >
+            <img src={Logo} alt="logo" className="w-40 h-16 object-contain" />
+          </button>
         </div>
 
         {/* Hamburger Menu */}
