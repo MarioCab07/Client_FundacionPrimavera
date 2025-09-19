@@ -6,10 +6,12 @@ import { navigate } from "./nav";
 import { forceClearSession, pushUserFromRefresh } from "../context/AuthContext";
 import { doRefresh } from "./refreshHelper";
 
-const apiURL = import.meta.env.VITE_BASE_URL+"api/v1/";
+const apiURL = import.meta.env.VITE_BASE_URL ?? "/api";
+
+const join  = (...parts) => parts.join("/").replace(/\/{2,}/g, "/");
 
 const api = axios.create({
-    baseURL: apiURL,
+    baseURL: join(apiURL,"v1")+ "/",
     withCredentials: true,
 })
 
