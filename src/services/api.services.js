@@ -8,12 +8,13 @@ import { doRefresh } from "./refreshHelper";
 
 const apiURL = import.meta.env.VITE_BASE_URL ?? "/api";
 
-const join  = (...parts) => parts.join("/").replace(/\/{2,}/g, "/");
+
+const baseURL = apiURL.replace(/\/$/, "") + "/v1/";
 
 const api = axios.create({
-    baseURL: join(apiURL,"v1")+ "/",
-    withCredentials: true,
-})
+  baseURL,
+  withCredentials: true,
+});
 
 export default api;
 
