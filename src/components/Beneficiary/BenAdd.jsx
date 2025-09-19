@@ -107,6 +107,7 @@ const BenForm = () => {
     transportation_difficulty: false,
     transportation_difficulty_person: false,
     agreement: true,
+    community: "",
   });
   const [picture, setPicture] = useState(profileIcon);
   const [image, setImage] = useState(null);
@@ -125,6 +126,7 @@ const BenForm = () => {
     occupation: null,
     income: false,
   });
+  const [communityFilter, setCommunityFilter] = useState(false);
   const [responsible, setResponsible] = useState("");
   const [referralControl, setReferralControl] = useState(false);
 
@@ -167,7 +169,8 @@ const BenForm = () => {
       field === "illness" ||
       field === "medicines" ||
       field === "discapacities" ||
-      field === "medical_service"
+      field === "medical_service" ||
+      field === "community"
     ) {
       value = e.target.value;
     } else {
@@ -320,6 +323,11 @@ const BenForm = () => {
     navigate("/GestionarBeneficiarios");
   };
 
+  useEffect(() => {
+    if (form.affiliation === "Comunidades Positivas") setCommunityFilter(true);
+    else setCommunityFilter(false);
+  }, [form.affiliation]);
+
   return (
     <>
       <section className="flex-col flex items-center justify-center  gap-7 ">
@@ -441,6 +449,8 @@ const BenForm = () => {
                 startingDate={startingDate}
                 referralControl={referralControl}
                 setReferralControl={setReferralControl}
+                communityFilter={communityFilter}
+                setCommunityFilter={setCommunityFilter}
               />
             )}
             {activeSection === "Registrar Beneficiario" && (

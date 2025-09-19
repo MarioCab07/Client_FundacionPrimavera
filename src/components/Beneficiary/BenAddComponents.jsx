@@ -42,7 +42,11 @@ const relationships = [
 ];
 const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 const educationLevels = ["Basica", "Media", "Superior"];
-const programs = ["Fundacion Primavera", "Programa 2", "Programa 3"];
+const programs = [
+  "Fundacion Primavera - Sede",
+  "Comunidades Positivas",
+  "Programa 3",
+];
 
 export const GeneralSection = ({
   picture,
@@ -1007,6 +1011,8 @@ export const FoundationSection = ({
   setStartingDate,
   referralControl,
   setReferralControl,
+  communityFilter,
+  setCommunityFilter,
 }) => {
   return (
     <article className="flex w-full flex-col px-4 py-8 h-full">
@@ -1030,6 +1036,26 @@ export const FoundationSection = ({
               setDate={setStartingDate}
             />
           </span>
+        </div>
+        <div
+          className={`flex gap-10  justify-center ${
+            communityFilter ? "w-full" : "w-1/3"
+          } transition-all ease-in-out duration-500`}
+        >
+          {communityFilter && (
+            <span className={`flex gap-6 w-full items-center`}>
+              <p className="font-semibold">Comunidad a la que pertenece</p>
+
+              <input
+                id="community"
+                value={form.community}
+                onChange={handleChange}
+                type="text"
+                className={`${inpStyle} w-full`}
+                placeholder="Comunidad"
+              />
+            </span>
+          )}
         </div>
         <div
           className={`flex flex-col  justify-center transition-all ease-in-out duration-500`}
