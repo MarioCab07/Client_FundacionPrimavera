@@ -14,6 +14,7 @@ import VolAdd from "./pages/Volunteer/VolAddPage";
 import VolListPage from "./pages/Volunteer/VolListPage";
 import Forbidden from "./pages/ForbiddenPage";
 import PublicRoute from "./components/PublicRoute";
+import UserAdd from "./pages/Users/UserAddPage";
 
 import { ToastContainer, toast, Bounce } from "react-toastify";
 
@@ -68,6 +69,11 @@ const App = () => {
               <Route path="/GestionarBeneficiarios" element={<BenList />} />
               <Route path="/RegistrarVoluntario" element={<VolAdd />} />
               <Route path="/Voluntarios" element={<VolListPage />} />
+            </Route>
+            <Route
+              element={<ProtectedRoutes allowedRoles={[ROLES.SUPER_ADMIN]} />}
+            >
+              <Route path="/RegistrarUsuarios" element={<UserAdd />} />
             </Route>
 
             <Route path="/403" element={<Forbidden />} />

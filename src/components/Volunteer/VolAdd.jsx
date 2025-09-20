@@ -72,9 +72,9 @@ const VolForm = () => {
       starting_date,
     };
     try {
-      const resposne = await addVolunteer(updatedForm);
+      const response = await addVolunteer(updatedForm);
 
-      if (resposne.status === 201) {
+      if (response.status === 201) {
         toast.update(toastId, {
           render: "Voluntario Agregado",
           type: "success",

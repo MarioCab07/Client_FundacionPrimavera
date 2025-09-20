@@ -22,7 +22,10 @@ const Details = ({
 }) => {
   const { user } = useAuth();
   const isAdmin =
-    user && (user.role === "ADMIN" || user.role === "SUPER_ADMIN");
+    user &&
+    (user.role === "ADMIN" ||
+      user.role === "SUPER_ADMIN" ||
+      user.role === "GERENTE");
 
   const isSuperAdmin = user && user.role === "SUPER_ADMIN";
   return (

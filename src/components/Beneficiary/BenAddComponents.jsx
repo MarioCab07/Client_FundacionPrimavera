@@ -42,11 +42,7 @@ const relationships = [
 ];
 const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 const educationLevels = ["Basica", "Media", "Superior"];
-const programs = [
-  "Fundacion Primavera - Sede",
-  "Comunidades Positivas",
-  "Programa 3",
-];
+const programs = ["Fundacion Primavera", "Comunidades Positivas", "Programa 3"];
 
 export const GeneralSection = ({
   picture,
