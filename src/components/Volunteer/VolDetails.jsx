@@ -22,7 +22,10 @@ const Details = ({
 }) => {
   const { user } = useAuth();
   const isAdmin =
-    user && (user.role === "ADMIN" || user.role === "SUPER_ADMIN");
+    user &&
+    (user.role === "ADMIN" ||
+      user.role === "SUPER_ADMIN" ||
+      user.role === "GERENTE");
 
   const isSuperAdmin = user && user.role === "SUPER_ADMIN";
   return (
@@ -103,6 +106,12 @@ const Details = ({
               Fecha de Inicio:{" "}
               <span className="font-semibold">
                 {sanitizeDate(vol.starting_date)}
+              </span>
+            </p>
+            <p>
+              Fecha de Finalizacion:{" "}
+              <span className="font-semibold">
+                {sanitizeDate(vol.ending_date)}
               </span>
             </p>
             <p>
@@ -202,7 +211,7 @@ const Details = ({
   );
 };
 
-const VolDetails = ({ vol, setVolSelected }) => {
+const VolDetails = ({ vol, setVolSelected, fetchData }) => {
   const [showDeactive, setShowDeactive] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showModify, setShowModify] = useState(false);
@@ -250,15 +259,35 @@ const VolDetails = ({ vol, setVolSelected }) => {
             vol={vol}
             setShowModify={setShowModify}
             setVolSelected={setVolSelected}
+            fetchData={fetchData}
           />
         ) : showDeactive ? (
-          <Deactive vol={vol} setShowDeactive={setShowDeactive} />
+          <Deactive
+            vol={vol}
+            setShowDeactive={setShowDeactive}
+            fetchData={fetchData}
+            handleClose={handleClose}
+          />
         ) : showReactive ? (
-          <Reactive vol={vol} setShowReactive={setShowReactive} />
+          <Reactive
+            vol={vol}
+            setShowReactive={setShowReactive}
+            fetchData={fetchData}
+          />
         ) : showDelete ? (
-          <Delete vol={vol} setShowDelete={setShowDelete} />
+          <Delete
+            vol={vol}
+            setShowDelete={setShowDelete}
+            fetchData={fetchData}
+            handleClose={handleClose}
+          />
         ) : showCreate ? (
-          <CreateUserVol vol={vol} setShowCreate={setShowCreate} />
+          <CreateUserVol
+            vol={vol}
+            setVolSelected={setVolSelected}
+            setShowCreate={setShowCreate}
+            fetchData={fetchData}
+          />
         ) : null}
       </section>
     </>

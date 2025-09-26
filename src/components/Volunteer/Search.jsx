@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { findBeneficiary } from "../../services/api.services";
+import { findVolunteer } from "../../services/api.services";
 import { Loading } from "../Loading";
 import { BsSearch } from "react-icons/bs";
 
-const Search = ({ setBenSelected }) => {
+const Search = ({ setVolSelected }) => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
-  const [benFound, setBenFound] = useState([]);
+  const [volFound, setVolFound] = useState([null]);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleChange = (e) => {
@@ -15,24 +15,27 @@ const Search = ({ setBenSelected }) => {
   const handleSearch = async (e) => {
     e.preventDefault();
     if (search === "") return;
+
     setLoading(true);
     setShowDropdown(true);
-    try {
-      const encodeId = encodeURIComponent(search);
-      const response = await findBeneficiary(encodeId);
 
-      setBenFound(response.data);
+    try {
+      const encodeID = encodeURIComponent(search);
+      const response = await findVolunteer(encodeID);
+
+      setVolFound(response.data);
     } catch (error) {
-      setBenFound([]);
+      setVolFound([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSelectBeneficiary = (beneficiary) => {
-    setBenSelected(beneficiary);
+  const handleSelectVolunteer = (volunteer) => {
+    setVolSelected(volunteer);
     setShowDropdown(false);
   };
+
   return (
     <>
       <section className=" h-fit relative w-full flex flex-col gap-4 items-start justify-center mt-10">
@@ -67,18 +70,18 @@ const Search = ({ setBenSelected }) => {
           >
             {loading ? (
               <Loading />
-            ) : benFound.length > 0 ? (
-              benFound.map((data, index) => {
+            ) : volFound.length > 0 ? (
+              volFound.map((data, index) => {
                 return (
                   <div
                     key={index}
                     className="cursor-pointer p-2 rounded-lg hover:bg-amber-100 transition"
-                    onClick={() => handleSelectBeneficiary(data)}
+                    onClick={() => handleSelectVolunteer(data)}
                   >
                     <span>
                       <p className="font-bold flex items-center gap-2">
                         {data.name}{" "}
-                        {data.active.value ? (
+                        {data.active ? (
                           <span className="inline-block h-4 w-4 rounded-full bg-green-400 drop-shadow-[0_0_6px_#39ff14]"></span>
                         ) : (
                           <span className="inline-block h-4 w-4 rounded-full bg-red-400 drop-shadow-[0_0_6px_#f87171]"></span>
@@ -86,6 +89,7 @@ const Search = ({ setBenSelected }) => {
                       </p>{" "}
                     </span>
                     <p>{data.age} años</p>
+                    <p>{data.service_type}</p>
                     <p className="text-sm text-gray-500">DUI: {data.dui}</p>
                   </div>
                 );
@@ -103,8 +107,6 @@ const Search = ({ setBenSelected }) => {
           </article>
         )}
       </section>
-
-      {/* Detalles del beneficiario */}
     </>
   );
 };

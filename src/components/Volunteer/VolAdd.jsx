@@ -70,11 +70,12 @@ const VolForm = () => {
       ...form,
       birth_date,
       starting_date,
+      ending_date,
     };
     try {
-      const resposne = await addVolunteer(updatedForm);
+      const response = await addVolunteer(updatedForm);
 
-      if (resposne.status === 201) {
+      if (response.status === 201) {
         toast.update(toastId, {
           render: "Voluntario Agregado",
           type: "success",
@@ -95,6 +96,7 @@ const VolForm = () => {
           year_studied: "",
           gender: "",
         });
+        setMenu(menuOptions.Personal);
       }
     } catch (error) {
       toast.update(toastId, {
