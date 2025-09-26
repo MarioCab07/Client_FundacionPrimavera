@@ -4,12 +4,14 @@ import { Loading } from "../../components/Loading";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { Header } from "../../components/Header";
-import { FiUserPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { GrGroup } from "react-icons/gr";
 import ListVolunteers from "../../components/Volunteer/ListVolunteers";
 import VolDetails from "../../components/Volunteer/VolDetails";
 import Pagination from "../../components/Pagination";
+import { useAuth } from "../../context/AuthContext";
+import Search from "../../components/Volunteer/Search";
+import { FaUsers } from "react-icons/fa";
 
 const VolListPage = () => {
   const [data, setData] = useState([]);
@@ -18,6 +20,12 @@ const VolListPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [showActive, setShowActive] = useState(true);
   const [volSelected, setVolSelected] = useState();
+  const { user } = useAuth();
+  const canModifyVolunteer =
+    user &&
+    (user.role === "ADMIN" ||
+      user.role === "SUPER_ADMIN" ||
+      user.role === "GERENTE");
 
   const fetchData = async () => {
     try {
@@ -57,24 +65,26 @@ const VolListPage = () => {
     <>
       <Header />
       <section className="flex flex-col items-center rounded-lg w-full relative z-40 p-2">
-        <div className="flex flex-1 items-center justify-center gap-10  px-4 py-8 ">
-          <FiUserPlus size={40} />
-          <h3 className=" text-6xl ms-madi-regular ">Voluntarios</h3>
+        <div className=" font-bold text-3xl flex flex-1 items-center justify-center gap-10  px-4 py-8 ">
+          <FaUsers color="#4B5563" size={40} />
+          <h3 className=" text-gray-500  text-6xl ">Voluntarios</h3>
         </div>
         <article className="flex justify-between items-center gap-20 p-4 w-full relative z-10">
           {/* Colocar Search para voluntario */}
           {/* <Search setBenSelected={setBenSelected} /> */}
-
-          <div className="flex gap-4 items-center justify-center">
-            <Link
-              style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
-              className="cursor-pointer w-fit p-3 rounded-lg flex gap-3 justify-center items-center text-white font-bold bg-amber-300 hover:scale-105 transition-all duration-300 hover:bg-yellow-50 hover:text-amber-300 text-center  "
-              to={"/RegistrarVoluntario"}
-            >
-              {" "}
-              Agregar Voluntario <GrGroup size={40} />
-            </Link>
-          </div>
+          <Search setVolSelected={setVolSelected} />
+          {canModifyVolunteer && (
+            <div className="flex gap-4 items-center justify-center">
+              <Link
+                style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                className="cursor-pointer w-fit p-3 rounded-lg flex gap-3 justify-center items-center text-white font-bold bg-amber-300 hover:scale-105 transition-all duration-300 hover:bg-yellow-50 hover:text-amber-300 text-center  "
+                to={"/RegistrarVoluntario"}
+              >
+                {" "}
+                Agregar Voluntario <GrGroup size={40} />
+              </Link>
+            </div>
+          )}
         </article>
 
         <article
@@ -131,7 +141,11 @@ const VolListPage = () => {
           />
         </article>
         {volSelected && (
-          <VolDetails setVolSelected={setVolSelected} vol={volSelected} />
+          <VolDetails
+            fetchData={fetchData}
+            setVolSelected={setVolSelected}
+            vol={volSelected}
+          />
         )}
       </section>
     </>

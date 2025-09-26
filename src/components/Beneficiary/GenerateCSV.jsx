@@ -92,7 +92,7 @@ const Fields = ({ selectedFields, setSelectedFields }) => {
   };
   return (
     <>
-      <section className="grid grid-cols-3 gap-3 w-full max-w-3xl mx-auto">
+      <section className="grid grid-cols-3 gap-3 w-full max-w-fit mx-auto">
         {CSV_FIELDS.map((field) => {
           const isSelected = selectedFields.some(
             (item) => item.value === field.value
@@ -192,7 +192,7 @@ const GenerateCSV = ({ showCSV, setShowCSV }) => {
             : showCSV
             ? "scale-in-center"
             : "scale-out-center"
-        } z-50 flex flex-col gap-6 bg-white rounded-3xl p-8 shadow-2xl w-1/2 h-full  mx-auto absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4 border-amber-300 border-2 border-solid transition-all duration-500`}
+        } z-50 flex flex-col gap-6 bg-white rounded-3xl p-8 shadow-2xl w-1/2   mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/4 border-amber-300 border-2 border-solid transition-all duration-500`}
       >
         <h3 className="w-full text-center font-bold text-2xl text-amber-600 mb-2">
           Generar CSV
