@@ -70,6 +70,7 @@ const VolForm = () => {
       ...form,
       birth_date,
       starting_date,
+      ending_date,
     };
     try {
       const response = await addVolunteer(updatedForm);
@@ -95,6 +96,7 @@ const VolForm = () => {
           year_studied: "",
           gender: "",
         });
+        setMenu(menuOptions.Personal);
       }
     } catch (error) {
       toast.update(toastId, {

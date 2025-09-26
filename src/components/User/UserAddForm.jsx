@@ -21,6 +21,7 @@ const UserAddForm = () => {
     dui: "",
     phone_number: "",
     role: "",
+    email: "",
   });
   const [success, setSuccess] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -28,8 +29,9 @@ const UserAddForm = () => {
 
   const handleChange = (e) => {
     let value = e.target.value;
+    let field = e.target.id;
 
-    setForm({ ...form, name: value });
+    setForm({ ...form, [field]: value });
   };
   const inpStyle = inputStyle();
 
@@ -51,6 +53,7 @@ const UserAddForm = () => {
           dui: "",
           phone_number: "",
           role: "",
+          email: "",
         });
         setSuccess(true);
         setCredentials(response.data);
@@ -103,6 +106,17 @@ const UserAddForm = () => {
                 onChange={(e) => {
                   handleDuiChange(e, setForm, form);
                 }}
+                className={inpStyle}
+              />
+            </label>
+            <label htmlFor="email" className="text-lg flex flex-col">
+              <p className="font-semibold">Email</p>
+              <input
+                required
+                type="text"
+                id="email"
+                value={form.email}
+                onChange={handleChange}
                 className={inpStyle}
               />
             </label>

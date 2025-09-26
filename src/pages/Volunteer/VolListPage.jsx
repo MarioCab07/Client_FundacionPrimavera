@@ -141,7 +141,11 @@ const VolListPage = () => {
           />
         </article>
         {volSelected && (
-          <VolDetails setVolSelected={setVolSelected} vol={volSelected} />
+          <VolDetails
+            fetchData={fetchData}
+            setVolSelected={setVolSelected}
+            vol={volSelected}
+          />
         )}
       </section>
     </>
