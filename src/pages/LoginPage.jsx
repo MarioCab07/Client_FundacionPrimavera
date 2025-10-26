@@ -10,6 +10,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ROLES } from "../constants/constants";
 
 const DASH_ROLES = [ROLES.SUPER_ADMIN, ROLES.GERENTE, ROLES.ADMIN];
+const INVENTORY_ROLES = [ROLES.VOLUNTARIO, ROLES.GERENTE];
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -28,6 +29,9 @@ const LoginPage = () => {
     if (user && !loading) {
       if (hasAnyRole(DASH_ROLES)) {
         navigate("/dashboard", { replace: true });
+      }
+      if (hasAnyRole(INVENTORY_ROLES)) {
+        navigate("/Inventario", { replace: true });
       } else {
         navigate("/403", { replace: true });
       }
