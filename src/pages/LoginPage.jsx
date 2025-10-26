@@ -10,6 +10,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ROLES } from "../constants/constants";
 
 const DASH_ROLES = [ROLES.SUPER_ADMIN, ROLES.GERENTE, ROLES.ADMIN];
+const INVENTORY_ROLES = [ROLES.VOLUNTARIO, ROLES.GERENTE];
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -23,16 +24,6 @@ const LoginPage = () => {
   });
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  useEffect(() => {
-    if (user && !loading) {
-      if (hasAnyRole(DASH_ROLES)) {
-        navigate("/dashboard", { replace: true });
-      } else {
-        navigate("/403", { replace: true });
-      }
-    }
-  }, [user, loading, hasAnyRole, navigate]);
 
   const handleChange = (e) => {
     setError("");
@@ -55,8 +46,6 @@ const LoginPage = () => {
         isLoading: false,
         autoClose: 3000, // Close after 3 seconds
       });
-
-      navigate("/Dashboard");
     } catch (err) {
       toast.update(toastId, {
         render: err.response?.data?.error || "Login failed!",

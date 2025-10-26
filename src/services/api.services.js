@@ -7,9 +7,7 @@ import { forceClearSession, pushUserFromRefresh } from "../context/AuthContext";
 import { doRefresh } from "./refreshHelper";
 
 const apiURL = import.meta.env.VITE_BASE_URL ?? "/api";
-
-
-const baseURL = apiURL.replace(/\/$/, "") + "/v1/";
+const baseURL = `${apiURL.replace(/\/$/, "")}/api/v1`;
 
 const api = axios.create({
   baseURL,
