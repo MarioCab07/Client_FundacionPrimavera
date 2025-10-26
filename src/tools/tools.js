@@ -148,3 +148,19 @@ export const handlePhoneChange = (e,setForm,form) => {
 export const hasRole = (user, role) => user?.role === role;
 
 export const hasAnyRole = (user, roles = []) => roles.includes(user?.role);
+
+export const pivotCrossStats = (data, field1, field2) => {
+  const grouped = {};
+
+  data.forEach(item => {
+    const key = item[field2]; // ej: "Rural", "Urbana"
+
+    if (!grouped[key]) {
+      grouped[key] = { [field2]: key };
+    }
+
+    grouped[key][item[field1]] = item.count;
+  });
+
+  return Object.values(grouped);
+};

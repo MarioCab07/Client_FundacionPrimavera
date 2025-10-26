@@ -198,7 +198,23 @@ export const GeneralSection = ({
                 <p className="font-semibold">Talla de zapatos</p>
                 <BasicSelect
                   label={"Talla"}
-                  options={["4", "5", "6", "7", "8", "9", "10", "11"]}
+                  options={[
+                    "4",
+                    "4.5",
+                    "5",
+                    "5.5",
+                    "6",
+                    "6.5",
+                    "7",
+                    "7.5",
+                    "8",
+                    "8.5",
+                    "9",
+                    "9.5",
+                    "10",
+                    "10.5",
+                    "11",
+                  ]}
                   value={form.shoe_size}
                   setValue={(value) => setForm({ ...form, shoe_size: value })}
                 />

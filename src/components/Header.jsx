@@ -109,6 +109,16 @@ export const Header = () => {
 
         {/* Menu */}
         <Menu open={open} setOpen={setOpen} />
+
+        {open && (
+          <div
+            onClick={() => {
+              setOpen(false);
+            }}
+            style={{ minHeight: "2000px" }}
+            className="min-w-full bg-black opacity-45 absolute z-45 right-0"
+          ></div>
+        )}
       </section>
     </>
   );
