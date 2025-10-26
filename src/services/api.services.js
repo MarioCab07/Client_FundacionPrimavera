@@ -7,9 +7,7 @@ import { forceClearSession, pushUserFromRefresh } from "../context/AuthContext";
 import { doRefresh } from "./refreshHelper";
 
 const apiURL = import.meta.env.VITE_BASE_URL ?? "/api";
-
-
-const baseURL = apiURL.replace(/\/$/, "") + "/v1/";
+const baseURL = `${apiURL.replace(/\/$/, "")}/api/v1`;
 
 const api = axios.create({
   baseURL,
@@ -451,4 +449,34 @@ export const getAgeStats = async(data)=>{
         throw error;
     }
 }
+
+export const getBarChartStats = async()=>{
+    try {
+        return await api.get("stats/bar");
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const getCircularChartStats = async()=>{
+    try {
+        return await api.get("stats/circular");
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const getCrossFilterStats = async (field1, field2) => {
+  try {
+    return await api.get("stats/cross", {
+      params: {
+        field1,
+        field2,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 

@@ -26,7 +26,7 @@ export const DashBoardHeader = () => {
   return (
     <>
       <section
-        className="p-4 gap-10 flex flex-row-reverse justify-between items-center bg-gradient-to-r from-gray-200 via-white to-gray-300 shadow-lg rounded-b-2xl"
+        className="p-4 gap-10 flex flex-row-reverse justify-between items-center bg-linear-to-r from-gray-200 via-white to-gray-300 shadow-lg rounded-b-2xl"
         style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
       >
         {/* Logo */}
@@ -84,7 +84,7 @@ export const Header = () => {
   return (
     <>
       <section
-        className=" py-4 px-10 flex items-center flex-row-reverse justify-between bg-gradient-to-r from-gray-200 via-white to-gray-300 shadow-lg rounded-b-2xl"
+        className=" py-4 px-10 flex items-center flex-row-reverse justify-between bg-linear-to-r from-gray-200 via-white to-gray-300 shadow-lg rounded-b-2xl"
         style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
       >
         {/* Logo */}
@@ -109,6 +109,16 @@ export const Header = () => {
 
         {/* Menu */}
         <Menu open={open} setOpen={setOpen} />
+
+        {open && (
+          <div
+            onClick={() => {
+              setOpen(false);
+            }}
+            style={{ minHeight: "2000px" }}
+            className="min-w-full bg-black opacity-45 absolute z-45 right-0"
+          ></div>
+        )}
       </section>
     </>
   );
