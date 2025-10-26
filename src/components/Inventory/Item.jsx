@@ -18,6 +18,7 @@ import { sanitizeDate } from "../../tools/tools";
 import { useAuth } from "../../context/AuthContext";
 import { MdModeEditOutline } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
+import defaultImage from "../../assets/images/defaultItem.jpg";
 
 const apiURL = import.meta.env.VITE_BASE_URL ?? "/api";
 
@@ -50,9 +51,15 @@ const ExpandMore = styled((props) => {
 }));
 
 export const Item = ({ item, handleOpenModify, handleOpenDelete }) => {
-  const normalizedPath = normalizePath(item.image);
-  const imageUrl = `${apiURL.replace(/\/$/, "")}/${normalizedPath}`;
+  let normalizedPath;
+  let imageUrl;
   const { user } = useAuth();
+  if (item.image) {
+    normalizedPath = normalizePath(item.image);
+    imageUrl = `${apiURL.replace(/\/$/, "")}/${normalizedPath}`;
+  } else {
+    imageUrl = defaultImage;
+  }
 
   const canModify = user && user.role !== "VOLUNTARIO";
 
