@@ -23,7 +23,7 @@ import defaultImage from "../../assets/images/defaultItem.jpg";
 const apiURL = import.meta.env.VITE_BASE_URL ?? "/api";
 
 function normalizePath(path) {
-  return path.replace(/\\/g, "/");
+  return path.replace(/\\/g, "/"); // Cambia \ por /
 }
 
 const ExpandMore = styled((props) => {
@@ -56,7 +56,7 @@ export const Item = ({ item, handleOpenModify, handleOpenDelete }) => {
   const { user } = useAuth();
   if (item.image) {
     normalizedPath = normalizePath(item.image);
-    imageUrl = `${apiURL.replace(/\/$/, "")}/${normalizedPath}`;
+    imageUrl = `/${normalizedPath}`;
   } else {
     imageUrl = defaultImage;
   }

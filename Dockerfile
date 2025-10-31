@@ -42,6 +42,12 @@ server {
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
   }
+
+  location /uploads/ {
+    proxy_pass http://backend:8008/uploads/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+  }
 }
 EOF
 

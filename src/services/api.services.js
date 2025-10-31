@@ -7,12 +7,15 @@ import { forceClearSession, pushUserFromRefresh } from "../context/AuthContext";
 import { doRefresh } from "./refreshHelper";
 
 const apiURL = import.meta.env.VITE_BASE_URL ?? "/api";
-const baseURL = `${apiURL.replace(/\/$/, "")}/api/v1`;
+
+
+const baseURL = apiURL.replace(/\/$/, "") + "/v1/";
 
 const api = axios.create({
   baseURL,
   withCredentials: true,
 });
+
 
 export default api;
 
@@ -74,6 +77,10 @@ api.interceptors.response.use(
 //Auth Functions
 export const Login = async(data)=>{
     try {
+        console.log(apiURL);
+        console.log(baseURL);
+        
+        
         return await api.post("auth/login",data);
     } catch (error) {
         throw error;
