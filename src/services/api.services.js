@@ -486,4 +486,18 @@ export const getCrossFilterStats = async (field1, field2) => {
   }
 };
 
+export const updateBeneficiaryPhoto = async(benId,file)=>{
+    const formData = new FormData();
+    formData.append("photo",file);
+    try {
+        return api.put(`beneficiary/update/photo/${benId}`,formData,{
+            headers:{
+                "Content-Type":"multipart/form-data"
+            }
+        });
+    } catch (error) {
+        throw error;
+    }
+}
+
 

@@ -10,6 +10,8 @@ import "../../style/animations.css";
 
 import { Documents } from "./Documents";
 import { useAuth } from "../../context/AuthContext";
+import { updateBeneficiaryPhoto } from "../../services/api.services";
+import { toast } from "react-toastify";
 
 const Details = ({
   ben,
@@ -24,20 +26,119 @@ const Details = ({
   const { user } = useAuth();
   const isAdmin =
     user && (user.role === "ADMIN" || user.role === "SUPER_ADMIN");
+  const [loading, setLoading] = useState(false);
+  const [photo, setPhoto] = useState(ben.photo);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const handleSelectPhoto = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setSelectedFile(file);
+    setPreview(URL.createObjectURL(file));
+  };
+  const handleChangePhoto = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setLoading(true);
+
+      const res = await updateBeneficiaryPhoto(beneficiaryId, file);
+      toast.success("Foto actualizada correctamente");
+
+      // Mandar nueva URL al padre
+      onPhotoUpdated(res.data.photo);
+    } catch (err) {
+      console.error(err);
+      toast.error("No se pudo actualizar la foto");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConfirmUpload = async () => {
+    if (!selectedFile) return;
+
+    try {
+      setLoading(true);
+      const res = await updateBeneficiaryPhoto(ben._id, selectedFile);
+
+      toast.success("Foto actualizada correctamente");
+
+      // actualizar UI
+      setPhoto(res.data.photo);
+
+      // limpiar estados
+      setSelectedFile(null);
+      setPreview(null);
+    } catch (err) {
+      console.error(err);
+      toast.error("No se pudo actualizar la foto");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setSelectedFile(null);
+    setPreview(null);
+  };
 
   return (
     <>
       <h2 className="text-2xl font-bold text-center">
         Detalles del Beneficiario
       </h2>
-      <div className="flex flex-col gap-4">
-        <div className="flex gap-4">
-          <span className="rounded-full w-50 h-40">
+      <div className="flex flex-col gap-8">
+        <div className="flex gap-8 z-50">
+          <span className="rounded-full w-50 h-40 flex flex-col items-center">
+            {/* FOTO ACTUAL O PREVIEW */}
             <img
-              src={ben.photo}
+              src={preview ? preview : photo}
               alt={ben.name}
-              className="rounded-full w-40 h-40 object-cover"
+              className="rounded-full w-40 h-40 object-cover border"
             />
+
+            {/* BOTÓN PARA SELECCIONAR FOTO */}
+            <label
+              className={`mt-3 px-4 py-2 rounded-lg cursor-pointer ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#d4bf92] hover:bg-[#c8b380]"
+              } text-white font-medium`}
+            >
+              {loading ? "Procesando..." : "Cambiar foto"}
+
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                disabled={loading}
+                onChange={handleSelectPhoto}
+              />
+            </label>
+
+            {/* BOTONES CONFIRMAR / CANCELAR */}
+            {selectedFile && (
+              <div className="flex gap-2 mt-3">
+                <button
+                  onClick={handleConfirmUpload}
+                  className="px-4 py-1 bg-green-500 text-white rounded-lg hover:bg-green-400"
+                  disabled={loading}
+                >
+                  Confirmar
+                </button>
+
+                <button
+                  onClick={handleCancel}
+                  className="px-4 py-1 bg-red-500 text-white rounded-lg hover:bg-red-400"
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+              </div>
+            )}
           </span>
           <span className="flex flex-col justify-center w-full gap-4">
             <h5 className="font-bold text-2xl flex gap-3 items-center">
